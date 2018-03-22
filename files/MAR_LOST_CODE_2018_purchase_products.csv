@@ -1,0 +1,6 @@
+Product Code,Net Unit Cost,Quantity,Warehouse Code,Supplier No,Reference No,Date,Shop ID,Purchase Status,Payment Term,Payment Status,Shipping,Order Discount,Order Tax
+SY0GF001,3.5,5,WH1,2,,,,received,,PAID,,,
+SYBBF001,3.5,5,WH1,2,,,,received,,PAID,,,
+CD0CF001,15.5,1,WH1,2,,,,received,,PAID,,,
+LPBBS001,4.5,1,WH1,2,,,,received,,PAID,,,
+LPBBL001,4.5,10,WH1,2,,,,received,,PAID,,,

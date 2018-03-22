@@ -1,0 +1,12 @@
+Code,Name,Category Code,Unit,Cost,Price,Alert Quantity, Tax Rate Name,Tax Method,Subcategory Code,Product Variants Separated by |,Supplier1(No),Supplier2(No),Supplier3(No),Supplier4(No),Supplier5(No),Custom Field 1,Custom Field 2,Custom Field 3,Custom Field 4,Custom Field 5,Custom Field 6,Image
+BGBE233,233 BLUE BAG,BG,UNIT,,14.99,1,,,,,,,,,,,,,,,,
+BG0G233,233 GRAY BAG,BG,UNIT,,14.99,1,,,,,,,,,,,,,,,,
+BG0P233,233 PINK BAG,BG,UNIT,,14.99,1,,,,,,,,,,,,,,,,
+BGBB233,233 BLACK BAG,BG,UNIT,,14.99,1,,,,,,,,,,,,,,,,
+BGBE1580,1580 BLUE BAG,BG,UNIT,,15.99,1,,,,,,,,,,,,,,,,
+BGBB1580,1580 BLACK BAG,BG,UNIT,,15.99,1,,,,,,,,,,,,,,,,
+BGCF7050,7050 BAG,BG,UNIT,,16.99,1,,,,,,,,,,,,,,,,
+BGBR6250,6250 BROWN BAG,BG,UNIT,,17.99,1,,,,,,,,,,,,,,,,
+BGBB6250,6250 BLACK BAG,BG,UNIT,,17.99,1,,,,,,,,,,,,,,,,
+BGBB6110,6110 BLACK BAG,BG,UNIT,,16.99,1,,,,,,,,,,,,,,,,
+BGBR6110,6110 BROWN BAG,BG,UNIT,,16.99,1,,,,,,,,,,,,,,,,

@@ -1,0 +1,11 @@
+Product Code,Net Unit Cost,Quantity,Warehouse Code,Supplier No,Reference No,Date,Shop ID,Purchase Status,Payment Term,Payment Status,Shipping,Order Discount,Order Tax
+HT009511,0.6,40,WH1,2,,,,received,,PAID,,,
+BW001066,1,23,WH1,2,,,,received,,PAID,,,
+BW001065,1.2,12,WH1,2,,,,received,,PAID,,,
+HT001064,1.5,15,WH1,2,,,,received,,PAID,,,
+HT001059,0.4,50,WH1,2,,,,received,,PAID,,,
+HT001061,0.1,20,WH1,2,,,,received,,PAID,,,
+HT001060,1,20,WH1,2,,,,received,,PAID,,,
+HT001199,0.1,50,WH1,2,,,,received,,PAID,,,
+HT0095066,0.5,40,WH1,2,,,,received,,PAID,,,
+BW001062,0.9,10,WH1,2,,,,received,,PAID,,,

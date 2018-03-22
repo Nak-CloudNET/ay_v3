@@ -1,0 +1,12 @@
+Code,Name,Category Code,Unit,Cost,Price,Alert Quantity, Tax Rate Name,Tax Method,Subcategory Code,Product Variants Separated by |,Supplier1(No),Supplier2(No),Supplier3(No),Supplier4(No),Supplier5(No),Custom Field 1,Custom Field 2,Custom Field 3,Custom Field 4,Custom Field 5,Custom Field 6,Image
+JKCFS8048,8048 S JACKET,JK,UNIT,,15.99,1,,,,,,,,,,,,,,,,
+JKCFM8048,8048 M JACKET,JK,UNIT,,15.99,1,,,,,,,,,,,,,,,,
+JKCFL8048,8048 L JACKET,JK,UNIT,,15.99,1,,,,,,,,,,,,,,,,
+JKCFXL8048,8048 XL JACKET,JK,UNIT,,15.99,1,,,,,,,,,,,,,,,,
+CDBES666,666 BLUE S DRESS,CD,UNIT,,14.99,1,,,,,,,,,,,,,,,,
+CDBEM666,666 BLUE M DRESS,CD,UNIT,,14.99,1,,,,,,,,,,,,,,,,
+CDBEL666,666 BLUE L DRESS,CD,UNIT,,14.99,1,,,,,,,,,,,,,,,,
+CDBBS666,666 BLACK S DRESS,CD,UNIT,,14.99,1,,,,,,,,,,,,,,,,
+CDBBM666,666 BLACK M DRESS,CD,UNIT,,14.99,1,,,,,,,,,,,,,,,,
+CDBBL666,666 BLACK L DRESS,CD,UNIT,,14.99,1,,,,,,,,,,,,,,,,
+JK0RXL1297,1297 RED XL JACKET,JK,UNIT,,15.99,1,,,,,,,,,,,,,,,,

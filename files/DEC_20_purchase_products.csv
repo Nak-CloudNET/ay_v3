@@ -1,0 +1,13 @@
+Product Code,Net Unit Cost,Quantity,Warehouse Code,Supplier No,Reference No,Date,Shop ID,Purchase Status,Payment Term,Payment Status,Shipping,Order Discount,Order Tax
+SYCFS6049,5.8,10,WH1,2,,,,received,,PAID,,,
+SYCFM6049,5.8,12,WH1,2,,,,received,,PAID,,,
+SYCFL6049,5.8,10,WH1,2,,,,received,,PAID,,,
+CDCFS8008,6.3,11,WH1,2,,,,received,,PAID,,,
+CDCFM8008,6.3,13,WH1,2,,,,received,,PAID,,,
+CDCFL8008,6.3,12,WH1,2,,,,received,,PAID,,,
+CD0RS8068,4.7,12,WH1,2,,,,received,,PAID,,,
+CD0RM8068,4.7,12,WH1,2,,,,received,,PAID,,,
+CD0RL8068,4.7,10,WH1,2,,,,received,,PAID,,,
+CDBBS8068,4.7,10,WH1,2,,,,received,,PAID,,,
+CDBBM8068,4.7,10,WH1,2,,,,received,,PAID,,,
+CDBBL8068,4.7,10,WH1,2,,,,received,,PAID,,,

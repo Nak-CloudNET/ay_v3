@@ -1,0 +1,11 @@
+Product Code,Net Unit Cost,Quantity,Warehouse Code,Supplier No,Reference No,Date,Shop ID,Purchase Status,Payment Term,Payment Status,Shipping,Order Discount,Order Tax
+SCBEF1230,3,14,WH1,2,,,,received,,PAID,,,
+SCBBF1230,3,12,WH1,2,,,,received,,PAID,,,
+SC0CF1230,3,12,WH1,2,,,,received,,PAID,,,
+SCLRF1230,3,14,WH1,2,,,,received,,PAID,,,
+SC0PF1230,3,12,WH1,2,,,,received,,PAID,,,
+SCCFF1232,2.7,12,WH1,2,,,,received,,PAID,,,
+SCCFF1233,2.7,12,WH1,2,,,,received,,PAID,,,
+SCCFF1234,2.7,14,WH1,2,,,,received,,PAID,,,
+SCCFF1235,2.7,14,WH1,2,,,,received,,PAID,,,
+SCCFF1236,2.7,12,WH1,2,,,,received,,PAID,,,

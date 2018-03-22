@@ -1,0 +1,11 @@
+Code,Name,Category Code,Unit,Cost,Price,Alert Quantity, Tax Rate Name,Tax Method,Subcategory Code,Product Variants Separated by |,Supplier1(No),Supplier2(No),Supplier3(No),Supplier4(No),Supplier5(No),Custom Field 1,Custom Field 2,Custom Field 3,Custom Field 4,Custom Field 5,Custom Field 6,Image
+SY0OF202,202 ORANGE SHIRT ,SY,UNIT,,5.99,1,,,,,,,,,,,,,,,,
+SYBBF202,202 BLACK SHIRT,SY,UNIT,,5.99,1,,,,,,,,,,,,,,,,
+SY0WF202,202 WHITE SHIRT,SY,UNIT,,5.99,1,,,,,,,,,,,,,,,,
+SY0OF203,203 ORANGE SHIRT,SY,UNIT,,5.99,1,,,,,,,,,,,,,,,,
+SYBBF203,203 BLACK SHIRT,SY,UNIT,,5.99,1,,,,,,,,,,,,,,,,
+SY0WF203,203 WHITE SHIRT,SY,UNIT,,5.99,1,,,,,,,,,,,,,,,,
+SY0WM205,205 WHITE M SHIRT,SY,UNIT,,3.99,1,,,,,,,,,,,,,,,,
+SY0WL205,205 WHITE L SHIRT,SY,UNIT,,3.99,1,,,,,,,,,,,,,,,,
+SYBBM205,205 BLACK M SHIRT,SY,UNIT,,3.99,1,,,,,,,,,,,,,,,,
+SYBBL205,205 BLACK L SHIRT,SY,UNIT,,3.99,1,,,,,,,,,,,,,,,,

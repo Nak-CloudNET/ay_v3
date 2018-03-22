@@ -1,0 +1,7 @@
+Code,Name,Category Code,Unit,Cost,Price,Alert Quantity, Tax Rate Name,Tax Method,Subcategory Code,Product Variants Separated by |,Supplier1(No),Supplier2(No),Supplier3(No),Supplier4(No),Supplier5(No),Custom Field 1,Custom Field 2,Custom Field 3,Custom Field 4,Custom Field 5,Custom Field 6,Image
+BRBBF1005,1005 BLACK BRA,BR,UNIT,,5.99,1,,,,,,,,,,,,,,,,
+BR0CF1005,1005 CREAM BRA,BR,UNIT,,5.99,1,,,,,,,,,,,,,,,,
+BRBBF1004,1004 BLACK BRA,BR,UNIT,,4.99,1,,,,,,,,,,,,,,,,
+BR0WF1004,1004 WHITE BRA,BR,UNIT,,4.99,1,,,,,,,,,,,,,,,,
+BRBBF1003,1003 BLACK BRA,BR,UNIT,,4.99,1,,,,,,,,,,,,,,,,
+BR0WF1003,1003 WHITE BRA,BR,UNIT,,4.99,1,,,,,,,,,,,,,,,,

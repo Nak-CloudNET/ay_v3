@@ -1,0 +1,7 @@
+Product Code,Net Unit Cost,Quantity,Warehouse Code,Supplier No,Reference No,Date,Shop ID,Purchase Status,Payment Term,Payment Status,Shipping,Order Discount,Order Tax
+BRBBF1005,2,20,WH1,2,,,,received,,PAID,,,
+BR0CF1005,2,10,WH1,2,,,,received,,PAID,,,
+BRBBF1004,1.4,30,WH1,2,,,,received,,PAID,,,
+BR0WF1004,1.4,30,WH1,2,,,,received,,PAID,,,
+BRBBF1003,1.3,20,WH1,2,,,,received,,PAID,,,
+BR0WF1003,1.3,20,WH1,2,,,,received,,PAID,,,

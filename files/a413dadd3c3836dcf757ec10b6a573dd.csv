@@ -1,0 +1,5 @@
+Company,Code,Name,Email,Phone,Address,City,State,Postal Code,Country,Group Area ID,Customer Group ID,Vat No,CF 1,CF 2,CF 3,CF 4,CF 5,CF 6
+CloudNET,C100,Dara,support@cloudnet.com.kh,012 24 11 87,Phnom Penh,Phnom Penh,WP,58100,Malaysia,1,1,,Doctor,Best,,,,
+CloudNET,C101,Chin,support1@cloudnet.com.kh,013 24 11 87,Phnom Penh,Phnom Penh,WP,58101,Malaysia,1,1,,Saler,Good,,,,
+CloudNET,C102,Nak,support2@cloudnet.com.kh,014 24 11 87,Phnom Penh,Phnom Penh,WP,58102,Malaysia,1,1,,Nurse,bad,,,,
+CloudNET,C103,Poro,support3@cloudnet.com.kh,015 24 11 87,Phnom Penh,Phnom Penh,WP,58103,Malaysia,1,1,,Doctor,Best,,,,

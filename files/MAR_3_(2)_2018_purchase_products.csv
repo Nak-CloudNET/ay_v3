@@ -1,0 +1,8 @@
+Product Code,Net Unit Cost,Quantity,Warehouse Code,Supplier No,Reference No,Date,Shop ID,Purchase Status,Payment Term,Payment Status,Shipping,Order Discount,Order Tax
+LPCFS1753,8.4,12,WH1,2,,,,received,,PAID,,,
+LPCFM1753,8.4,7,WH1,2,,,,received,,PAID,,,
+LPCFL1753,8.4,7,WH1,2,,,,received,,PAID,,,
+LPCFS1830,8.4,12,WH1,2,,,,received,,PAID,,,
+LPCFM1830,8.4,12,WH1,2,,,,received,,PAID,,,
+LPCFL1830,8.4,7,WH1,2,,,,received,,PAID,,,
+LPCFXL1830,8.4,4,WH1,2,,,,received,,PAID,,,

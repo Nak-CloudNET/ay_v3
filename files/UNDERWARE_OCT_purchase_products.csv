@@ -1,0 +1,4 @@
+Product Code,Net Unit Cost,Quantity,Warehouse Code,Supplier No,Reference No,Date,Shop ID,Purchase Status,Payment Term,Payment Status,Shipping,Order Discount,Order Tax
+GU0S001,1.8,100,WH1,2,,,,received,,PAID,,,
+GUBB001,1.8,50,WH1,2,,,,received,,PAID,,,
+GU00202,3.5,24,WH1,2,,,,received,,PAID,,,

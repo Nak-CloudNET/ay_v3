@@ -1,0 +1,8 @@
+Product Code,Net Unit Cost,Quantity,Warehouse Code,Supplier No,Reference No,Date,Shop ID,Purchase Status,Payment Term,Payment Status,Shipping,Order Discount,Order Tax
+JSCFS3067,4.4,10,WH1,2,,,,received,,PAID,,,
+JSCFM3067,4.4,8,WH1,2,,,,received,,PAID,,,
+JSCFL3067,4.4,4,WH1,2,,,,received,,PAID,,,
+CDCFF9409,4.6,8,WH1,2,,,,received,,PAID,,,
+CDBBF8186,5.8,15,WH1,2,,,,received,,PAID,,,
+CDCFF1510,5.7,20,WH1,2,,,,received,,PAID,,,
+SYCFF9422,5.8,20,WH1,2,,,,received,,PAID,,,

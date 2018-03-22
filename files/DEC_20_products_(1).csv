@@ -1,0 +1,13 @@
+Code,Name,Category Code,Unit,Cost,Price,Alert Quantity, Tax Rate Name,Tax Method,Subcategory Code,Product Variants Separated by |,Supplier1(No),Supplier2(No),Supplier3(No),Supplier4(No),Supplier5(No),Custom Field 1,Custom Field 2,Custom Field 3,Custom Field 4,Custom Field 5,Custom Field 6,Image
+SYCFS6049,6049 S SHIRT,SY,UNIT,,13.99,1,,,,,,,,,,,,,,,,
+SYCFM6049,6049 M SHIRT,SY,UNIT,,13.99,1,,,,,,,,,,,,,,,,
+SYCFL6049,6049 L SHIRT,SY,UNIT,,13.99,1,,,,,,,,,,,,,,,,
+CDCFS8008,8008 S DRESS,CD,UNIT,,15.99,1,,,,,,,,,,,,,,,,
+CDCFM8008,8008 M DRESS,CD,UNIT,,15.99,1,,,,,,,,,,,,,,,,
+CDCFL8008,8008 L DRESS,CD,UNIT,,15.99,1,,,,,,,,,,,,,,,,
+CD0RS8068,8068 RED S DRESS,CD,UNIT,,15.99,1,,,,,,,,,,,,,,,,
+CD0RM8068,8068 RED M DRESS,CD,UNIT,,15.99,1,,,,,,,,,,,,,,,,
+CD0RL8068,8068 RED L DRESS,CD,UNIT,,15.99,1,,,,,,,,,,,,,,,,
+CDBBS8068,8068 BLACK S DRESS,CD,UNIT,,15.99,1,,,,,,,,,,,,,,,,
+CDBBM8068,8068 BLACK M DRESS,CD,UNIT,,15.99,1,,,,,,,,,,,,,,,,
+CDBBL8068,8068 BLACK L DRESS,CD,UNIT,,15.99,1,,,,,,,,,,,,,,,,

@@ -1,0 +1,6 @@
+Product Code,Net Unit Cost,Quantity,Warehouse Code,Supplier No,Reference No,Date,Shop ID,Purchase Status,Payment Term,Payment Status,Shipping,Order Discount,Order Tax
+BX008971,10,10,WH1,2,,,,received,,PAID,,,
+BX001511,15.5,10,WH1,2,,,,received,,PAID,,,
+BX001211,5,10,WH1,2,,,,received,,PAID,,,
+BX006311,7.5,10,WH1,2,,,,received,,PAID,,,
+BX006811,9.5,10,WH1,2,,,,received,,PAID,,,

@@ -1,0 +1,13 @@
+Product Code,Net Unit Cost,Quantity,Warehouse Code,Supplier No,Reference No,Date,Shop ID,Purchase Status,Payment Term,Payment Status,Shipping,Order Discount,Order Tax
+BGBE233,5,12,WH1,2,,,,received,,PAID,,,
+BG0G233,5,12,WH1,2,,,,received,,PAID,,,
+BG0P233,5,12,WH1,2,,,,received,,PAID,,,
+BGBB233,5,12,WH1,2,,,,received,,PAID,,,
+BGBR1223,6.8,12,WH1,2,,,,received,,PAID,,,
+BG0G1223,6.8,12,WH1,2,,,,received,,PAID,,,
+BGBB1223,6.8,12,WH1,2,,,,received,,PAID,,,
+BG0R1224,5.6,12,WH1,2,,,,received,,PAID,,,
+BGBB1224,5.6,12,WH1,2,,,,received,,PAID,,,
+BGBR8130,6.8,12,WH1,2,,,,received,,PAID,,,
+BG0G8130,6.8,12,WH1,2,,,,received,,PAID,,,
+BGBB8130,6.8,12,WH1,2,,,,received,,PAID,,,

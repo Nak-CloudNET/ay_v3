@@ -1,0 +1,9 @@
+Code,Name,Category Code,Unit,Cost,Price,Alert Quantity, Tax Rate Name,Tax Method,Subcategory Code,Product Variants Separated by |,Supplier1(No),Supplier2(No),Supplier3(No),Supplier4(No),Supplier5(No),Custom Field 1,Custom Field 2,Custom Field 3,Custom Field 4,Custom Field 5,Custom Field 6,Image
+BGBR1223,1223 BROWN BAG,BG,UNIT,,16.99,1,,,,,,,,,,,,,,,,
+BG0G1223,1223 GRAY BAG,BG,UNIT,,16.99,1,,,,,,,,,,,,,,,,
+BGBB1223,1223 BLACK BAG,BG,UNIT,,16.99,1,,,,,,,,,,,,,,,,
+BG0R1224,1224 RED BAG,BG,UNIT,,15.99,1,,,,,,,,,,,,,,,,
+BGBB1224,1224 BLACK BAG,BG,UNIT,,15.99,1,,,,,,,,,,,,,,,,
+BGBR8130,8130 BROWN BAG,BG,UNIT,,19.99,1,,,,,,,,,,,,,,,,
+BG0G8130,8130 GRAY BAG,BG,UNIT,,19.99,1,,,,,,,,,,,,,,,,
+BGBB8130,8130 BLACK BAG,BG,UNIT,,19.99,1,,,,,,,,,,,,,,,,

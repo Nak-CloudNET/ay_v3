@@ -1,0 +1,11 @@
+Code,Name,Category Code,Unit,Cost,Price,Alert Quantity, Tax Rate Name,Tax Method,Subcategory Code,Product Variants Separated by |,Supplier1(No),Supplier2(No),Supplier3(No),Supplier4(No),Supplier5(No),Custom Field 1,Custom Field 2,Custom Field 3,Custom Field 4,Custom Field 5,Custom Field 6,Image
+SY0P3211,3211 PINK SHIRT,SY,UNIT,,10,1,,,,,,,,,,,,,,,,
+SYBB3211,3211 BLACK SHIRT,SY,UNIT,,10,1,,,,,,,,,,,,,,,,
+SYBB3251,3251 BLACK SHIRT,SY,UNIT,,10.99,1,,,,,,,,,,,,,,,,
+SYBE3251,3251 BLUE SHIRT,SY,UNIT,,10.99,1,,,,,,,,,,,,,,,,
+SY006111,6111 SHIRT,SY,UNIT,,10,1,,,,,,,,,,,,,,,,
+SY0050778,50778 SHIRT,SY,UNIT,,10.99,1,,,,,,,,,,,,,,,,
+SK0065028,65028 SKIRT,SK,UNIT,,13.99,1,,,,,,,,,,,,,,,,
+SK0061270,61270 SKIRT,SK,UNIT,,13.99,1,,,,,,,,,,,,,,,,
+SYBB65078,65078 BLACK SHIRT,SY,UNIT,,14.99,1,,,,,,,,,,,,,,,,
+SY0W65078,65078 WHITE SHIRT,SY,UNIT,,14.99,1,,,,,,,,,,,,,,,,

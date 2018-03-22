@@ -1,0 +1,10 @@
+Code,Name,Category Code,Unit,Cost,Price,Alert Quantity, Tax Rate Name,Tax Method,Subcategory Code,Product Variants Separated by |,Supplier1(No),Supplier2(No),Supplier3(No),Supplier4(No),Supplier5(No),Custom Field 1,Custom Field 2,Custom Field 3,Custom Field 4,Custom Field 5,Custom Field 6,Image
+LPCFS6080,6080 S PANT,LP,UNIT,,16.99,1,,,,,,,,,,,,,,,,
+LPCFM6080,6080 M PANT,LP,UNIT,,16.99,1,,,,,,,,,,,,,,,,
+LPCFL6080,6080 L PANT,LP,UNIT,,16.99,1,,,,,,,,,,,,,,,,
+CDCFM9010,9010 M DRESS,CD,UNIT,,24.99,1,,,,,,,,,,,,,,,,
+CDCFL9010,9010 L DRESS,CD,UNIT,,24.99,1,,,,,,,,,,,,,,,,
+CDCFS9030,9030 S DRESS,CD,UNIT,,17.99,1,,,,,,,,,,,,,,,,
+CDCFS9020,9020 S DRESS,CD,UNIT,,17.99,1,,,,,,,,,,,,,,,,
+CDCFM9020,9020 M DRESS,CD,UNIT,,17.99,1,,,,,,,,,,,,,,,,
+CDCFL9020,9020 L DRESS,CD,UNIT,,17.99,1,,,,,,,,,,,,,,,,
