@@ -28,13 +28,11 @@
             }, {"mRender": fld}, null, null, null, 
                 <?php 
                     if ($Owner || $Admin) { 
-                        echo '{"mRender": currencyFormat}, 
+                        echo '{"mRender": formatQuantity}, 
                               {"mRender": currencyFormat}, 
                               {"mRender": currencyFormat},';
                     }else{ 
-                        if($GP['transfers-subtotal']){
-                            echo '{"mRender": currencyFormat},';
-                        }
+                        echo '{"mRender": formatQuantity},';
                         echo '{"mRender": currencyFormat},';
                         if($GP['transfers-subtotal']){
                             echo '{"mRender": currencyFormat},';
@@ -58,14 +56,10 @@
                         gtotal += parseFloat(aaData[aiDisplay[i]][7]);
                     <?php 
                         }else{
-                            if($GP['transfers-subtotal']){
                     ?>
                             row_total += parseFloat(aaData[aiDisplay[i]][5]);
                             a = a+1;
-                    <?php
-                            }
-                    ?>
-                                tax += parseFloat(aaData[aiDisplay[i]][a]);
+                            tax += parseFloat(aaData[aiDisplay[i]][a]);
                     <?php
                             if($GP['transfers-subtotal']){
                     ?>
@@ -83,10 +77,8 @@
                     echo 'nCells[7].innerHTML = currencyFormat(formatMoney(gtotal));';
                     }else{
                         $a = 5;
-                        if($GP['transfers-subtotal']){
-                            echo 'nCells[5].innerHTML = currencyFormat(formatMoney(row_total));';
-                            $a = $a + 1;
-                        }
+                        echo 'nCells[5].innerHTML = formatQuantity(row_total);';
+                        $a = $a + 1;
                         echo 'nCells['.$a.'].innerHTML = currencyFormat(formatMoney(tax));';
                         if($GP['transfers-subtotal']){
                             echo 'nCells[7].innerHTML = currencyFormat(formatMoney(gtotal));';
@@ -254,13 +246,11 @@
                             <th><?= lang("warehouse") . ' (' . lang('to') . ')'; ?></th>
                             <?php 
                                 if ($Owner || $Admin) { 
-                                    echo '<th>'.lang("total").'</th>';
+                                    echo '<th>'.lang("total_quantity").'</th>';
                                     echo '<th>'.lang("product_tax").'</th>';
                                     echo '<th>'.lang("grand_total").'</th>';
                                 }else{ 
-                                    if($GP['transfers-subtotal']){
-                                        echo '<th>'.lang("total").'</th>';
-                                    }
+									echo '<th>'.lang("total_quantity").'</th>';
                                     echo '<th>'.lang("product_tax").'</th>';
                                     if($GP['transfers-subtotal']){
                                         echo '<th>'.lang("grand_total").'</th>';
@@ -289,9 +279,7 @@
                                 if ($Owner || $Admin) { 
                                     echo '<th></th><th></th><th></th>';
                                 }else{ 
-                                    if($GP['transfers-subtotal']){
-                                        echo '<th></th>';
-                                    }
+                                    echo '<th></th>';
                                     echo '<th></th>';
                                     if($GP['transfers-subtotal']){
                                         echo '<th></th>';

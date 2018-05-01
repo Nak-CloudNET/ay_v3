@@ -54,7 +54,7 @@
                         <th style="vertical-align:middle;"><?= lang("description"); ?></th>
                         <th style="text-align:center; vertical-align:middle;"><?= lang("quantity"); ?></th>
 						<?php if ($Owner || $Admin || $GP['transfers-net_unit_cost']) { ?>
-							<th style="text-align:center; vertical-align:middle;"><?= lang("unit_cost"); ?></th>
+							<th style="text-align:center; vertical-align:middle; width: 120px;"><?= lang("net_unit_cost"); ?></th>
 						<?php } ?>
                         <?php if ($this->Settings->tax1) {
                             echo '<th style="text-align:center; vertical-align:middle;">' . lang("tax") . '</th>';
@@ -66,9 +66,12 @@
                     </thead>
 
                     <tbody>
-                    <?php $r = 1;
+                    <?php 
+					$r = 1;
+					$total_net_unit_cost = 0;
                     foreach ($rows as $row): 
                         $qty += $row->quantity;
+                        $total_net_unit_cost += $row->net_unit_cost;
                         ?>
                         <tr>
                             <td style="text-align:center; width:25px;"><?= $r; ?></td>
@@ -98,20 +101,23 @@
                     }
 
                     if ($this->Settings->tax1) {
-                        $col += 1;
+                       $col += 1;
                     } ?>
 
                         <tr>
-                            <td colspan="<?= $col; ?>"
+                            <td colspan="2"
                                 style="text-align:right; padding-right:10px;"><?= lang("total"); ?>
                                 <?php if ($Owner || $Admin || $GP['transfers-subtotal']) { ?>
                                 (<?= $default_currency->code; ?>)
                                 <?php } ?>
                             </td>
-                            <?php if ($Owner || $Admin) { }else{
-                                echo '<td style="text-align:right; padding-right:10px;">'.$this->erp->formatQuantity($qty).'</td>';
-                                } ?>
-                            <td style="text-align:right; padding-right:10px;"><?= $this->erp->formatMoney($transfer->total_tax); ?>
+                            <td style="text-align:center; padding-right:10px;"><?= $this->erp->formatQuantity($qty); ?> </td>
+							<?php if ($Owner || $Admin || $GP['transfers-net_unit_cost']) { ?>
+								<td style="text-align:right; padding-right:10px;"><?= $this->erp->formatMoney($total_net_unit_cost); ?> </td>
+							<?php } ?>
+							
+                            <td style="text-align:right; padding-right:10px;"><?= $this->erp->formatMoney($transfer->total_tax); ?> </td>
+							
                             <?php if ($Owner || $Admin || $GP['transfers-subtotal']) { ?>
                             <td style="text-align:right; padding-right:10px;"><?= $this->erp->formatMoney($transfer->total+$transfer->total_tax); ?></td>
                             <?php } ?>

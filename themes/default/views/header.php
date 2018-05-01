@@ -1641,7 +1641,7 @@
                                                                 </li>
                                                                 <?php } ?>
 
-                                                                    <?php if ($GP['purchases-index']) { ?>
+                                                                    <?php if ($GP['purchases-index']  || $GP['purchases-add'] || $GP['purchases-expenses']) { ?>
                                                                         <li class="mm_purchases">
                                                                             <a class="dropmenu" href="#">
                                                                                 <i class="fa fa-star"></i>
@@ -1649,11 +1649,14 @@
                                     </span> <span class="chevron closed"></span>
                                                                             </a>
                                                                             <ul>
-                                                                                <li id="purchases_index">
-                                                                                    <a class="submenu" href="<?= site_url('purchases'); ?>">
-                                                                                        <i class="fa fa-star"></i><span class="text"> <?= lang('list_purchases'); ?></span>
-                                                                                    </a>
-                                                                                </li>
+																			    <?php if($GP['purchases-index']) { ?>
+																					<li id="purchases_index">
+																						<a class="submenu" href="<?= site_url('purchases'); ?>">
+																							<i class="fa fa-star"></i><span class="text"> <?= lang('list_purchases'); ?></span>
+																						</a>
+																					</li>
+																				<?php } ?>
+																				
                                                                                 <?php if ($GP['purchases-add']) { ?>
                                                                                     <li id="purchases_add">
                                                                                         <a class="submenu" href="<?= site_url('purchases/add'); ?>">
@@ -1661,18 +1664,18 @@
                                                                                         </a>
                                                                                     </li>
                                                                                     <?php } ?>
-                                                                                        <?php if ($GP['purchases-expenses']) { ?>
-                                                                                            <li id="purchases_expenses">
-                                                                                                <a class="submenu" href="<?= site_url('purchases/expenses'); ?>">
-                                                                                                    <i class="fa fa-dollar"></i><span class="text"> <?= lang('expenses'); ?></span>
-                                                                                                </a>
-                                                                                            </li>
-                                                                                            <li id="purchases_add_expense">
-                                                                                                <a class="submenu" href="<?= site_url('purchases/add_expense'); ?>" data-toggle="modal" data-target="#myModal">
-                                                                                                    <i class="fa fa-plus-circle"></i><span class="text"> <?= lang('add_expense'); ?></span>
-                                                                                                </a>
-                                                                                            </li>
-                                                                                            <?php } ?>
+																				<?php if ($GP['purchases-expenses']) { ?>
+																					<li id="purchases_expenses">
+																						<a class="submenu" href="<?= site_url('purchases/expenses'); ?>">
+																							<i class="fa fa-dollar"></i><span class="text"> <?= lang('expenses'); ?></span>
+																						</a>
+																					</li>
+																					<li id="purchases_add_expense">
+																						<a class="submenu" href="<?= site_url('purchases/add_expense'); ?>" data-toggle="modal" data-target="#myModal">
+																							<i class="fa fa-plus-circle"></i><span class="text"> <?= lang('add_expense'); ?></span>
+																						</a>
+																					</li>
+																				<?php } ?>
                                                                             </ul>
                                                                         </li>
                                                                         <?php } ?>

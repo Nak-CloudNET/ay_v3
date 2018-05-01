@@ -55,7 +55,6 @@
                                 <th style="text-align:center; vertical-align:middle;"><?= lang("expected"); ?></th>
                                 <th style="text-align:center; vertical-align:middle;"><?= lang("counted"); ?></th>
                                 <th style="text-align:center; vertical-align:middle;"><?= lang("difference"); ?></th>
-                                <th style="text-align:center; vertical-align:middle;"><?= lang("cost"); ?></th>
                             </tr>
                             </thead>
 
@@ -90,9 +89,6 @@
 											<td style="text-align:right; width:80px;">
 												<?= $this->erp->formatQuantity($counted - $row->quantity); ?>
 											</td>
-											<td style="text-align:right; width:100px;">
-												<?= $this->erp->formatMoney($row->cost * ($counted - $row->quantity)); ?>
-											</td>
 										</tr>
 										<?php $r++;
 										$items += $counted - $row->expected;
@@ -102,9 +98,6 @@
                                     <td colspan="4"><?= lang('total'); ?></td>
                                     <td style="text-align:right; width:80px;">
                                     <?= $this->erp->formatQuantity($items); ?>
-                                    </td>
-                                    <td style="text-align:right; width:100px;">
-                                        <?= $this->erp->formatMoney($total); ?>
                                     </td>
                                 </tr>
                             </tbody>

@@ -352,7 +352,7 @@ class Quotes extends MY_Controller
         $this->erp->checkPermissions();
 
         $this->form_validation->set_message('is_natural_no_zero', $this->lang->line("no_zero_required"));
-        
+        //$this->form_validation->set_rules('reference_no', $this->lang->line("reference_no"), 'required');
         $this->form_validation->set_rules('customer', $this->lang->line("customer"), 'required');
 
         if ($this->form_validation->run() == true) {
@@ -596,6 +596,8 @@ class Quotes extends MY_Controller
 
     public function edit($id = null)
     {
+        $this->erp->checkPermissions();
+
         if ($this->input->get('id')) {
             $id = $this->input->get('id');
         }
@@ -605,7 +607,8 @@ class Quotes extends MY_Controller
         }*/
         $this->form_validation->set_message('is_natural_no_zero', $this->lang->line("no_zero_required"));
         $this->form_validation->set_rules('reference_no', $this->lang->line("reference_no"), 'required');
-        $this->form_validation->set_rules('customer', $this->lang->line("customer"), 'required');        
+        $this->form_validation->set_rules('customer', $this->lang->line("customer"), 'required');
+        //$this->form_validation->set_rules('note', $this->lang->line("note"), 'xss_clean');
 
         if ($this->form_validation->run() == true) {
             $quantity = "quantity";
@@ -899,10 +902,10 @@ class Quotes extends MY_Controller
                 }
                 $c++;
             }
-			
             $this->data['inv_items'] = json_encode($pr);
             $this->data['id'] = $id;
 			$this->data['payment_deposit'] = $this->quotes_model->getPaymentByQuoteID($id);
+            //$this->data['currencies'] = $this->site->getAllCurrencies();
             $this->data['billers'] = ($this->Owner || $this->Admin || !$this->session->userdata('biller_id')) ? $this->site->getAllCompanies('biller') : null;
             $this->data['tax_rates'] = $this->site->getAllTaxRates();
             $this->data['warehouses'] = ($this->Owner || $this->Admin || !$this->session->userdata('biller_id')) ? $this->site->getAllWarehouses() : null;

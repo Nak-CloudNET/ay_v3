@@ -80,14 +80,16 @@ class Transfers extends MY_Controller
         $this->load->library('datatables');
 
         $this->datatables          
-			->select("transfers.id, transfers.date, transfers.transfer_no, transfers.from_warehouse_name as fname, transfers.from_warehouse_code as fcode, transfers.to_warehouse_name as tname, transfers.to_warehouse_code as tcode, transfers.total, transfers.total_tax,transfers. grand_total, transfers.status")
+			->select("transfers.id, transfers.date, transfers.transfer_no, transfers.from_warehouse_name as fname, transfers.from_warehouse_code as fcode, transfers.to_warehouse_name as tname, transfers.to_warehouse_code as tcode, SUM(COALESCE(erp_purchase_items.quantity, 0)) as total_qty, transfers.total_tax, transfers.grand_total, transfers.status")
             ->from('transfers')
-			
+			->join('purchase_items', 'purchase_items.transfer_id = transfers.id', 'left')
+			->where('purchase_items.quantity > 0')
+			->group_by('purchase_items.transfer_id')
 			->edit_column("fname", "$1 ($2)", "fname, fcode")
             ->edit_column("tname", "$1 ($2)", "tname, tcode");
 
         if (!$this->Owner && !$this->Admin && !$this->session->userdata('view_right')) {
-            $this->datatables->where('created_by', $this->session->userdata('user_id'));
+            $this->datatables->where('transfers.created_by', $this->session->userdata('user_id'));
         }
 		if ($reference_no) {
 			$this->datatables->where('transfers.transfer_no', $reference_no);
@@ -96,10 +98,10 @@ class Transfers extends MY_Controller
 			$this->datatables->join('purchase_items', 'purchase_items.transfer_id = transfers.id', 'left');
 			$this->datatables->where(array('purchase_items.product_id' => $product_id, 'purchase_items.quantity >' => 0));
 		}
+		
 		if (!$this->Owner && !$this->Admin) {
             if(!$subtotal){
-                $this->datatables->unset_column("total");
-                $this->datatables->unset_column("grand_total");
+                $this->datatables->unset_column("transfers.grand_total");
             }
         }else{
 

@@ -4373,8 +4373,7 @@ class Purchases extends MY_Controller
 
     public function getExpenses($id = null)
     {
-        $this->erp->checkPermissions('index');
-		if ($this->input->get('user')) {
+        if ($this->input->get('user')) {
             $user_query = $this->input->get('user');
         } else {
             $user_query = NULL;
@@ -4435,8 +4434,8 @@ class Purchases extends MY_Controller
 			->join('gl_trans', 'gl_trans.account_code = expenses.account_code', 'left')
             ->group_by('expenses.id');
 
-        if (!$this->Owner && !$this->Admin) {
-            $this->datatables->where('created_by', $this->session->userdata('user_id'));
+        if (!$this->Owner && !$this->Admin && $this->session->userdata('view_right') == 0) {
+            $this->datatables->where('expenses.created_by', $this->session->userdata('user_id'));
         }
 		if ($user_query) {
 			$this->datatables->where('expenses.created_by', $user_query);
