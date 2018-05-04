@@ -866,9 +866,9 @@ class Transfers extends MY_Controller
         }
         $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
         $transfer = $this->transfers_model->getTransferByID($transfer_id);
-        if (!$this->session->userdata('view_right')) {
+        /*if (!$this->session->userdata('view_right')) {
             $this->erp->view_rights($transfer->created_by, true);
-        }
+        }*/
         $this->data['rows'] = $this->transfers_model->getAllTransferItems($transfer_id, $transfer->status);
         $this->data['from_warehouse'] = $this->site->getWarehouseByID($transfer->from_warehouse_id);
         $this->data['to_warehouse'] = $this->site->getWarehouseByID($transfer->to_warehouse_id);
