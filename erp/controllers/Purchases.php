@@ -4493,11 +4493,8 @@ class Purchases extends MY_Controller
 
         $this->form_validation->set_rules('userfile', lang("attachment"), 'xss_clean');
         if ($this->form_validation->run() == true) {
-            if ($this->Owner || $this->Admin) {
-                $date = $this->erp->fld(trim($this->input->post('date')));
-            } else {
-                $date = date('Y-m-d H:i:s');
-            }
+			
+            $date = $this->erp->fld(trim($this->input->post('date')));
 			
             $data_payment = array(
                             'date'          => $date,
@@ -4520,7 +4517,7 @@ class Purchases extends MY_Controller
 				'biller_id'	=> $this->input->post('biller'),
 				'bank_code' => $this->input->post('paid_by')
             );
-			//$this->erp->print_arrays($data);
+			
             if ($_FILES['userfile']['size'] > 0) {
                 $this->load->library('upload');
                 $config['upload_path'] = $this->upload_path;
@@ -4537,7 +4534,6 @@ class Purchases extends MY_Controller
                 $photo = $this->upload->file_name;
                 $data['attachment'] = $photo;
             }
-            //$this->erp->print_arrays($data, $data_payment);
         } elseif ($this->input->post('add_expense')) {
             $this->session->set_flashdata('error', validation_errors());
             redirect('purchases/expenses');

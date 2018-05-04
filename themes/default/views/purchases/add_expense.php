@@ -31,14 +31,11 @@
 				echo form_input($biller_input);
 			}
 			?>
-
-            <?php if ($Owner || $Admin) { ?>
-
-                <div class="form-group">
-                    <?= lang("date", "date"); ?>
-                    <?= form_input('date', (isset($_POST['date']) ? $_POST['date'] : ""), 'class="form-control datetime" id="date" required="required"'); ?>
-                </div>
-            <?php } ?>
+			
+			<div class="form-group">
+				<?= lang("date", "date"); ?>
+				<?= form_input('date', (isset($_POST['date']) ? $_POST['date'] : ""), 'class="form-control datetime" id="date" required="required"'); ?>
+			</div>
 
             <div class="form-group">
                 <?= lang("reference", "reference"); ?>

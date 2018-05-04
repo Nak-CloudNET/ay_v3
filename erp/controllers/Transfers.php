@@ -88,9 +88,9 @@ class Transfers extends MY_Controller
 			->edit_column("fname", "$1 ($2)", "fname, fcode")
             ->edit_column("tname", "$1 ($2)", "tname, tcode");
 
-        if (!$this->Owner && !$this->Admin && !$this->session->userdata('view_right')) {
+        /*if (!$this->Owner && !$this->Admin && !$this->session->userdata('view_right')) {
             $this->datatables->where('transfers.created_by', $this->session->userdata('user_id'));
-        }
+        }*/
 		if ($reference_no) {
 			$this->datatables->where('transfers.transfer_no', $reference_no);
 		}
