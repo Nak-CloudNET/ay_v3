@@ -40,9 +40,9 @@
 
     });
 </script>
-<?php if ($Owner || $GP['bulk_actions']) {
+<?php
     echo form_open('products/count_actions'.($warehouse_id ? '/'.$warehouse_id : ''), 'id="action-form"');
-} ?>
+?>
 <div class="box">
     <div class="box-header">
         <h2 class="blue">
@@ -123,10 +123,9 @@
         </div>
     </div>
 </div>
-<?php if ($Owner || $GP['bulk_actions']) { ?>
-    <div style="display: none;">
-        <input type="hidden" name="form_action" value="" id="form_action"/>
-        <?= form_submit('performAction', 'performAction', 'id="action-form-submit"') ?>
-    </div>
-    <?= form_close() ?>
-<?php } ?>
+
+<div style="display: none;">
+	<input type="hidden" name="form_action" value="" id="form_action"/>
+	<?= form_submit('performAction', 'performAction', 'id="action-form-submit"') ?>
+</div>
+<?= form_close() ?>

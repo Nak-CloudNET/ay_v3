@@ -4656,7 +4656,6 @@ class Products extends MY_Controller
 	}
 	
 	function count_actions(){
-		
 		$this->form_validation->set_rules('form_action', lang("form_action"), 'required');
 		if ($this->form_validation->run() == true) {
 			if (!empty($_POST['val'])) {
@@ -4780,7 +4779,7 @@ class Products extends MY_Controller
 	
 	function getCounts($warehouse_id = NULL)
     {
-        $this->erp->checkPermissions('count_stock',null,'products');
+        $this->erp->checkPermissions('count_stock', null, 'products');
 		
         if ((! $this->Owner || ! $this->Admin) && ! $warehouse_id) {
             $user = $this->site->getUser();
@@ -4952,7 +4951,7 @@ class Products extends MY_Controller
 
     function finalize_count()
     {
-        $this->erp->checkPermissions('count_stock',null,'products');
+        $this->erp->checkPermissions('count_stock', null,'products');
 		$this->form_validation->set_rules('warehouse', lang("warehouse"), 'required');
         $this->form_validation->set_rules('reference_no', lang("reference_no"), 'required');
 		if ($this->form_validation->run() == true) {
