@@ -5127,7 +5127,6 @@ class Sales extends MY_Controller
         }
         $customer = $this->site->getCompanyByID($customer_id);
         $customer_group = $this->site->getCustomerGroupByID($customer->customer_group_id);
-		//$customer_group = $this->site->getMakeupCostByCompanyID($customer_id);
 		$user_setting = $this->site->getUserSetting($this->session->userdata('user_id'));
         $rows = $this->sales_model->getProductNumber($sr, $warehouse_id, $user_setting->sales_standard, $user_setting->sales_combo, $user_setting->sales_digital, $user_setting->sales_service, $user_setting->sales_category);
         if ($rows) {
@@ -5169,7 +5168,7 @@ class Sales extends MY_Controller
                         }
                     }
                 }
-                if ($opt->price != 0) {
+                /*if ($opt->price != 0) {
 					if($customer_group->makeup_cost == 1){
 						$row->price = $row->cost + (($row->cost * $customer_group->percent) / 100);
 					}else{
@@ -5181,8 +5180,9 @@ class Sales extends MY_Controller
 					}else{
 						$row->price = $row->price + (($row->price * $customer_group->percent) / 100);
 					}
-                }
+                }*/
                 $row->real_unit_price = $row->price;
+				$row->percent_cus_group = $customer_group->percent;
                 $combo_items = FALSE;
                 if ($row->tax_rate) {
                     $tax_rate = $this->site->getTaxRateByID($row->tax_rate);
