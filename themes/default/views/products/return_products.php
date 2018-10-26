@@ -1,4 +1,5 @@
 <?php
+	$warehouse_id = explode(',', $warehouse_id);
 	$v = "";
 	/* if($this->input->post('name')){
 	  $v .= "&product=".$this->input->post('product');
@@ -30,6 +31,7 @@
 	if(isset($date)){
 		$v .= "&d=" . $date;
 	}
+	
 
 ?>
 <script>
@@ -68,20 +70,20 @@
         ], "footer");
 
         <?php if($this->session->userdata('remove_rels')) { ?>
-        localStorage.setItem('remove_rels', '1');
+        __setItem('remove_rels', '1');
         <?php $this->erp->unset_data('remove_rels'); } ?>
-        if (localStorage.getItem('remove_rels')) {
-            localStorage.removeItem('reref');
-            localStorage.removeItem('renote');
-            localStorage.removeItem('reitems');
-            localStorage.removeItem('rediscount');
-            localStorage.removeItem('retax2');
-            localStorage.removeItem('return_surcharge');
-            localStorage.removeItem('remove_rels');
+        if (__getItem('remove_rels')) {
+            __removeItem('reref');
+            __removeItem('renote');
+            __removeItem('reitems');
+            __removeItem('rediscount');
+            __removeItem('retax2');
+            __removeItem('return_surcharge');
+            __removeItem('remove_rels');
         }
 
         $(document).on('click', '.sledit', function (e) {
-            if (localStorage.getItem('slitems')) {
+            if (__getItem('slitems')) {
                 e.preventDefault();
                 var href = $(this).attr('href');
                 bootbox.confirm("<?=lang('you_will_loss_sale_data')?>", function (result) {

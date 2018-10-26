@@ -79,7 +79,7 @@
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;
-							height: 20px;"><p class="text-style"  >From (DD)</p>
+							height: 20px;" value="1" readonly><p class="text-style"  >From (DD)</p>
 							</td>
 						<td class="vertical-align: middle !important padding-less">
 						<p class="text-style" style="margin-bottom: 0px;">ខែ</p>
@@ -118,7 +118,7 @@
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;
-							height: 20px;"><p class="text-style"  >To 	(DD)</p>
+							height: 20px;" readonly><p class="text-style"  >To 	(DD)</p>
 							</td>
 						<td class="vertical-align: middle !important padding-less">
 						<p class="text-style" style="margin-bottom: 0px;">ខែ</p>
@@ -130,7 +130,7 @@
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;
-							height: 20px;"><p class="text-style"  >Month(MM) </p>
+							height: 20px;" readonly><p class="text-style"  >Month(MM) </p>
 							</td>
 						<td class="vertical-align: middle !important padding-less">
 						<p class="text-style" style="margin-bottom: 0px;">ឆ្នាំ</p>
@@ -142,7 +142,7 @@
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;
-							height: 20px;"><p class="text-style"  >Year(YYYY)</p>
+							height: 20px;" readonly><p class="text-style"  >Year(YYYY)</p>
 						</td>
 					</td>
 					
@@ -355,7 +355,7 @@
 							<input type="hidden" name="type_of_oop[]" value=" ការបំពេញសេវាកម្ម សួយសារចំពោះទ្រព្យអរូបី ភាគកម្មក្នុងេធនធានរ៉ែ<br/>
 							Performance of Services, Royalty for Intangibles, Interests in Minerals"></td>
 							
-							<td style="width:16%;"><input type="text" class="checknb t_r form-control salarypaid" name="salarypaid[]" style="
+							<td style="width:16%;"><input type="text" class="checknb t_r form-control salarypaid" name="salarypaid[]" id="rb1"  readonly style="
 							width: 80%;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -371,8 +371,8 @@
 							padding-left: 2px;
 							padding-right: 2px;
 							text-align:right;
-							height: 35px;float:left;" value="15"><p style="padding-top:5px;margin-bottom: 0px;float:right;">%</p></td>
-							<td style="width:16%;"><input type="text" readonly="" class="checknb t_r form-control withholding_box" name="withholding_box[]" style="
+							height: 35px;float:left;" value="15" readonly><p style="padding-top:5px;margin-bottom: 0px;float:right;">%</p></td>
+							<td style="width:16%;"><input type="text" readonly="" class="checknb t_r form-control withholding_box"  id="rd1"  name="withholding_box[]" style="
 							width: 80%;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -393,7 +393,7 @@
 							Payment of Interest to Non-Bank or Saving Institution Taxpayers
 							<input type="hidden" name="type_of_oop[]" value="ការបង់ការប្រាក់ឲ្យទៅអ្នកជាប់ពន្ធមិនមែនជាធនាគារឬស្ថាប័នសញ្ជ័យធន <br/>
 							Payment of Interest to Non-Bank or Saving Institution Taxpayers"></td>
-							<td style="width:16%;"><input type="text" class="checknb t_r form-control salarypaid" name="salarypaid[]" style="
+							<td style="width:16%;"><input type="text" class="checknb t_r form-control salarypaid" id="rb2" readonly name="salarypaid[]" style="
 							width: 80%;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -407,8 +407,8 @@
 							padding-left: 2px;
 							padding-right: 2px;
 							text-align:right;
-							height: 35px;float:left;" value="15"><p style="padding-top:5px;margin-bottom: 0px;float:right;">%</p></td>
-							<td style="width:16%;"><input type="text" readonly="" class="checknb t_r form-control withholding_box" name="withholding_box[]" style="
+							height: 35px;float:left;" value="15" readonly><p style="padding-top:5px;margin-bottom: 0px;float:right;">%</p></td>
+							<td style="width:16%;"><input type="text" readonly="" class="checknb t_r form-control withholding_box"   id="rd2" name="withholding_box[]" style="
 							width: 80%;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -429,7 +429,7 @@
 							Payment of Interest to Taxpayers who have Fixed Term Deposit Accounts
 							<input type="hidden" name="type_of_oop[]" value="ការបង់ការប្រាក់ឲ្យអ្នកជាប់ពន្ធដែលមានគណនីសន្សំមានកាលកំណត់ *<br/>
 							Payment of Interest to Taxpayers who have Fixed Term Deposit Accounts"></td>
-							<td style="width:16%;"><input type="text" class="checknb t_r form-control salarypaid" name="salarypaid[]"style="
+							<td style="width:16%;"><input type="text" class="checknb t_r form-control salarypaid" readonly id="rb3" name="salarypaid[]"style="
 							width: 80%;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -443,8 +443,8 @@
 							padding-left: 2px;
 							padding-right: 2px;
 							text-align:right;
-							height: 35px;float:left;" value="6"><p style="padding-top:5px;margin-bottom: 0px;float:right;">%</p></td>
-							<td style="width:16%;"><input  type="text" readonly="" class="checknb t_r  form-control withholding_box" name="withholding_box[]" style="
+							height: 35px;float:left;" value="6" readonly><p style="padding-top:5px;margin-bottom: 0px;float:right;">%</p></td>
+							<td style="width:16%;"><input  type="text" readonly="" class="checknb t_r  form-control withholding_box"    id="rd3"   name="withholding_box[]" style="
 							width: 80%;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -465,7 +465,7 @@
 							Payment of Interest to Taxpayers who have Non-Fixed Term Saving
 							<input type="hidden" name="type_of_oop[]" value="ការបង់ការប្រាក់ឲ្យអ្នកជាប់ពន្ធដែលមានគណនីសន្សំគ្មានកាលកំណត់* <br/>
 							Payment of Interest to Taxpayers who have Non-Fixed Term Saving"></td>
-							<td style="width:16%;"><input type="text" class="checknb t_r form-control salarypaid" name="salarypaid[]" style="
+							<td style="width:16%;"><input type="text" class="checknb t_r form-control salarypaid" id="rb4" readonly name="salarypaid[]" style="
 							width: 80%;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -479,8 +479,8 @@
 							padding-left: 2px;
 							padding-right: 2px;
 							text-align:right;
-							height: 35px;float:left;" value="4"><p style="padding-top:5px;margin-bottom: 0px;float:right;">%</p></td>
-							<td style="width:16%;"><input type="text" readonly="" class="checknb t_r form-control withholding_box" name="withholding_box[]" style="
+							height: 35px;float:left;" value="4" readonly><p style="padding-top:5px;margin-bottom: 0px;float:right;">%</p></td>
+							<td style="width:16%;"><input type="text" readonly="" class="checknb t_r form-control withholding_box"    id="rd4"  name="withholding_box[]" style="
 							width: 80%;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -501,7 +501,7 @@
 							Payment of Rental/Lease of Movabel and Immovable Property
 							<input type="hidden" name="type_of_oop[]" value="ការបង់ថ្លៃឈ្នួលចលននិងអចលនទ្រព្យ <br/>
 							Payment of Rental/Lease of Movabel and Immovable Property"></td>
-							<td style="width:16%;"><input type="text" class="checknb t_r form-control salarypaid" name="salarypaid[]" style="
+							<td style="width:16%;"><input type="text" class="checknb t_r form-control salarypaid"   id="rb5" readonly name="salarypaid[]" style="
 							width: 80%;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -515,8 +515,8 @@
 							padding-left: 2px;
 							padding-right: 2px;
 							text-align:right;
-							height: 35px;float:left;" value="10"><p style="padding-top:5px;margin-bottom: 0px;float:right;">%</p></td>
-							<td style="width:16%;"><input type="text" readonly="" class="checknb t_r form-control withholding_box" name="withholding_box[]" style="
+							height: 35px;float:left;" value="10" readonly><p style="padding-top:5px;margin-bottom: 0px;float:right;">%</p></td>
+							<td style="width:16%;"><input type="text" readonly="" class="checknb t_r form-control withholding_box"    id="rd5" name="withholding_box[]" style="
 							width: 80%;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -535,9 +535,12 @@
 							<td style="width:2%;text-align:center;vertical-align: middle !important;"></td>
 							<td style="width:40%;text-align:left;">សរុប <br/>
 							Total</td>
-							<td style="width:16%;" class="TotalSP_AMT"><p style="padding-top:5px;margin-bottom: 0px;float:right;">រៀល</p></td>
+							<td style="width:16%;" class="TotalSP_AMT"><p style="padding-top:5px;margin-bottom: 0px;float:right;"><span id="total_r"></span>រៀល</p></td>
 							<td style="width:12%;background-color:#7f8c8d;"></td>
-							<td style="width:16%;" class="TotalWidhholding"><p style="padding-top:5px;margin-bottom: 0px;float:right;">រៀល</p></td>
+							<td style="width:16%;" class="TotalWidhholding"><p style="padding-top:5px;margin-bottom: 0px;float:right;">
+							<span id="total_rt"></span>
+							<input type="hidden" id="total_tr_box" name="total_tr_box" />
+							រៀល</p></td>
 							<td style="width:16%;"></td>
 					</tr>
 						
@@ -570,14 +573,14 @@
 							Payment of Interest
 							<input type="hidden" name="type_of_oop[]" value="ការបង់ការប្រាក់<br/>
 							Payment of Interest"></td>
-							<td style="width:16%;"><input type="text" class="checknb t_r form-control salary_nre" name="salary_nre[]" style="
+							<td style="width:16%;"><input type="text" class="checknb t_r form-control salary_nre" readonly name="salary_nre[]"id="nrb1" style="
 							width: 80%;
 							padding-top: 2px;
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;
 							height: 35px;float:left;"><p style="padding-top:5px;margin-bottom: 0px;float:right;">រៀល</p></td>
-							<td style="width:12%;"><input type="text" class="checknb t_r form-control persent_nre" name="persent_nre[]" style="
+							<td style="width:12%;"><input type="text" class="checknb t_r form-control persent_nre" readonly name="persent_nre[]" style="
 							width: 90%;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -585,7 +588,7 @@
 							padding-right: 2px;
 							text-align:right;
 							height: 35px;float:left;" value="14"><p style="padding-top:5px;margin-bottom: 0px;float:right;">%</p></td>
-							<td style="width:16%;"><input type="text" class="checknb t_r form-control withholding_box_nre" name="withholding_box_nre[]" style="
+							<td style="width:16%;"><input type="text" class="checknb t_r form-control withholding_box_nre" readonly name="withholding_box_nre[]" id="nrd1" style="
 							width: 80%;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -606,14 +609,14 @@
 							Payment of Royaly, Rental/Leasign, and Income related to use of property
 							<input type="hidden" name="type_of_oop[]" value="ការបង់សួយសារ ថ្លៃឈ្នូល ចំណូលផ្សេងៗទាក់ទិននឹងការប្រើប្រាស់ទ្រព្យសម្បត្តិ<br/>
 							Payment of Royaly, Rental/Leasign, and Income related to use of property"></td>
-							<td style="width:16%;"><input type="text" class="checknb t_r form-control salary_nre" name="salary_nre[]" style="
+							<td style="width:16%;"><input type="text" class="checknb t_r form-control salary_nre" readonly name="salary_nre[]"  id="nrb2" style="
 							width: 80%;
 							padding-top: 2px;
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;
 							height: 35px;float:left;"><p style="padding-top:5px;margin-bottom: 0px;float:right;">រៀល</p></td>
-							<td style="width:12%;"><input type="text" class="checknb t_r form-control persent_nre" name="persent_nre[]" style="
+							<td style="width:12%;"><input type="text" class="checknb t_r form-control persent_nre" readonly name="persent_nre[]"  style="
 							width: 90%;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -621,7 +624,7 @@
 							padding-right: 2px;
 							text-align:right;
 							height: 35px;float:left;" value="14"><p style="padding-top:5px;margin-bottom: 0px;float:right;">%</p></td>
-							<td style="width:16%;"><input type="text" class="checknb t_r form-control withholding_box_nre" name="withholding_box_nre[]" style="
+							<td style="width:16%;"><input type="text" class="checknb t_r form-control withholding_box_nre" readonly id="nrd2" name="withholding_box_nre[]" style="
 							width: 80%;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -642,14 +645,14 @@
 							Payment of Management Fee and Techical Services
 							<input type="hidden" name="type_of_oop[]" value="ការទូទាត់ថ្លៃសេវាគ្រប់គ្រងនិងសេវាបច្ចេកទេសនានា <br/>
 							Payment of Management Fee and Techical Services"></td>
-							<td style="width:16%;"><input type="text" class="checknb t_r form-control salary_nre" name="salary_nre[]" style="
+							<td style="width:16%;"><input type="text" class="checknb t_r form-control salary_nre" readonly name="salary_nre[]"  id="nrb3" style="
 							width: 80%;
 							padding-top: 2px;
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;
 							height: 35px;float:left;"><p style="checknb t_c padding-top:5px;margin-bottom: 0px;float:right;">រៀល</p></td>
-							<td style="width:12%;"><input type="text" class="checknb t_r form-control persent_nre" name="persent_nre[]" style="
+							<td style="width:12%;"><input type="text" class="checknb t_r form-control persent_nre" readonly name="persent_nre[]" style="
 							width: 90%;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -657,7 +660,7 @@
 							padding-right: 2px;
 							text-align:right;
 							height: 35px;float:left;" value="14"><p style="padding-top:5px;margin-bottom: 0px;float:right;">%</p></td>
-							<td style="width:16%;"><input type="text" class="checknb t_r form-control withholding_box_nre" name="withholding_box_nre[]" style="
+							<td style="width:16%;"><input type="text" class="checknb t_r form-control withholding_box_nre" readonly id="nrd3"  name="withholding_box_nre[]" style="
 							width: 80%;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -678,14 +681,14 @@
 							Payment of Dividend
 							<input type="hidden" name="type_of_oop[]" value="ការបង់ភាគលាភ <br/>
 							Payment of Dividend"></td>
-							<td style="width:16%;"><input type="text" class="checknb t_r form-control salary_nre" name="salary_nre[]" style="
+							<td style="width:16%;"><input type="text" class="checknb t_r form-control salary_nre"  readonly name="salary_nre[]"  id="nrb4"  style="
 							width: 80%;
 							padding-top: 2px;
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;
 							height: 35px;float:left;"><p style="padding-top:5px;margin-bottom: 0px;float:right;">រៀល</p></td>
-							<td style="width:12%;"><input type="text" class="checknb t_r form-control persent_nre" name="persent_nre[]" style="
+							<td style="width:12%;"><input type="text" class="checknb t_r form-control persent_nre" readonly name="persent_nre[]" style="
 							width: 90%;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -693,7 +696,7 @@
 							padding-right: 2px;
 							text-align:right;
 							height: 35px;float:left;" value="14"><p style="padding-top:5px;margin-bottom: 0px;float:right;">%</p></td>
-							<td style="width:16%;"><input type="text" class="checknb t_r form-control withholding_box_nre" name="withholding_box_nre[]"  style="
+							<td style="width:16%;"><input type="text" class="checknb t_r form-control withholding_box_nre" readonly  id="nrd4" name="withholding_box_nre[]"  style="
 							width: 80%;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -713,9 +716,12 @@
 							<td style="width:2%;text-align:center;vertical-align: middle !important;"></td>
 							<td style="width:40%;text-align:left;">សរុប <br/>
 							Total</td>
-							<td style="width:16%;" class="TotalSP_NRE"><p style="padding-top:5px;margin-bottom: 0px;float:right;">រៀល</p></td>
+							<td style="width:16%;" class="TotalSP_NRE"><p style="padding-top:5px;margin-bottom: 0px;float:right;"><span id="total_nr"></span>រៀល</p></td>
 							<td style="width:12%;background-color:#7f8c8d;"></td>
-							<td style="width:16%;" class="TotalWidhholding_nre"><p style="padding-top:5px;margin-bottom: 0px;float:right;">រៀល</p></td>
+							<td style="width:16%;" class="TotalWidhholding_nre"><p style="padding-top:5px;margin-bottom: 0px;float:right;">
+							<span id="total_nrt"></span>
+							<input type="hidden" id="total_nrt_box" name="total_nrt_box" />
+							រៀល</p></td>
 							<td style="width:16%;"></td>
 					</tr>
 						
@@ -1062,7 +1068,7 @@
 			var amt_t   = tr.find(".abtw").val()-0;
 			var persent = tr.find(".tax_r").val()-0;
 			total       = (amt_t*(persent/100));
-			tr.find(".wdt_tax").val(total.toFixed(2));
+			tr.find(".wdt_tax").val(total.toFixed(0));
 		});
 		
 		$(".abtw_nre,.tax_r_nre").change(function(){
@@ -1071,40 +1077,10 @@
 			var amt_t   = tr.find(".abtw_nre").val()-0;
 			var persent = tr.find(".tax_r_nre").val()-0;
 			total       = (amt_t*(persent/100));
-			tr.find(".wdt_tax_nre").val(total.toFixed(2));
+			tr.find(".wdt_tax_nre").val(total.toFixed(0));
 		});
 		
-		$('#enterprise').change(function(){
-			var ent_id = $(this).val();
-			$.ajax({
-				type: 'get',
-				url: '<?= site_url('taxes/getEnterpriceInfo'); ?>',
-				dataType: "json",
-				data: {
-					ent_id: ent_id
-				},
-				success: function (data) {
-					$('.vat').text('');
-					var str = data['vat_no'];
-					var i = 0;
-					$('.vat').each(function() {
-						$(this).text(str[i]);
-						i++;
-					});
-					$('.business_act').val(data['business_activity']);
-					$('.address').val(data['address']);	
-					$('.street').val(data['street']);
-					$('.group').val(data['group']);
-					$('.village').val(data['village']);
-					$('.sangkat').val(data['sangkat']);
-					$('.district').val(data['district']);
-					$('.municipality').val(data['']);
-					$('.municipality').val(data['city']);
-					$('.phone').val(data['phone']);
-					$('.email').val(data['email']);
-				}
-			});
-		});
+
 		
 		$(".salarypaid").change(function(){
 			var tr = $(this).parent().parent();
@@ -1112,9 +1088,9 @@
 			var salarypaid = tr.find(".salarypaid").val()-0;
 			var persent    = tr.find(".persent").val()-0;
 			total = (salarypaid*(persent/100));
-			tr.find(".withholding_box").val(total.toFixed(2));
-			$(".TotalSP_AMT").html(SumAmt(".salarypaid").toFixed(2));
-			$(".TotalWidhholding").html(SumAmt(".withholding_box").toFixed(2));
+			tr.find(".withholding_box").val(total.toFixed(0));
+			$(".TotalSP_AMT").html(SumAmt(".salarypaid").toFixed(0));
+			$(".TotalWidhholding").html(SumAmt(".withholding_box").toFixed(0));
 		});
 		
 		$(".salary_nre").change(function(){
@@ -1123,9 +1099,9 @@
 			var salarypaid = tr.find(".salary_nre").val()-0;
 			var persent    = tr.find(".persent_nre").val()-0;
 			total = (salarypaid*(persent/100));
-			tr.find(".withholding_box_nre").val(total.toFixed(2));
-			$(".TotalSP_NRE").html(SumAmt(".salary_nre").toFixed(2));
-			$(".TotalWidhholding_nre").html(SumAmt(".withholding_box_nre").toFixed(2));
+			tr.find(".withholding_box_nre").val(total.toFixed(0));
+			$(".TotalSP_NRE").html(SumAmt(".salary_nre").toFixed(0));
+			$(".TotalWidhholding_nre").html(SumAmt(".withholding_box_nre").toFixed(0));
 		});
 		
 		
@@ -1138,6 +1114,89 @@
 		}
 		
 		
-	});
+		 $( ".st_mm" ).focusout(function() {
+				$( "#enterprise" ).trigger( "change" );
+		  })
+		  $( ".st_yy" ).focusout(function() {
+				$( "#enterprise" ).trigger( "change" );
+		  })
+			$('#enterprise').change(function(){
+				var ent_id = $(this).val();
+				var month = $('.st_mm').val();
+				var year = $('.st_yy').val();
+				if(month =='' || year == '' || ent_id==''){
+					
+				}else{
+					$.ajax({
+						type: 'get',
+						url: '<?= site_url('taxes/getEnterpriceInfo'); ?>',
+						dataType: "json",
+						data: {
+							ent_id: ent_id,
+							month: month,
+							year: year,
+							tax_type: 2
+						},
+						success: function (data) {
+							$('.vat').text('');
+							var str = data['vat_no'];
+							var i = 0;
+							$('.vat').each(function() {
+								$(this).text(str[i]);
+								i++;
+							});
+							$('.business_act').val(data['business_activity']);
+							$('.address').val(data['address']);	
+							$('.street').val(data['street']);
+							$('.group').val(data['group']);
+							$('.village').val(data['village']);
+							$('.sangkat').val(data['sangkat']);
+							$('.district').val(data['district']);
+							$('.city').val(data['city']);
+							$('.phone').val(data['phone']);
+							$('.email').val(data['email']);
+							
+							$('#rb1').val((data['wr1']).toFixed(0));
+							$('#rd1').val((data['wr1']*0.15).toFixed(0));
+							$('#rb2').val((data['wr2']).toFixed(0));
+							$('#rd2').val((data['wr2']*0.15).toFixed(0));
+							$('#rb3').val((data['wr3']).toFixed(0));
+							$('#rd3').val((data['wr3']*0.06).toFixed(0));
+							$('#rb4').val((data['wr4']).toFixed(0));
+							$('#rd4').val((data['wr4']*0.04).toFixed(0));
+							$('#rb5').val((data['wr5']).toFixed(0));
+							$('#rd5').val((data['wr5']*0.1).toFixed(0));
+							
+							var total_r=parseInt(data['wr1'])+parseInt(data['wr2'])+parseInt(data['wr3'])+parseInt(data['wr4'])+parseInt(data['wr5']);
+							
+							var total_rt=parseInt(data['wr1']*0.15)+parseInt(data['wr2']*0.15)+parseInt(data['wr3']*0.06)+parseInt(data['wr4']*0.14)+parseInt(data['wr5']*0.10);
+							
+							
+							$('#total_r').text(total_r);
+							$('#total_rt').text(total_rt);
+							$('#total_tr_box').val(total_rt);
+							
+							
+							$('#nrb1').val((data['wnr1']).toFixed(0));
+							$('#nrd1').val((data['wnr1']*0.14).toFixed(0));
+							$('#nrb2').val((data['wnr2']).toFixed(0));
+							$('#nrd2').val((data['wnr2']*0.14).toFixed(0));
+							$('#nrb3').val((data['wnr3']).toFixed(0));
+							$('#nrd3').val((data['wnr3']*0.14).toFixed(0));
+							$('#nrb4').val((data['wnr4']).toFixed(0));
+							$('#nrd4').val((data['wnr4']*0.14).toFixed(0));
+							
+							var total_nr=(data['wnr1'])+(data['wnr2'])+(data['wnr3'])+(data['wnr4']);
+							var total_nrt=((data['wnr1']*0.14)+(data['wnr2']*0.14)+(data['wnr3']*0.14)+(data['wnr4']*0.14)).toFixed(0);
+							
+							$('#total_nr').text(total_nr);
+							$('#total_nrt').text(total_nrt);
+							$('#total_nrt_box').val(total_nrt);
+							
+						}
+						});
+					}
+				});
+			});
 </script>
 

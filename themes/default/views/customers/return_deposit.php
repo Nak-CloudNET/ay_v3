@@ -12,7 +12,16 @@
 
             <div class="row">
                 <div class="col-sm-12">
-				
+					<div class="form-group">
+						<?= lang('reference_no', 'reference_no'); ?>
+						<div class="input-group">  
+						<?= form_input('reference_no',$reference, 'class="form-control tip"  required  id="reference_no"'); ?>
+						<input type="hidden"  name="temp_reference_no"  id="temp_reference_no" value="<?= $reference ?>" />
+						<div class="input-group-addon no-print" style="padding: 2px 5px;background-color:white;">
+								<input type="checkbox" name="ref_status" id="ref_st" value="1" style="margin-top:3px;">
+							</div>
+						</div>
+					</div>
 					<?php if ($Owner || $Admin) { ?>
 						<div class="form-group">
 							<?= lang("biller", "biller"); ?>
@@ -50,7 +59,85 @@
                             <?php echo form_input('amount', set_value('amount', $this->erp->formatDecimal($deposit->amount)), 'class="form-control" id="amount" required="required"'); ?>
                         </div>
                     </div>
-					
+					<div class="form-group">
+						<?= lang("paying_by", "paid_by_1"); ?>
+						<select name="paid_by" id="paid_by_1" class="form-control paid_by"
+								required="required">
+							<option value="cash" <?= (($deposit && $deposit->paid_by == 'cash')? 'selected':''); ?> ><?= lang("cash"); ?></option>
+							<option value="CC" <?= (($deposit && $deposit->paid_by == 'CC')? 'selected':''); ?> ><?= lang("CC"); ?></option>
+							<option value="gift_card" <?= (($deposit && $deposit->paid_by == 'gift_card')? 'selected':''); ?> ><?= lang("gift_card"); ?></option>
+							<option value="Cheque" <?= (($deposit && $deposit->paid_by == 'Cheque')? 'selected':''); ?> ><?= lang("cheque"); ?></option>
+							<option value="other" <?= (($deposit && $deposit->paid_by == 'other')? 'selected':''); ?> ><?= lang("other"); ?></option>
+						</select>
+					</div>
+					<div class="form-group">
+						<?= lang("bank_account", "bank_account_1"); ?>
+						<?php $bank = array('' => '');
+						foreach($bankAccounts as $bankAcc) {
+							$bank[$bankAcc->accountcode] = $bankAcc->accountcode . ' | '. $bankAcc->accountname;
+						}
+						echo form_dropdown('bank_account', $bank, (($deposit && $deposit->bank_code)? $deposit->bank_code:''), 'id="bank_account_1" class="ba form-control kb-pad bank_account" required="required"');
+						?>
+					</div>
+					<div class="form-group gc" style="display: none;">
+						<?= lang("gift_card_no", "gift_card_no"); ?>
+						<input name="gift_card_no" type="text" id="gift_card_no" class="pa form-control kb-pad"/>
+
+						<div id="gc_details"></div>
+					</div>
+					<div class="pcc_1" style="display:none;">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<input name="pcc_no" type="text" id="pcc_no_1" class="form-control"
+										   placeholder="<?= lang('cc_no') ?>"/>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+
+									<input name="pcc_holder" type="text" id="pcc_holder_1" class="form-control"
+										   placeholder="<?= lang('cc_holder') ?>"/>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<select name="pcc_type" id="pcc_type_1" class="form-control pcc_type"
+											placeholder="<?= lang('card_type') ?>">
+										<option value="Visa"><?= lang("Visa"); ?></option>
+										<option value="MasterCard"><?= lang("MasterCard"); ?></option>
+										<option value="Amex"><?= lang("Amex"); ?></option>
+										<option value="Discover"><?= lang("Discover"); ?></option>
+									</select>
+									<!-- <input type="text" id="pcc_type_1" class="form-control" placeholder="<?= lang('card_type') ?>" />-->
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<input name="pcc_month" type="text" id="pcc_month_1" class="form-control"
+										   placeholder="<?= lang('month') ?>"/>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+
+									<input name="pcc_year" type="text" id="pcc_year_1" class="form-control"
+										   placeholder="<?= lang('year') ?>"/>
+								</div>
+							</div>
+							<!--<div class="col-md-3">
+													<div class="form-group">
+														<input name="pcc_ccv" type="text" id="pcc_cvv2_1" class="form-control" placeholder="<?= lang('cvv2') ?>" />
+													</div>
+												</div>-->
+						</div>
+					</div>
+					<div class="pcheque_1" style="display:none;">
+						<div class="form-group"><?= lang("cheque_no", "cheque_no_1"); ?>
+							<input name="cheque_no" type="text" id="cheque_no_1" class="form-control cheque_no"/>
+						</div>
+					</div>
+
                     <div class="form-group">
                         <?php echo lang('note', 'note'); ?>
                         <div class="controls">
@@ -69,6 +156,18 @@
 <?= $modal_js ?>
 <script type="text/javascript" charset="UTF-8">
     $(document).ready(function () {
+		$("#reference_no").attr('readonly','readonly');
+		$('#ref_st').on('ifChanged', function() {
+		  if ($(this).is(':checked')) {
+			$("#reference_no").prop('readonly', false);
+			$("#reference_no").val("");
+		  }else{
+			$("#reference_no").prop('readonly', true);
+			var temp = $("#temp_reference_no").val();
+			$("#reference_no").val(temp);
+			
+		  }
+		});
         $(document).on('change', '#gift_card_no', function () {
             var cn = $(this).val() ? $(this).val() : '';
             if (cn != '') {
@@ -128,7 +227,7 @@
         });
         $('#pcc_no_1').change(function (e) {
             var pcc_no = $(this).val();
-            localStorage.setItem('pcc_no_1', pcc_no);
+            __setItem('pcc_no_1', pcc_no);
             var CardType = null;
             var ccn1 = pcc_no.charAt(0);
             if (ccn1 == 4)

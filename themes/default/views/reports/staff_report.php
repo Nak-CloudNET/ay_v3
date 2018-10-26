@@ -33,11 +33,19 @@
         margin: 0;
         padding: 8px;
     }
-
-    .day_num:hover {
+    .day_nums {
+        width: 100%;
+        text-align: left;
+        cursor: pointer;
+        margin: 0;
+        padding: 8px;
+    }
+    .day_nums:hover {
         background: #F5F5F5;
     }
-
+    .day_num:hover{
+        background: #F5F5F5;
+    }
     .content {
         width: 100%;
         text-align: left;
@@ -94,10 +102,11 @@
 <ul id="myTab" class="nav nav-tabs">
     <li class=""><a href="#daily-con" class="tab-grey"><?= lang('staff_daily_sales') ?></a></li>
     <li class=""><a href="#monthly-con" class="tab-grey"><?= lang('staff_monthly_sales') ?></a></li>
-    <li class=""><a href="#sales-con" class="tab-grey"><?= lang('staff_sales_report') ?></a></li>
-    <li class=""><a href="#purchases-con" class="tab-grey"><?= lang('staff_purchases_report') ?></a></li>
+    <li class=""><a href="#purchases-daily" class="tab-grey"><?= lang('staff_daily_purchases') ?></a></li>
+    <li class=""><a href="#purchases-monthly" class="tab-grey"><?= lang('staff_monthly_purchases') ?></a></li>
     <li class=""><a href="#payments-con" class="tab-grey"><?= lang('staff_payments_report') ?></a></li>
     <li class=""><a href="#logins-con" class="tab-grey"><?= lang('staff_logins_report') ?></a></li>
+    <li class=""><a href="#sale_pro" class="tab-grey"><?= lang('sale_prodcut_report') ?></a></li>
 </ul>
 
 <div class="tab-content">
@@ -149,7 +158,7 @@
                         <p class="introtext"><?= lang("reports_calendar_text") ?></p>
 
                         <div class="table-responsive">
-                            <table class="table table-bordered dfTable reports-table">
+                            <table class="table table-bordered dfTable reports-table ">
                                 <tr class="year_roller">
                                     <th>
                                         <div class="text-center"><a href="reports/staff_report/<?= $user_id; ?>/<?= $year - 1; ?>/#monthly-con">&lt;&lt;</a>
@@ -164,27 +173,120 @@
                                     </th>
                                     </th>
                                 </tr>
-                                <tr>
-                                    <td><?= lang("cal_january"); ?></td>
-                                    <td><?= lang("cal_february"); ?></td>
-                                    <td><?= lang("cal_march"); ?></td>
-                                    <td><?= lang("cal_april"); ?></td>
-                                    <td><?= lang("cal_may"); ?></td>
-                                    <td><?= lang("cal_june"); ?></td>
-                                    <td><?= lang("cal_july"); ?></td>
-                                    <td><?= lang("cal_august"); ?></td>
-                                    <td><?= lang("cal_september"); ?></td>
-                                    <td><?= lang("cal_october"); ?></td>
-                                    <td><?= lang("cal_november"); ?></td>
-                                    <td><?= lang("cal_december"); ?></td>
-                                </tr>
+                                 <tr>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_profits/'.$user_id."/$year/01"); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_january"); ?>
+										</a>
+									</td>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_profits/'.$user_id.'/'.$year.'/02'); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_february"); ?>
+										</a>
+									</td>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_profits/'.$user_id.'/'.$year.'/03'); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_march"); ?>
+										</a>
+									</td>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_profits/'.$user_id.'/'.$year.'/04'); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_april"); ?>
+										</a>
+									</td>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_profits/'.$user_id.'/'.$year.'/05'); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_may"); ?>
+										</a>
+									</td>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_profits/'.$user_id.'/'.$year.'/06'); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_june"); ?>
+										</a>
+									</td>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_profits/'.$user_id.'/'.$year.'/07'); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_july"); ?>
+										</a>
+									</td>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_profits/'.$user_id.'/'.$year.'/08'); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_august"); ?>
+										</a>
+									</td>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_profits/'.$user_id.'/'.$year.'/09'); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_september"); ?>
+										</a>
+									</td>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_profits/'.$user_id.'/'.$year.'/10'); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_october"); ?>
+										</a>
+									</td>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_profits/'.$user_id.'/'.$year.'/11'); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_november"); ?>
+										</a>
+									</td>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_profits/'.$user_id.'/'.$year.'/12'); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_december"); ?>
+										</a>
+									</td>
+								</tr>
                                 <tr>
 
                                     <?php
                                     if (!empty($msales)) {
-
-                                        foreach ($msales as $value) {
-                                            $array[$value->date] = "<table class='table table-bordered table-hover table-striped table-condensed data' style='margin:0;'><tr><td>" . lang("product_tax") . "</td></tr><tr><td>" . $this->erp->formatMoney($value->tax1) . "</td></tr><tr><td>" . lang("order_tax") . "</td></tr><tr><td>" . $this->erp->formatMoney($value->tax2) . "</td></tr><tr><td>" . lang("total") . "</td></tr><tr><td>" . $this->erp->formatMoney($value->total) . "</td></tr><tr><td>" . lang("award_points") . "</td></tr><tr><td>" . intval($value->total / $this->Settings->each_sale) . "</td></tr></table>";
+                                        $grand_total=0;
+                                        foreach ($msales as $value){
+											$grand_total= $value->total+$value->tax2-$value->discount-$value->t_return;
+                                            $array[$value->date] = "
+                                                                    <table class='table table-bordered table-hover table-striped table-condensed data' style='margin:0;color:#428BCA;'>
+                                                                        <tr>
+                                                                            <td>" . lang("total") . "</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . $this->erp->formatMoney($value->total). "</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . lang("order_discount") . "</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . $this->erp->formatMoney($value->order_discount)."</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . lang("product_tax") . "</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . $this->erp->formatMoney($value->tax1)."</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . lang("refund") . "</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . $this->erp->formatMoney($value->t_return)."</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . lang("order_tax") . "</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . $this->erp->formatMoney($value->tax2)."</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . lang("grand_total") . "</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . $this->erp->formatMoney($grand_total). "</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . lang("award_points") . "</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . intval($value->total / $this->Settings->each_sale) . "</td>
+                                                                        </tr>
+                                                                    </table>";
                                         }
 
                                         for ($i = 1; $i <= 12; $i++) {
@@ -211,115 +313,16 @@
             </div>
         </div>
     </div>
-    <div id="sales-con" class="tab-pane fade in">
-
-        <?php
-        $v = "&user=" . $user_id;
-        if ($this->input->post('submit_sale_report')) {
-            if ($this->input->post('biller')) {
-                $v .= "&biller=" . $this->input->post('biller');
-            }
-            if ($this->input->post('warehouse')) {
-                $v .= "&warehouse=" . $this->input->post('warehouse');
-            }
-            if ($this->input->post('csutomer')) {
-                $v .= "&customer=" . $this->input->post('customer');
-            }
-            if ($this->input->post('serial')) {
-                $v .= "&serial=" . $this->input->post('serial');
-            }
-            if ($this->input->post('start_date')) {
-                $v .= "&start_date=" . $this->input->post('start_date');
-            }
-            if ($this->input->post('end_date')) {
-                $v .= "&end_date=" . $this->input->post('end_date');
-            }
-        }
-        ?>
-        <script>
-            $(document).ready(function () {
-                var oTable = $('#SlRData').dataTable({
-                    "aaSorting": [[0, "desc"]],
-                    "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
-                    "iDisplayLength": <?= $Settings->rows_per_page ?>,
-                    'bProcessing': true, 'bServerSide': true,
-                    'sAjaxSource': '<?= site_url('reports/getSalemanReport/?v=1' . $v) ?>',
-                    'fnServerData': function (sSource, aoData, fnCallback) {
-                        aoData.push({
-                            "name": "<?= $this->security->get_csrf_token_name() ?>",
-                            "value": "<?= $this->security->get_csrf_hash() ?>"
-                        });
-                        $.ajax({
-                            'dataType': 'json',
-                            'type': 'POST',
-                            'url': sSource,
-                            'data': aoData,
-                            'success': fnCallback
-                        });
-                    },
-                    "aoColumns": [{"mRender": fld}, null, null, null, {
-                        "bSearchable": false,
-                        "mRender": pqFormat
-                    }, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": row_status}],
-                    "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
-                        var gtotal = 0, paid = 0, balance = 0;
-                        for (var i = 0; i < aaData.length; i++) {
-                            gtotal += parseFloat(aaData[aiDisplay[i]][5]);
-                            paid += parseFloat(aaData[aiDisplay[i]][6]);
-                            balance += parseFloat(aaData[aiDisplay[i]][7]);
-                        }
-                        var nCells = nRow.getElementsByTagName('th');
-                        nCells[5].innerHTML = currencyFormat(parseFloat(gtotal));
-                        nCells[6].innerHTML = currencyFormat(parseFloat(paid));
-                        nCells[7].innerHTML = currencyFormat(parseFloat(balance));
-                    }
-                }).fnSetFilteringDelay().dtFilter([
-                    {column_number: 0, filter_default_label: "[<?=lang('date');?> (yyyy-mm-dd)]", filter_type: "text", data: []},
-                    {column_number: 1, filter_default_label: "[<?=lang('reference_no');?>]", filter_type: "text", data: []},
-                    {column_number: 2, filter_default_label: "[<?=lang('biller');?>]", filter_type: "text", data: []},
-                    {column_number: 3, filter_default_label: "[<?=lang('customer');?>]", filter_type: "text", data: []},
-                    {column_number: 8, filter_default_label: "[<?=lang('payment_status');?>]", filter_type: "text", data: []},
-                ], "footer");
-            });
-        </script>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('#form').hide();
-                $('.toggle_down').click(function () {
-                    $("#form").slideDown();
-                    return false;
-                });
-                $('.toggle_up').click(function () {
-                    $("#form").slideUp();
-                    return false;
-                });
-            });
-        </script>
-
+    <div id="purchases-daily" class="tab-pane fade in">
         <div class="box">
             <div class="box-header">
-                <h2 class="blue"><i class="fa-fw fa fa-heart nb"></i> <?= lang('staff_sales_report'); ?> <?php
-                    if ($this->input->post('start_date')) {
-                        echo "From " . $this->input->post('start_date') . " to " . $this->input->post('end_date');
-                    }
-                    ?></h2>
+                <h2 class="blue"><i class="fa-fw fa fa-calendar nb"></i> <?= lang('daily_sales'); ?></h2>
 
                 <div class="box-icon">
                     <ul class="btn-tasks">
-                        <li class="dropdown"><a href="#" class="toggle_up tip" title="<?= lang('hide_form') ?>"><i
-                                    class="icon fa fa-toggle-up"></i></a></li>
-                        <li class="dropdown"><a href="#" class="toggle_down tip" title="<?= lang('show_form') ?>"><i
-                                    class="icon fa fa-toggle-down"></i></a></li>
-                    </ul>
-                </div>
-                <div class="box-icon">
-                    <ul class="btn-tasks">
-                        <li class="dropdown"><a href="#" id="pdf2" class="tip" title="<?= lang('download_pdf') ?>"><i
+                        <li class="dropdown"><a href="#" id="pdf" class="tip" title="<?= lang('download_pdf') ?>"><i
                                     class="icon fa fa-file-pdf-o"></i></a></li>
-                        <li class="dropdown"><a href="#" id="xls2" class="tip" title="<?= lang('download_xls') ?>"><i
-                                    class="icon fa fa-file-excel-o"></i></a></li>
-                        <li class="dropdown"><a href="#" id="image2" class="tip image"
-                                                title="<?= lang('save_image') ?>"><i
+                        <li class="dropdown"><a href="#" id="image" class="tip image" title="<?= lang('save_image') ?>"><i
                                     class="icon fa fa-file-picture-o"></i></a></li>
                     </ul>
                 </div>
@@ -327,226 +330,26 @@
             <div class="box-content">
                 <div class="row">
                     <div class="col-lg-12">
-
-                        <p class="introtext"><?= lang('customize_report'); ?></p>
-
-                        <div id="form">
-
-                            <?= form_open("reports/staff_report/" . $user_id . '#sales-con'); ?>
-                            <div class="row">
-
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="control-label" for="customer"><?= lang("customer"); ?></label>
-                                        <?php
-                                        echo form_input('customer', (isset($_POST['customer']) ? $_POST['customer'] : ""), 'class="form-control" id="customer" data-placeholder="' . lang("select") . " " . lang("customer") . '"');
-                                        ?>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="control-label" for="biller"><?= lang("biller"); ?></label>
-                                        <?php
-                                        $bl[""] = "";
-                                        foreach ($billers as $biller) {
-                                            $bl[$biller->id] = $biller->company != '-' ? $biller->company : $biller->name;
-                                        }
-                                        echo form_dropdown('biller', $bl, (isset($_POST['biller']) ? $_POST['biller'] : ""), 'class="form-control" id="biller" data-placeholder="' . lang("select") . " " . lang("biller") . '"');
-                                        ?>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="control-label" for="warehouse"><?= lang("warehouse"); ?></label>
-                                        <?php
-                                        $wh[""] = "";
-                                        foreach ($warehouses as $warehouse) {
-                                            $wh[$warehouse->id] = $warehouse->name;
-                                        }
-                                        echo form_dropdown('warehouse', $wh, (isset($_POST['warehouse']) ? $_POST['warehouse'] : ""), 'class="form-control" id="warehouse" data-placeholder="' . lang("select") . " " . lang("warehouse") . '"');
-                                        ?>
-                                    </div>
-                                </div>
-                                <?php if($this->Settings->product_serial) { ?>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <?= lang('serial_no', 'serial'); ?>
-                                        <?= form_input('serial', '', 'class="form-control tip" id="serial"'); ?>
-                                    </div>
-                                </div>
-                                <?php } ?>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <?= lang("start_date", "start_date"); ?>
-                                        <?= form_input('start_date', (isset($_POST['start_date']) ? $_POST['start_date'] : ""), 'class="form-control datetime" id="start_date"'); ?>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <?= lang("end_date", "end_date"); ?>
-                                        <?= form_input('end_date', (isset($_POST['end_date']) ? $_POST['end_date'] : ""), 'class="form-control datetime" id="end_date"'); ?>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div
-                                    class="controls"> <?= form_submit('submit_sale_report', lang("submit"), 'class="btn btn-primary"'); ?> </div>
-                            </div>
-                            <?= form_close(); ?>
-
+                        <p class="introtext"><?= lang("reports_calendar_text") ?></p>
+                        <div>
+                            <?= $calenders; ?>
                         </div>
-                        <div class="clearfix"></div>
-
-
-                        <div class="table-responsive">
-                            <table id="SlRData"
-                                   class="table table-bordered table-hover table-striped table-condensed reports-table">
-                                <thead>
-                                <tr>
-                                    <th><?= lang("date"); ?></th>
-                                    <th><?= lang("reference_no"); ?></th>
-                                    <th><?= lang("biller"); ?></th>
-                                    <th><?= lang("customer"); ?></th>
-                                    <th><?= lang("product_qty"); ?></th>
-                                    <th><?= lang("grand_total"); ?></th>
-                                    <th><?= lang("paid"); ?></th>
-                                    <th><?= lang("balance"); ?></th>
-                                    <th><?= lang("payment_status"); ?></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td colspan="9"
-                                        class="dataTables_empty"><?= lang('loading_data_from_server') ?></td>
-                                </tr>
-
-                                </tbody>
-                                <tfoot class="dtFilter">
-                                <tr class="active">
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th><?= lang("product_qty"); ?></th>
-                                    <th><?= lang("grand_total"); ?></th>
-                                    <th><?= lang("paid"); ?></th>
-                                    <th><?= lang("balance"); ?></th>
-                                    <th></th>
-                                </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
-    <div id="purchases-con" class="tab-pane fade in">
-        <?php
-        $v1 = "&user=" . $user_id;
-        if ($this->input->post('submit_purchase_report')) {
-            if ($this->input->post('biller')) {
-                $v1 .= "&biller=" . $this->input->post('biller');
-            }
-            if ($this->input->post('pr_warehouse')) {
-                $v1 .= "&warehouse=" . $this->input->post('pr_warehouse');
-            }
-            if ($this->input->post('supplier')) {
-                $v1 .= "&supplier=" . $this->input->post('supplier');
-            }
-            if ($this->input->post('pr_start_date')) {
-                $v1 .= "&start_date=" . $this->input->post('pr_start_date');
-            }
-            if ($this->input->post('pr_end_date')) {
-                $v1 .= "&end_date=" . $this->input->post('pr_end_date');
-            }
-        }
-        ?>
-        <script>
-            $(document).ready(function () {
-                var oTable = $('#PoRData').dataTable({
-                    "aaSorting": [[0, "desc"]],
-                    "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
-                    "iDisplayLength": <?= $Settings->rows_per_page ?>,
-                    'bProcessing': true, 'bServerSide': true,
-                    'sAjaxSource': '<?= site_url('reports/getPurchasesReports/?v=1' . $v1) ?>',
-                    'fnServerData': function (sSource, aoData, fnCallback) {
-                        aoData.push({
-                            "name": "<?= $this->security->get_csrf_token_name() ?>",
-                            "value": "<?= $this->security->get_csrf_hash() ?>"
-                        });
-                        $.ajax({
-                            'dataType': 'json',
-                            'type': 'POST',
-                            'url': sSource,
-                            'data': aoData,
-                            'success': fnCallback
-                        });
-                    },
-                    "aoColumns": [{'bVisible': false},{"mRender": fld}, null, null, null, {
-                        "bSearchable": false,
-                        "mRender": pqFormat
-                    }, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": row_status}],
-                    "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
-                        var gtotal = 0, paid = 0, balance = 0;
-                        for (var i = 0; i < aaData.length; i++) {
-                            gtotal += parseFloat(aaData[aiDisplay[i]][6]);
-                            paid += parseFloat(aaData[aiDisplay[i]][7]);
-                            balance += parseFloat(aaData[aiDisplay[i]][8]);
-                        }
-                        var nCells = nRow.getElementsByTagName('th');
-                        nCells[5].innerHTML = currencyFormat(parseFloat(gtotal));
-                        nCells[6].innerHTML = currencyFormat(parseFloat(paid));
-                        nCells[7].innerHTML = currencyFormat(parseFloat(balance));
-                    }
-                }).fnSetFilteringDelay().dtFilter([
-                    {column_number: 1, filter_default_label: "[<?=lang('date');?> (yyyy-mm-dd)]", filter_type: "text", data: []},
-                    {column_number: 2, filter_default_label: "[<?=lang('reference_no');?>]", filter_type: "text", data: []},
-                    {column_number: 3, filter_default_label: "[<?=lang('warehouse');?>]", filter_type: "text", data: []},
-                    {column_number: 4, filter_default_label: "[<?=lang('supplier');?>]", filter_type: "text", data: []},
-					{column_number: 5, filter_default_label: "[<?=lang('product');?>]", filter_type: "text", data: []},
-                    {column_number: 9, filter_default_label: "[<?=lang('status');?>]", filter_type: "text", data: []},
-                ], "footer");
-            });
-        </script>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('#pform').hide();
-                $('.ptoggle_down').click(function () {
-                    $("#pform").slideDown();
-                    return false;
-                });
-                $('.ptoggle_up').click(function () {
-                    $("#pform").slideUp();
-                    return false;
-                });
-            });
-        </script>
-
+    <div id="purchases-monthly" class="tab-pane fade in">
         <div class="box">
             <div class="box-header">
-                <h2 class="blue"><i class="fa-fw fa fa-star nb"></i><?= lang('staff_purchases_report'); ?> <?php
-                    if ($this->input->post('start_date')) {
-                        echo "From " . $this->input->post('start_date') . " to " . $this->input->post('end_date');
-                    }
-                    ?></h2>
+                <h2 class="blue"><i class="fa-fw fa fa-calendar nb"></i> <?= lang('monthly_sales'); ?></h2>
 
                 <div class="box-icon">
                     <ul class="btn-tasks">
-                        <li class="dropdown"><a href="#" class="ptoggle_up tip" title="<?= lang('hide_form') ?>"><i
-                                    class="icon fa fa-toggle-up"></i></a></li>
-                        <li class="dropdown"><a href="#" class="ptoggle_down tip" title="<?= lang('show_form') ?>"><i
-                                    class="icon fa fa-toggle-down"></i></a></li>
-                    </ul>
-                </div>
-                <div class="box-icon">
-                    <ul class="btn-tasks">
-                        <li class="dropdown"><a href="#" id="pdf3" class="tip" title="<?= lang('download_pdf') ?>"><i
+                        <li class="dropdown"><a href="#" id="pdf1" class="tip" title="<?= lang('download_pdf') ?>"><i
                                     class="icon fa fa-file-pdf-o"></i></a></li>
-                        <li class="dropdown"><a href="#" id="xls3" class="tip" title="<?= lang('download_xls') ?>"><i
-                                    class="icon fa fa-file-excel-o"></i></a></li>
-                        <li class="dropdown"><a href="#" id="image3" class="tip image"
+                        <li class="dropdown"><a href="#" id="image1" class="tip image"
                                                 title="<?= lang('save_image') ?>"><i
                                     class="icon fa fa-file-picture-o"></i></a></li>
                     </ul>
@@ -555,99 +358,154 @@
             <div class="box-content">
                 <div class="row">
                     <div class="col-lg-12">
-
-                        <p class="introtext"><?= lang('customize_report'); ?></p>
-
-                        <div id="pform">
-
-                            <?= form_open("reports/staff_report/" . $user_id . '#purchases-con'); ?>
-                            <div class="row">
-
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="control-label" for="supplier"><?= lang("supplier"); ?></label>
-                                        <?php
-                                        echo form_input('supplier', (isset($_POST['supplier']) ? $_POST['supplier'] : ""), 'class="form-control" id="supplier" data-placeholder="' . lang("select") . " " . lang("supplier") . '"');
-                                        ?>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="control-label" for="pr_warehouse"><?= lang("warehouse"); ?></label>
-                                        <?php
-                                        $wh[""] = "";
-                                        foreach ($warehouses as $warehouse) {
-                                            $wh[$warehouse->id] = $warehouse->name;
-                                        }
-                                        echo form_dropdown('pr_warehouse', $wh, (isset($_POST['pr_warehouse']) ? $_POST['pr_warehouse'] : ""), 'class="form-control" id="pr_warehouse" data-placeholder="' . lang("select") . " " . lang("warehouse") . '"');
-                                        ?>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <?= lang("pr_start_date", "pr_start_date"); ?>
-                                        <?= form_input('pr_start_date', (isset($_POST['pr_start_date']) ? $_POST['pr_start_date'] : ""), 'class="form-control date" id="pr_start_date"'); ?>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <?= lang("end_date", "pr_end_date"); ?>
-                                        <?= form_input('pr_end_date', (isset($_POST['pr_end_date']) ? $_POST['pr_end_date'] : ""), 'class="form-control date" id="pr_end_date"'); ?>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div
-                                    class="controls"> <?= form_submit('submit_purchase_report', lang("submit"), 'class="btn btn-primary"'); ?> </div>
-                            </div>
-                            <?= form_close(); ?>
-
-                        </div>
-                        <div class="clearfix"></div>
+                        <p class="introtext"><?= lang("reports_calendar_text") ?></p>
 
                         <div class="table-responsive">
-                            <table id="PoRData"
-                                   class="table table-bordered table-hover table-striped table-condensed reports-table">
-                                <thead>
-                                <tr>
-								    <th></th>
-                                    <th><?= lang("date"); ?></th>
-                                    <th><?= lang("reference_no"); ?></th>
-                                    <th><?= lang("warehouse"); ?></th>
-                                    <th><?= lang("supplier"); ?></th>
-                                    <th><?= lang("product_qty"); ?></th>
-                                    <th><?= lang("grand_total"); ?></th>
-                                    <th><?= lang("paid"); ?></th>
-                                    <th><?= lang("balance"); ?></th>
-                                    <th><?= lang("status"); ?></th>
+                            <table class="table table-bordered dfTable reports-table ">
+                                <tr class="year_roller">
+                                    <th>
+                                        <div class="text-center"><a href="reports/staff_report/<?= $user_id; ?>/<?= $year - 1; ?>/#monthly-con">&lt;&lt;</a>
+                                        </div>
+                                    </th>
+                                    <th colspan="10">
+                                        <div class="text-center"> <?= $year; ?> </div>
+                                    </td>
+                                    <th>
+                                        <div class="text-center"><a href="reports/staff_report/<?= $user_id; ?>/<?= $year + 1; ?>/#monthly-con">&gt;&gt;</a>
+                                        </div>
+                                    </th>
+                                    </th>
                                 </tr>
-                                </thead>
-                                <tbody>
+                                 <tr>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_purchase_profits/'.$user_id."/$year/01"); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_january"); ?>
+										</a>
+									</td>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_purchase_profits/'.$user_id.'/'.$year.'/02'); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_february"); ?>
+										</a>
+									</td>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_purchase_profits/'.$user_id.'/'.$year.'/03'); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_march"); ?>
+										</a>
+									</td>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_purchase_profits/'.$user_id.'/'.$year.'/04'); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_april"); ?>
+										</a>
+									</td>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_purchase_profits/'.$user_id.'/'.$year.'/05'); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_may"); ?>
+										</a>
+									</td>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_purchase_profits/'.$user_id.'/'.$year.'/06'); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_june"); ?>
+										</a>
+									</td>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_purchase_profits/'.$user_id.'/'.$year.'/07'); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_july"); ?>
+										</a>
+									</td>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_purchase_profits/'.$user_id.'/'.$year.'/08'); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_august"); ?>
+										</a>
+									</td>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_purchase_profits/'.$user_id.'/'.$year.'/09'); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_september"); ?>
+										</a>
+									</td>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_purchase_profits/'.$user_id.'/'.$year.'/10'); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_october"); ?>
+										</a>
+									</td>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_purchase_profits/'.$user_id.'/'.$year.'/11'); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_november"); ?>
+										</a>
+									</td>
+									<td class="bold text-center">
+										<a href="<?= site_url('reports/monthly_purchase_profits/'.$user_id.'/'.$year.'/12'); ?>" data-toggle="modal" data-target="#myModal">
+											<?= lang("cal_december"); ?>
+										</a>
+									</td>
+								</tr>
                                 <tr>
-                                    <td colspan="9"
-                                        class="dataTables_empty"><?= lang('loading_data_from_server') ?></td>
-                                </tr>
 
-                                </tbody>
-                                <tfoot class="dtFilter">
-                                <tr class="active">
-                                    <th></th>
-									<th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
+                                    <?php
+                                    if (!empty($mpurchases)) {
+                                        $grand_total=0;
+                                        foreach ($mpurchases as $value){
+											$grand_total= $value->total+$value->tax2-$value->discount;
+                                            $array[$value->date] = "
+                                                                    <table class='table table-bordered table-hover table-striped table-condensed data' style='margin:0;color:#428BCA;'>
+                                                                        <tr>
+                                                                            <td>" . lang("total") . "</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . $this->erp->formatMoney($value->total). "</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . lang("order_discount") . "</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . $this->erp->formatMoney($value->order_discount)."</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . lang("product_tax") . "</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . $this->erp->formatMoney($value->tax1)."</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . lang("order_tax") . "</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . $this->erp->formatMoney($value->tax2)."</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . lang("grand_total") . "</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . $this->erp->formatMoney($grand_total). "</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . lang("award_points") . "</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>" . intval($value->total / $this->Settings->each_sale) . "</td>
+                                                                        </tr>
+                                                                    </table>";
+                                        }
+
+                                        for ($i = 1; $i <= 12; $i++) {
+                                            echo "<td>";
+                                            if (isset($array[$i])) {
+                                                echo $array[$i];
+                                            } else {
+                                                echo '<strong>&nbsp;</strong>';
+                                            }
+                                            echo "</td>";
+                                        }
+                                    } else {
+                                        for ($i = 1; $i <= 12; $i++) {
+                                            echo "<td><strong>0</strong></td>";
+                                        }
+                                    }
+                                    ?>
                                 </tr>
-                                </tfoot>
                             </table>
                         </div>
-
                     </div>
+
                 </div>
             </div>
         </div>
@@ -886,7 +744,7 @@
                         <li class="dropdown"><a href="#" class="logintoggle_up tip" title="<?= lang('hide_form') ?>"><i
                                     class="icon fa fa-toggle-up"></i></a></li>
                         <li class="dropdown"><a href="#" class="logintoggle_down tip"
-                                                title="<?= lang('hide_form') ?>"><i class="icon fa fa-toggle-down"></i></a>
+                                                title="<?= lang('show_form') ?>"><i class="icon fa fa-toggle-down"></i></a>
                         </li>
                     </ul>
                 </div>
@@ -1035,11 +893,234 @@
             </div>
         </div>
     </div>
+
+    <!-- staff salling product -->
+    <div id="sale_pro" class="tab-pane fade in">
+        <div class="box">
+            <div class="box-header">
+                <h2 class="blue"><i class="fa-fw fa fa-file-text nb"></i> <?= lang('sale_prodcut_report'); ?></h2>
+
+                <div class="box-icon">
+                    <ul class="btn-tasks">
+                        <li class="dropdown"><a href="#" class="sale_pro_toggle_up tip" title="<?= lang('hide_form') ?>"><i
+                                    class="icon fa fa-toggle-up"></i></a></li>
+                        <li class="dropdown"><a href="#" class="sale_pro_toggle_down tip"
+                                                title="<?= lang('show_form') ?>"><i class="icon fa fa-toggle-down"></i></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="box-icon">
+                    <ul class="btn-tasks">
+                        <li class="dropdown"><a href="#" id="pdf6" class="tip" title="<?= lang('download_pdf') ?>"><i
+                                    class="icon fa fa-file-pdf-o"></i></a></li>
+                        <li class="dropdown"><a href="#" id="xls6" class="tip" title="<?= lang('download_xls') ?>"><i
+                                    class="icon fa fa-file-excel-o"></i></a></li>
+                        <li class="dropdown"><a href="#" id="image6" class="tip image"
+                                                title="<?= lang('save_image') ?>"><i
+                                    class="icon fa fa-file-picture-o"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="box-content">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <p class="introtext"><?= lang("sale_prodcut_report") ?></p>
+
+                        <div id="saleProduct">
+
+                            <?= form_open("reports/staff_report/" . $user_id . '#sale_pro'); ?>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="control-label" for="product_id"><?= lang("product"); ?></label>
+                                        <?php
+                                        $pr[""] = "";
+                                        foreach ($products as $product) {
+                                            $pr[$product->id] = $product->name . " | " . $product->code ;
+                                        }
+                                        echo form_dropdown('product_id', $pr, (isset($_POST['product_id']) ? $_POST['product_id'] : ""), 'class="form-control" id="product_id" data-placeholder="' . $this->lang->line("select") . " " . $this->lang->line("product") . '"');
+                                        ?>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <?= lang("start_date", "start_date"); ?>
+                                        <?= form_input('start_date', (isset($_POST['start_date']) ? $_POST['start_date'] : ""), 'class="form-control datetime" id="start_date"'); ?>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <?= lang("end_date", "end_date"); ?>
+                                        <?= form_input('end_date', (isset($_POST['end_date']) ? $_POST['end_date'] : ""), 'class="form-control datetime" id="end_date"'); ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div
+                                    class="controls"> <?= form_submit('submit_SaleProduct_report', lang("submit"), 'class="btn btn-primary"'); ?> </div>
+                            </div>
+                            <?= form_close(); ?>
+
+                        </div>
+                        <div class="clearfix"></div>
+                        <div>
+                            <?php 
+                                $sp = '';
+                            if ($this->input->post('submit_SaleProduct_report')) {
+                                if ($this->input->post('product_id')) {
+                                    $sp .= "&product_id=" .$this->input->post('product_id');
+                                }
+                                if ($this->input->post('start_date')) {
+                                    $sp .= "&start_date=" .$this->input->post('start_date');
+                                }
+                                if ($this->input->post('end_date')) {
+                                    $sp .= "&end_date=" .$this->input->post('end_date');
+                                }
+                            }
+                            ?>
+                            <script>
+                                $(document).ready(function () {
+                                    $('#SPTable').dataTable({
+                                        "aaSorting": [[2, "desc"]],
+                                        "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
+                                        "iDisplayLength": <?= $Settings->rows_per_page ?>,
+                                        'bProcessing': true, 'bServerSide': true,
+                                        'sAjaxSource': '<?= site_url('reports/getSaleProduct/' . $user_id.'/?v=1'.$sp); ?>',
+                                        'fnServerData': function (sSource, aoData, fnCallback) {
+                                            aoData.push({
+                                                "name": "<?= $this->security->get_csrf_token_name(); ?>",
+                                                "value": "<?= $this->security->get_csrf_hash() ?>"
+                                            });
+                                            $.ajax({
+                                                'dataType': 'json',
+                                                'type': 'POST',
+                                                'url': sSource,
+                                                'data': aoData,
+                                                'success': fnCallback
+                                            });
+                                        },
+                                        "aoColumns": [{"bSortable": false,"mRender": img_hl}, {"mRender": fld},null,null, null, {"mRender": formatQuantity},null, {"mRender": currencyFormat},{"mRender": currencyFormat}
+                                        ],
+                                        "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
+                                            var am = 0, pr = 0, qty = 0;
+                                            for (var i = 0; i < aaData.length; i++) {
+                                                qty += parseFloat(aaData[aiDisplay[i]][5]);
+                                                pr += parseFloat(aaData[aiDisplay[i]][7]); 
+                                                am += parseFloat(aaData[aiDisplay[i]][8]);
+                                            }
+                                            var nCells = nRow.getElementsByTagName('th');
+                                            nCells[5].innerHTML = currencyFormat(parseFloat(qty)); 
+                                            nCells[7].innerHTML = currencyFormat(parseFloat(pr));
+                                            nCells[8].innerHTML = currencyFormat(parseFloat(am));
+                                            
+                                        }
+                                    }).fnSetFilteringDelay().dtFilter([
+                                        {column_number: 1, filter_default_label: "[<?=lang('date');?>]", filter_type: "text", data: []},
+                                        {column_number: 2, filter_default_label: "[<?=lang('reference_no');?>]", filter_type: "text", data: []},
+                                        {column_number: 3, filter_default_label: "[<?=lang('product_code');?>]", filter_type: "text", data: []},
+                                        {column_number: 4, filter_default_label: "[<?=lang('product_name');?>]", filter_type: "text", data: []},
+                                        {column_number: 6, filter_default_label: "[<?=lang('unit');?>]", filter_type: "text", data: []},
+                                    ], "footer");
+                                });
+
+                            </script>
+                            <script type="text/javascript">
+                                $(document).ready(function () {
+                                    $('#saleProduct').hide();
+                                    $('.sale_pro_toggle_down').click(function () {
+                                        $("#saleProduct").slideDown();
+                                        return false;
+                                    });
+                                    $('.sale_pro_toggle_up').click(function () {
+                                        $("#saleProduct").slideUp();
+                                        return false;
+                                    });
+                                });
+                            </script>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <table id="SPTable"
+                                               class="table table-bordered table-hover table-striped reports-table">
+                                            <thead>
+                                            <tr>
+                                                <!-- <th style="min-width:30px; width: 30px; text-align: center;">
+                                                    <input class="checkbox checkth" type="checkbox" name="check"/>
+                                                </th> -->
+                                                <th style="min-width:40px; width: 40px; text-align: center;"><?php echo $this->lang->line("image"); ?></th>
+                                                <th><?= lang('date'); ?></th>
+                                                <th><?= lang('reference'); ?></th>
+                                                <th><?= lang('product_code'); ?></th>
+                                                <th><?= lang('product_name'); ?></th>
+                                                <th><?= lang('qty'); ?></th>
+                                                <th><?= lang('unit'); ?></th>
+                                                <th><?= lang('unit_price'); ?></th>
+                                                <th><?= lang('amount'); ?></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td colspan="9"
+                                                    class="dataTables_empty"><?= lang('loading_data_from_server') ?>
+                                                        
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                            <tfoot class="dtFilter">
+                                            <tr class="active">
+                                                <!-- <th style="min-width:30px; width: 30px; text-align: center;">
+                                                    <input class="checkbox checkft" type="checkbox" name="check"/>
+                                                </th> -->
+                                                <th style="min-width:40px; width: 40px; text-align: center;"><?php echo $this->lang->line("image"); ?></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ending -->
 </div>
 
 <script type="text/javascript" src="<?= $assets ?>js/html2canvas.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+		$('#daily-con .day_num').click(function (){
+            var day = $(this).html(); 
+            var date = '<?= $year.'-'.$month.'-'; ?>'+day;
+            var href = '<?= site_url('reports/profit_staff/'.$user_id); ?>/'+date;
+            $.get(href, function( data ) {
+                $("#myModal").html(data).modal();
+            });
+
+        }); 
+		
+		$('#purchases-daily .day_num').click(function (){
+            var day = $(this).html(); 
+            var date = '<?= $year.'-'.$month.'-'; ?>'+day;
+            var href = '<?= site_url('reports/profit_staff1/'.$user_id); ?>/'+date;
+            $.get(href, function( data ) {
+                $("#myModal").html(data).modal();
+            });
+
+        }); 
+		
+		
         $('#pdf').click(function (event) {
             event.preventDefault();
             window.location.href = "<?=site_url('reports/staff_report/'.$user_id.'/'.$year.'/'.$month.'/pdf')?>";
@@ -1088,6 +1169,16 @@
         $('#xls5').click(function (event) {
             event.preventDefault();
             window.location.href = "<?=site_url('reports/getUserLogins/'.$user_id.'/0/xls?v=1'.$l)?>";
+            return false;
+        });
+        $('#pdf6').click(function (event) {
+            event.preventDefault();
+            window.location.href = "<?=site_url('reports/getSaleProduct/'.$sp.'/pdf/?v=1')?>";
+            return false;
+        });
+        $('#xls6').click(function (event) {
+            event.preventDefault();
+            window.location.href = "<?=site_url('reports/getSaleProduct/'.$sp.'/0/xls?v=1')?>";
             return false;
         });
         $('.image').click(function (event) {

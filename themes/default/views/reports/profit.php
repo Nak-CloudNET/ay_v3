@@ -1,4 +1,19 @@
-<div class="modal-dialog">
+<?php
+	function row_status($x){
+		if($x == 'completed' || $x == 'paid' || $x == 'sent' || $x == 'received') {
+			return '<div class="text-center"><span class="label label-success">'.lang($x).'</span></div>';
+		}elseif($x == 'pending' || $x == 'book' || $x == 'free'){
+			return '<div class="text-center"><span class="label label-warning">'.lang($x).'</span></div>';
+		}elseif($x == 'partial' || $x == 'transferring' || $x == 'ordered'  || $x == 'busy'  || $x == 'processing'){
+			return '<div class="text-center"><span class="label label-info">'.lang($x).'</span></div>';
+		}elseif($x == 'due' || $x == 'returned'){
+			return '<div class="text-center"><span class="label label-danger">'.lang($x).'</span></div>';
+		}else{
+			return '<div class="text-center"><span class="label label-default">'.lang($x).'</span></div>';
+		}
+	}
+?>
+<div class="modal-dialog modal-lg" style="width:1000px;">
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-2x">&times;</i>
@@ -9,81 +24,105 @@
 			<a href="#" class="btn btn-xs btn-default no-print pull-right" style="margin-right:15px;" onclick="sendEmail();">
 				<i class="fa fa-send"></i> <?= lang('Send'); ?>
 			</a>
-            <h4 class="modal-title" id="myModalLabel"><?= lang('day_profit').' ('.$this->erp->hrsd($date).')'; ?></h4>
+            <h4 class="modal-title" id="myModalLabel"><?= lang('sale_dialy').' ('.$this->erp->hrsd($date).')'; ?>
+            <?php
+                if($biller){
+                    echo " >> ".$biller->company;
+                }else{
+                    echo " >> All Project";
+                }
+                ?>
+            </h4>
         </div>
         <div class="modal-body">
-            <p><?= lang('unit_and_net_tip'); ?></p>
-            <div class="table-responsive">
-            <table width="100%" class="stable">
-                <tr>
-                    <td style="border-bottom: 1px solid #EEE;">
-						<h4><?= lang('sales_revenue'); ?>:</h4>
-					</td>
-                    <td style="text-align:right; border-bottom: 1px solid #EEE;">
-						<h4><span>(<?= $this->erp->formatQuantity($revenues->total_items); ?>)<?= $this->erp->formatMoney($revenues->no_total); ?></span></h4>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="border-bottom: 1px solid #DDD;">
-						<h4><?= lang('order_discount'); ?>:</h4>
-					</td>
-                    <td style="text-align:right;border-bottom: 1px solid #DDD;">
-						<h4>
-                            <span><?php $discount->order_discount = $refunds ? $discount->order_discount : 0; echo '('.$this->erp->formatQuantity($count_dis->count_id).')'.$this->erp->formatMoney($discount->order_discount); ?></span>
-                        </h4>
-					</td>
-                </tr>
-				<tr>
-                    <td style="border-bottom: 1px solid #DDD;"><h4><?= lang('sales_refund'); ?>:</h4></td>
-                    <td style="text-align:right;border-bottom: 1px solid #DDD;"><h4>
-						<span>(<?= $this->erp->formatQuantity($refunds->quantity); ?>)<?= $this->erp->formatMoney($refunds->paid); ?></span></h4>
-                    </td>
-                </tr>
-				
-				<tr>
-                    <td style="border-bottom: 1px solid #DDD;font-weight:bold !important;"><h4><strong><?= lang('net_price'); ?>:</strong></h4></td>
-                    <td style="text-align:right;border-bottom: 1px solid #DDD;"><h4><strong>
-						<span>(<?= $this->erp->formatQuantity(($revenues->total_items - $refunds->quantity)); ?>)<?= $this->erp->formatMoney((($revenues->no_total - $discount->order_discount) - $refunds->paid)); ?></span></strong></h4>
-                    </td>
-                </tr>
-				
-				<?php if($Admin || $Owner){ ?>
-                <tr>
-                    <td style="border-bottom: 1px solid #EEE;"><h4><?= lang('products_cost'); ?>:</h4></td>
-                    <td style="text-align:right; border-bottom: 1px solid #EEE;"><h4>
-                        <span>(<?= $this->erp->formatQuantity($costing->total_items); ?>)<?= $this->erp->formatMoney($costing->cost); ?></span>
-                    </h4></td>
-                </tr>
-                <!--
-                <tr>
-                    <td style="border-bottom: 1px solid #DDD;"><h4><?= lang('products_return'); ?>:</h4></td>
-                    <td style="text-align:right;border-bottom: 1px solid #DDD;"><h4>
-                            <span><?php $expense = $expenses ? $expenses->total : 0; echo $this->erp->formatMoney($expense); ?></span>
-                        </h4></td>
-                </tr>  -->
-				<tr>
-                    <td style="border-bottom: 1px solid #DDD;"><h4><?= lang('expenses'); ?>:</h4></td>
-                    <td style="text-align:right;border-bottom: 1px solid #DDD;"><h4>
-                            <span><?php echo '('.$this->erp->formatQuantity($expenses->count_ex).')'. $expense = $expenses ? $this->erp->formatMoney($expenses->total) : 0; ?></span>
-                        </h4></td>
-                </tr>
-                <tr>
-                    <td width="300px;" style="font-weight:bold;"><h4><strong><?= lang('profit'); ?></strong>:</h4>
-                    </td>
-                    <td style="text-align:right;"><h4>
-                        <span><strong><?= $this->erp->formatMoney($revenues->no_total - $costing->cost - $discount->order_discount - $refunds->paid - $expenses->total); ?></strong></span>
-                        </h4></td>
-                </tr>
-				<?php } ?>
-            </table>
-            </div>
+				<table id="POData" cellpadding="0" cellspacing="0" border="0" class="table table-condensed table-bordered table-hover table-striped">
+                    <thead>
+                        <tr class="active">
+                        	<th style="display: none;"></th>
+                            <th><?php echo $this->lang->line("date"); ?></th>
+                            <th><?php echo $this->lang->line("reference_no"); ?></th>
+                            <th><?php echo $this->lang->line("customer"); ?></th>
+                            <th><?php echo $this->lang->line("sale_status"); ?></th>
+                            <th><?php echo $this->lang->line("grand_total"); ?></th>
+                            <th><?php echo lang("returned"); ?></th>
+                            <th><?= lang("deposit"); ?></th>
+							<th><?php echo $this->lang->line("discount"); ?></th>
+                            <th><?php echo $this->lang->line("paid"); ?></th>
+                            <th><?php echo $this->lang->line("balance"); ?></th>
+                            <th><?php echo $this->lang->line("payment_status"); ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+						<?php
+							$total = 0;
+							$pay   = 0;
+							$balances = 0;
+							$total_discount = 0;
+							$return =0;
+							$deposit=0;
+							foreach($sales as $sale){
+                                $return+=$sale->return_sale;
+                                $deposit+=$sale->deposit;
+								$total += $sale->grand_total;
+								$pay += $sale->paid;
+								$balances += $sale->balance;
+								$total_discount += $sale->total_discount;
+						?>
+							<tr>
+								<td style="display: none;"></td>
+								<td><?= $sale->date; ?></td>
+								<td><?= $sale->reference_no; ?></td>
+								<td><?= $sale->customer; ?></td>
+								<td><?= row_status($sale->sale_status); ?></td>
+								<td><?= number_format($sale->grand_total,2); ?></td>
+                                <td><?= number_format($sale->return_sale,2); ?></td>
+                                <td><?= number_format($sale->deposit,2); ?></td>
+								<td><?= number_format($sale->total_discount,2); ?></td>
+								<td><?= number_format($sale->paid,2); ?></td>
+								<td><?= number_format($sale->balance,2); ?></td>
+								<td><?= row_status($sale->payment_status); ?></td>
+							</tr>
+						<?php
+							}
+						?>
+                    </tbody>
+                    <tfoot>
+                        <tr class="active">
+                        	<th style="display: none;"></th>
+                            <th><?php echo $this->lang->line("date"); ?></th>
+                            <th><?php echo $this->lang->line("reference_no"); ?></th>
+                            <th><?php echo $this->lang->line("customer"); ?></th>
+                            <th><?php echo $this->lang->line("sale_status"); ?></th>
+                            <th><?php echo number_format($total,2); ?></th>
+                            <th><?php  echo number_format($return,2);?></th>
+                            <th><?php  echo number_format($deposit,2);?></th>
+							<th><?php echo number_format($total_discount,2); ?></th>
+                            <th><?php echo number_format($pay,2); ?></th>
+                            <th><?php echo number_format($balances,2); ?></th>
+                            <th><?php echo $this->lang->line("payment_status"); ?></th>
+                        </tr>
+                    </tfoot>
+                </table>
         </div>
     </div>
 
 </div>
-
+<style type="text/css">
+	table { 
+		white-space: nowrap;
+	}
+	@media print {
+		.row {
+			display: none !important;
+		}
+	}
+</style>
 <script>
-
+	$(function(){
+		$("#TData").dataTable({
+			"iDisplayLength": 20,
+		});
+	})
 	function sendEmail(){
 	var email = prompt("<?= lang("email_address"); ?>", "<?= isset($customer->email)?$customer->email:''; ?>");
 	if (email != null) {

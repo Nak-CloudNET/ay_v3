@@ -47,9 +47,69 @@
                     </tr>
 					<tr>
                         <td><strong><?= lang("address"); ?></strong></td>
-                        <td><?= $customer->address; ?></strong></td>
+                        <td><?= $customer->address; ?></strong>
+						<span style="float:right;">
+						<input type="radio" value="<?= $customer->address; ?>" class="checkbox" name="address" id="addr" >
+						</span>
+						</td>
                     </tr>
-                <!--    <tr>
+					<tr>
+                        <td><strong><?= lang("address1"); ?></strong></td>
+                        <td><?= $customer->address_1; ?></strong>
+						<?php if($customer->address_1){?>
+						<span style="float:right;"><input type="radio" value="<?= $customer->address_1; ?>" class="checkbox" name="address" id="addr1" ></span>
+						<?php } ?>
+						</td>
+                    </tr>
+                    <tr>
+                        <td><strong><?= lang("address2"); ?></strong></td>
+                        <td><?= $customer->address_2; ?></strong>
+						<?php if($customer->address_2){?>
+						<span style="float:right;"><input type="radio" value="<?= $customer->address_2; ?>" class="checkbox" name="address" id="addr2" ></span>
+						<?php } ?>
+						</td>
+                    </tr>
+                    <tr>
+                        <td><strong><?= lang("address3"); ?></strong></td>
+                        <td><?= $customer->address_3; ?></strong>
+						<?php if($customer->address_3){?>
+						<span style="float:right;"><input type="radio" value="<?= $customer->address_3; ?>" class="checkbox" name="address" id="addr3" ></span>
+						<?php } ?>
+						</td>
+                    </tr>
+                    <tr>
+                        <td><strong><?= lang("address4"); ?></strong></td>
+                        <td><?= $customer->address_4; ?></strong>
+						<?php if($customer->address_4){?>
+						<span style="float:right;"><input type="radio" value="<?= $customer->address_4; ?>" class="checkbox" name="address" id="addr4" ></span>
+						<?php } ?>
+						</td>
+                    </tr>
+                    <tr>
+                        <td><strong><?= lang("address5"); ?></strong></td>
+                        <td><?= $customer->address_5; ?></strong>
+						<?php if($customer->address_5){?>
+						<span style="float:right;"><input type="radio" value="<?= $customer->address_5; ?>" class="checkbox" name="address" id="addr5" ></span>
+						<?php } ?>
+						</td>
+                    </tr>
+					<tr>
+                        <td><strong><?= lang("street_no"); ?></strong></td>
+                        <td><?= $customer->street; ?></strong></td>
+                    </tr>
+					<tr>
+                        <td><strong><?= lang("village"); ?></strong></td>
+                        <td><?= $customer->village; ?></strong></td>
+                    </tr>
+					<tr>
+                        <td><strong><?= lang("sangkat"); ?></strong></td>
+                        <td><?= $customer->sangkat; ?></strong></td>
+                    </tr>
+					<tr>
+                        <td><strong><?= lang("district"); ?></strong></td>
+                        <td><?= $customer->district; ?></strong></td>
+                    </tr>
+                    <tr>
                         <td><strong><?= lang("city"); ?></strong></td>
                         <td><?= $customer->city; ?></strong></td>
                     </tr>
@@ -65,26 +125,7 @@
                         <td><strong><?= lang("country"); ?></strong></td>
                         <td><?= $customer->country; ?></strong></td>
                     </tr>
-                    <tr>
-                        <td><strong><?= lang("ccf1"); ?></strong></td>
-                        <td><?= $customer->cf1; ?></strong></td>
-                    </tr>
-                    <tr>
-                        <td><strong><?= lang("ccf2"); ?></strong></td>
-                        <td><?= $customer->cf2; ?></strong></td>
-                    </tr>
-                    <tr>
-                        <td><strong><?= lang("ccf3"); ?></strong></td>
-                        <td><?= $customer->cf3; ?></strong></td>
-                    </tr>
-                    <tr>
-                        <td><strong><?= lang("ccf4"); ?></strong></td>
-                        <td><?= $customer->cf4; ?></strong></td>
-                    </tr>
-                    <tr>
-                        <td><strong><?= lang("ccf5"); ?></strong></td>
-                        <td><?= $customer->cf5; ?></strong></td>
-                    </tr> -->
+                    
                     </tbody>
                 </table>
             </div>
@@ -101,3 +142,28 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+$(document).ready(function(){
+	
+	var not2 = __getItem('nott');
+	var addr = $("#addr").val();
+	var addr1 = $("#addr1").val();
+	var addr2 = $("#addr2").val();
+	var addr3 = $("#addr3").val();
+	var addr4 = $("#addr4").val();
+	var addr5 = $("#addr5").val();
+	if(not2 == addr){
+		$("#addr").attr('checked', 'checked');
+	}else if(not2 == addr1){
+		$("#addr1").attr('checked', 'checked');
+	}else if(not2 == addr2){
+		$("#addr2").attr('checked', 'checked');
+	}else if(not2 == addr3){
+		$("#addr3").attr('checked', 'checked');
+	}else if(not2 == addr4){
+		$("#addr4").attr('checked', 'checked');
+	}else{
+		$("#addr5").attr('checked', 'checked');
+	}
+});
+</script>

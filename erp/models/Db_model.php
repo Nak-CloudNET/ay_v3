@@ -99,13 +99,11 @@ class Db_model extends CI_Model
         COALESCE( P.purchases, 0 ) as purchases,
         COALESCE(S.tax1, 0) as tax1,
         COALESCE(S.tax2, 0) as tax2,
-        COALESCE(S.order_discount, 0) as order_discount,
         COALESCE( P.ptax, 0 ) as ptax
         FROM (  SELECT  date_format(date, '%Y-%m') Month,
                 SUM(total) Sales,
                 SUM(product_tax) tax1,
-                SUM(order_tax) tax2,
-                SUM(order_discount) order_discount
+                SUM(order_tax) tax2
                 FROM " . $this->db->dbprefix('sales') . "
                 WHERE date >= date_sub( now( ) , INTERVAL 12 MONTH )
                 GROUP BY date_format(date, '%Y-%m')) S

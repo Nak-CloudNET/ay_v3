@@ -66,8 +66,8 @@
                                 <input class="checkbox checkth" type="checkbox" name="check"/>
                             </th>
                             <th style="min-width:40px; width: 40px; text-align: center;"><?php echo $this->lang->line("map"); ?></th>
-                            <th><?php echo $this->lang->line("id"); ?></th>
-                            <th><?php echo $this->lang->line("code"); ?></th>
+                             <th><?php echo $this->lang->line("id"); ?></th>
+							<th><?php echo $this->lang->line("code"); ?></th>
                             <th><?php echo $this->lang->line("name"); ?></th>
                             <th><?php echo $this->lang->line("phone"); ?></th>
                             <th><?php echo $this->lang->line("email"); ?></th>

@@ -135,7 +135,7 @@
 									padding-bottom: 2px;
 									padding-left: 2px;
 									padding-right: 2px;
-									height: 20px;" value=""><p class="text-style"  >From (DD)</p>
+									height: 20px;" readonly="readonly" value="1"><p class="text-style"  >From (DD)</p>
 							</td>
 							<td class="vertical-align: middle !important padding-less">
 								<p class="text-style" style="margin-bottom: 0px;">ខែ</p>
@@ -171,7 +171,7 @@
 									padding-bottom: 2px;
 									padding-left: 2px;
 									padding-right: 2px;
-									height: 20px;" value=""><p class="text-style"  >To 	(DD)</p>
+									height: 20px;" value="" readonly="readonly" ><p class="text-style"  >To 	(DD)</p>
 							</td>
 							<td class="vertical-align: middle !important padding-less">
 								<p class="text-style" style="margin-bottom: 0px;">ខែ</p>
@@ -183,7 +183,7 @@
 									padding-bottom: 2px;
 									padding-left: 2px;
 									padding-right: 2px;
-									height: 20px;" value=""><p class="text-style"  >Month(MM) </p>
+									height: 20px;" value="" readonly="readonly" ><p class="text-style"  >Month(MM) </p>
 							</td>
 							<td class="vertical-align: middle !important padding-less">
 								<p class="text-style" style="margin-bottom: 0px;">ឆ្នាំ</p>
@@ -195,7 +195,7 @@
 									padding-bottom: 2px;
 									padding-left: 2px;
 									padding-right: 2px;
-									height: 20px;" value=""><p class="text-style"  >Year(YYYY)</p>
+									height: 20px;" value="" readonly="readonly" ><p class="text-style"  >Year(YYYY)</p>
 							</td>
 						</tr>
 					</table>
@@ -248,7 +248,7 @@
 				<div>
 					<div>
 					<!--- start----->
-						<table style="margin-left: 25px;">	
+						<table style="margin-left: 25px;margin-top:15px">	
 							<tr>
 								<td>
 									<p class="text-style" style="
@@ -350,28 +350,28 @@
 							<td colspan="2" style="padding:0 !important;height:31px;width:25%;">
 							<div style="font-weight: 700;padding:15px;width:40px;height:40px;background-color:#7f8c8d;color:white;float:left;">04</div>
 							<p style="margin-bottom: 0 !important;padding-top:5px !important;">ឥណទានយោងពីខែមុន<br>Credit from Last Month</p> </td>
-							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="credit_04" id="credit_04" class="checknb form-control text-box text-right credit_04"  value=""></td>
+							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="credit_04" id="credit_04" readonly class="checknb form-control text-box text-right credit_04"  value=""></td>
 						</tr>
 						<tr>
 							<td style="padding:0 !important;height:31px;width:25%;">
 							<div style="font-weight: 700;padding:15px;width:40px;height:40px;background-color:#7f8c8d;color:white;float:left;">05</div>
 							<p style="margin-bottom: 0 !important;padding-top:5px !important;">មូលដ្ឋានគិតប្រាក់រំដោះក្នុងខែ<br>Prepayment Calculation Base for the Month</p> </td>
-							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="prepayment_05" id="prepayment_05" class="checknb form-control text-box text-right prepayment_05"  value=""></td>
+							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="prepayment_05" id="prepayment_05" readonly="readonly" class="checknb form-control text-box text-right prepayment_05"  value=""></td>
 							<td colspan="2" style="padding:0 !important;height:31px;width:25%;">
 							<div style="font-weight: 700;padding:15px;width:40px;height:40px;background-color:#7f8c8d;color:white;float:left;">06</div>
 							<p style="margin-bottom: 0 !important;padding-top:5px !important;">ប្រាក់រំដោះក្នុងខែ (អត្រា ១%)<br>Prepayment for the Month(Rate: 1%)</p> </td>
-							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="prepayment_06" id="prepayment_06" class="checknb form-control text-box text-right prepayment_06" value=""></td>
+							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="prepayment_06" id="prepayment_06" readonly="readonly"  class="checknb form-control text-box text-right prepayment_06" value=""></td>
 						</tr>
 						<tr>
 							<td style="padding:0 !important;height:31px;width:25%;">
 							<div style="font-weight: 700;padding:15px;width:40px;height:40px;background-color:#7f8c8d;color:white;float:left;">07</div>
 							<p style="margin-bottom: 0 !important;padding-top:5px !important;">	ឥណទានយោងទៅមុខ<br>Credit Carried Forwards</p> </td>
-							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="credit_07" id="credit_07" class="checknb form-control text-box text-right credit_07" value="">
+							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="credit_07" readonly id="credit_07" class="checknb form-control text-box text-right credit_07" value="">
 							</td>
 							<td colspan="2" style="padding:0 !important;height:31px;width:25%;">
 							<div style="font-weight: 700;padding:15px;width:40px;height:40px;background-color:#7f8c8d;color:white;float:left;">08</div>
 							<p style="margin-bottom: 0 !important;padding-top:5px !important;">	ប្រាក់រំដោះត្រូវបង់<br>Prepayment of Profit Tax Due</p> </td>
-							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="prepayment_08" id="prepayment_08" class="checknb form-control text-right text-box prepayment_08" value="">
+							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="prepayment_08" readonly id="prepayment_08" class="checknb form-control text-right text-box prepayment_08" value="">
 							</td>
 						</tr>
 						<tr>
@@ -381,21 +381,21 @@
 							<td style="padding:0 !important;height:31px;width:25%;">
 							<div style="font-weight: 700;padding:15px;width:40px;height:40px;background-color:#7f8c8d;color:white;float:left;">09</div>
 							<p style="margin-bottom: 0 !important;padding-top:5px !important;">	មូលដ្ឋានគិតអាករពិសេស<br>Specific Tax Calculation Base</p> </td>
-							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="specific_09" id="specific_09" class="checknb form-control text-right text-box specific_09" value=""></td>
+							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="specific_09" readonly id="specific_09" class="checknb form-control text-right text-box specific_09" value=""></td>
 							<td colspan="2" style="padding:0 !important;height:31px;width:25%;text-align:left;">
 							<div style="font-weight: 700;padding:15px;width:40px;height:40px;background-color:#7f8c8d;color:white;float:left;">10</div>
-							<p style="margin-bottom: 0 !important;padding-top:5px !important;float:left;">	ប្រាក់អាករពិសេសត្រូវបង់តាមអត្រា<br/>Specific Tax Due at the rate of</p><span style="margin-top:8px;float:right;">%<span></td>
-							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="specific_10" id="specific_10" class="checknb form-control text-right text-box specific_10" value=""></td>
+							<p style="margin-bottom: 0 !important;padding-top:5px !important;float:left;">	ប្រាក់អាករពិសេសត្រូវបង់តាមអត្រា<br/>Specific Tax Due at the rate of</p><span style="margin-top:8px;float:right;"><span id="pspecific_10"></span>%<span></td>
+							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="specific_10" readonly id="specific_10" class="checknb form-control text-right text-box specific_10" value=""></td>
 						</tr>
 						<tr>
 							<td style="padding:0 !important;height:31px;width:25%;">
 							<div style="font-weight: 700;padding:15px;width:40px;height:40px;background-color:#7f8c8d;color:white;float:left;">11</div>
 							<p style="margin-bottom: 0 !important;padding-top:5px !important;">	មូលដ្ឋានគិតអាករពិសេស<br>Specific Tax Calculation Base</p> </td>
-							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="specific_11" id="specific_11" class="checknb form-control text-right text-box specific_11" value=""></td>
+							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="specific_11" id="specific_11" readonly class="checknb form-control text-right text-box specific_11" value=""></td>
 							<td colspan="2" style="padding:0 !important;height:31px;width:25%;text-align:left;">
 							<div style="font-weight: 700;padding:15px;width:40px;height:40px;background-color:#7f8c8d;color:white;float:left;">12</div>
-							<p style="margin-bottom: 0 !important;padding-top:5px !important;float:left;">	ប្រាក់អាករពិសេសត្រូវង់តាមអត្រា<br/>Specific Tax Due at the rate of</p><span style="margin-top:8px;float:right;">%<span></td>
-							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="specific_12" id="specific_12" class="checknb form-control text-right text-box specific_12" value=""></td>
+							<p style="margin-bottom: 0 !important;padding-top:5px !important;float:left;">	ប្រាក់អាករពិសេសត្រូវបង់តាមអត្រា<br/>Specific Tax Due at the rate of</p><span style="margin-top:8px;float:right;"><span id="pspecific_12"></span>%<span></td>
+							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="specific_12" readonly id="specific_12" class="checknb form-control text-right text-box specific_12" value=""></td>
 						</tr>
 						<tr>
 							<td colspan="5" style="width:50%;border-left:none !important;border-top:none !important;"><p  style="margin-bottom: 0 !important;"><b>III.</b> <u> អាករលើការស្នាក់នៅ Accommodation Tax </u> :</p></td>
@@ -404,11 +404,11 @@
 							<td style="padding:0 !important;height:31px;width:25%;">
 							<div style="font-weight: 700;padding:15px;width:40px;height:40px;background-color:#7f8c8d;color:white;float:left;">13</div>
 							<p style="margin-bottom: 0 !important;padding-top:5px !important;">មូលដ្ឋានគិតអាករលើការស្នាក់នៅ<br>Accommodation Tax Calculation Base</p> </td>
-							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="accommodation_13" id="accommodation_13" class="checknb form-control text-right text-box accommodation_13" value=""></td>
+							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="accommodation_13" readonly id="accommodation_13" class="checknb form-control text-right text-box accommodation_13" value=""></td>
 							<td colspan="2" style="padding:0 !important;height:31px;width:25%;text-align:left;">
 							<div style="font-weight: 700;padding:15px;width:40px;height:40px;background-color:#7f8c8d;color:white;float:left;">14</div>
-							<p style="margin-bottom: 0 !important;padding-top:5px !important;">	ប្រាក់អាករលើការស្នាក់នៅត្រូវបង់ (អត្រា ២%)ា<br/>Accom Tax Due (Rate 2%)</p></td>
-							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="accommodation_14" id="accommodation_14" class="checknb form-control text-right text-box accommodation_14" value=""></td>
+							<p style="margin-bottom: 0 !important;padding-top:5px !important;">	ប្រាក់អាករលើការស្នាក់នៅត្រូវបង់ (អត្រា ២%)<br/>Accom Tax Due (Rate 2%)</p></td>
+							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="accommodation_14" readonly id="accommodation_14" class="checknb form-control text-right text-box accommodation_14" value=""></td>
 						</tr>
 						<tr>
 							<td colspan="5"  style="width:50%;border-left:none !important;border-top:none !important;border-right:none !important;"><p  style="margin-bottom: 0 !important;"><b>IV.</b> <u> អាករបំភ្លឺសាធារណៈ Public Lighting Tax</u> :</p></td>
@@ -417,11 +417,11 @@
 							<td style="padding:0 !important;height:31px;width:25%;">
 							<div style="font-weight: 700;padding:15px;width:40px;height:40px;background-color:#7f8c8d;color:white;float:left;">15</div>
 							<p style="margin-bottom: 0 !important;padding-top:5px !important;">មូលដ្ឋានគិតអាករបំភ្លឺសាធារណៈ<br>Public Lighting Tax Calculation Base</p> </td>
-							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="lighting_15" id="lighting_15" class="checknb form-control text-right text-box lighting_15" value=""></td>
+							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="lighting_15" readonly id="lighting_15" class="checknb form-control text-right text-box lighting_15" value=""></td>
 							<td colspan="2" style="padding:0 !important;height:31px;width:25%;text-align:left;">
 							<div style="font-weight: 700;padding:15px;width:40px;height:40px;background-color:#7f8c8d;color:white;float:left;">16</div>
 							<p style="margin-bottom: 0 !important;padding-top:5px !important;">ប្រាក់អាករស.បំភ្លឺសាធារណៈត្រូវបង់ (អត្រា ៣%)<br/>Public Lighting Tax Due (Rate 3%)</p></td>
-							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="lighting_16" id="lighting_16" class="checknb form-control text-right text-box lighting_16" value=""></td>
+							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="lighting_16" readonly id="lighting_16" class="checknb form-control text-right text-box lighting_16" value=""></td>
 						</tr>
 						<tr>
 							<td  style="padding:5px;border-left:none !important;border-top:none !important;"  ><p  style="margin-bottom: 0 !important;float:left;border-right:none !important;"><b>V.</b> <u> ពន្ធអាករដទៃទៀត Other Taxes: (បញ្ជាក់ Specify)     </u> *</p></td>
@@ -431,11 +431,11 @@
 							<td style="padding:0 !important;height:31px;width:25%;">
 							<div style="font-weight: 700;padding:15px;width:40px;height:40px;background-color:#7f8c8d;color:white;float:left;">17</div>
 							<p style="margin-bottom: 0 !important;padding-top:5px !important;">	មូលដ្ឋានគិតពន្ថអាករ<br>Tax Calculation Base</p> </td>
-							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="tax_17" id="tax_17" class="checknb form-control text-right text-box tax_17" value=""></td>
+							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="tax_17" readonly id="tax_17" class="checknb form-control text-right text-box tax_17" value=""></td>
 							<td colspan="2" style="padding:0 !important;height:31px;width:25%;text-align:left;">
 							<div style="font-weight: 700;padding:15px;width:40px;height:40px;background-color:#7f8c8d;color:white;float:left;">18</div>
-							<p style="margin-bottom: 0 !important;padding-top:5px !important;float:left;">	ប្រាក់ពន្ធអាករត្រូវបង់តាមអត្រា<br/>Tax Due at the rate of</p><span style="margin-top:8px;float:right;">%<span>
-							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="tax_due_18" id="tax_due_18" class="checknb form-control text-right text-box tax_due_18" value=""></td>
+							<p style="margin-bottom: 0 !important;padding-top:5px !important;float:left;">	ប្រាក់ពន្ធអាករត្រូវបង់តាមអត្រា<br/>Tax Due at the rate of</p><span style="margin-top:8px;float:right;"><span id="ptax_due_18"></span>%<span>
+							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="tax_due_18" readonly id="tax_due_18" class="checknb form-control text-right text-box tax_due_18" value=""></td>
 						</tr>
 						<tr>
 							<td colspan="2"  style="padding:0 !important;height:31px;width:25%;text-align:right;">
@@ -444,7 +444,7 @@
 							<td colspan="2" style="padding:0 !important;height:31px;width:25%;text-align:left;">
 							<div style="font-weight: 700;padding:15px;width:40px;height:40px;background-color:#7f8c8d;color:white;float:left;">19</div>
 							<p style="margin-bottom: 0 !important;padding-top:5px !important;float:left;">	សរុបប្រាក់ពន្ធត្រូវបង់ <br/>Total Tax Due</p>
-							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input type="text" name="total_tax_19" id="total_tax_19" class="checknb form-control text-right text-box total_tax_19" value=""></td>
+							<td style="vertical-align: middle !important;width:25%;padding:5px !important;"><input readonly="readonly" type="text" name="total_tax_19" id="total_tax_19" class="checknb form-control text-right text-box total_tax_19" value=""></td>
 						</tr>
 					</table>
 					<div>
@@ -729,35 +729,71 @@
 				   return false;
 		}
 	   });
+	   $( ".stM" ).focusout(function() {
+				$( "#enterprise" ).trigger( "change" );
+		  })
+		  $( ".stY" ).focusout(function() {
+				$( "#enterprise" ).trigger( "change" );
+		  })
 		$('#enterprise').change(function(){
 			var ent_id = $(this).val();
-			$.ajax({
-				type: 'get',
-				url: '<?= site_url('taxes/getEnterpriceInfo'); ?>',
-				dataType: "json",
-				data: {
-					ent_id: ent_id
-				},
-				success: function (data) {
-					$('.vat').text('');
-					var str = data['vat_no'];
-					var i = 0;
-					$('.vat').each(function() {
-						$(this).text(str[i]);
-						i++;
-					});
-					$('#business_act').val(data['business_activity']);
-					$('#address').val(data['address']);	
-					$('#street').val(data['street']);
-					$('#group').val(data['group']);
-					$('#village').val(data['village']);
-					$('#sangkat').val(data['sangkat']);
-					$('#district').val(data['district']);
-					$('#city').val(data['city']);
-					$('#phone').val(data['phone']);
-					$('#email').val(data['email']);
-				}
-			});
+			var month = $('.stM').val();
+			var year = $('.stY').val();
+			$('#prepayment_05').val('');
+			$('#prepayment_06').val('');
+			if(month =='' || year == '' || ent_id==''){
+				
+			}else{
+				$.ajax({
+					type: 'get',
+					url: '<?= site_url('taxes/getEnterpriceInfo'); ?>',
+					dataType: "json",
+					data: {
+						ent_id: ent_id,
+						month: month,
+						year: year,
+						tax_type: 2
+					},
+					success: function (data) {
+						$('.vat').text('');
+						var str = data['vat_no'];
+						var i = 0;
+						$('.vat').each(function() {
+							$(this).text(str[i]);
+							i++;
+						});
+						$('#business_act').val(data['business_activity']);
+						$('#address').val(data['address']);	
+						$('#street').val(data['street']);
+						$('#group').val(data['group']);
+						$('#village').val(data['village']);
+						$('#sangkat').val(data['sangkat']);
+						$('#district').val(data['district']);
+						$('#city').val(data['city']);
+						$('#phone').val(data['phone']);
+						$('#email').val(data['email']);
+						$('#prepayment_05').val(data['prepayment_05']);
+						$('#prepayment_06').val(data['prepayment_06']);
+						$('#prepayment_08').val(data['prepayment_06']);
+
+						$('#specific_09').val((data['specifictax3']/1.1).toFixed(0));
+						$('#specific_10').val(((data['specifictax3']/1.1)*0.03).toFixed(0));
+						$('#specific_11').val((data['specifictax10']/1.1).toFixed(0));
+						$('#specific_12').val(((data['specifictax10']/1.1)*0.1).toFixed(0));
+						$('#accommodation_13').val(((data['total_accommodation_tax']/1.02)).toFixed(0));
+						$('#lighting_15').val(((data['total_public_lighting_tax']/1.03)).toFixed(0));
+						$('#accommodation_14').val(((data['total_accommodation_tax']/1.02)*0.02).toFixed(0));
+						$('#lighting_16').val(((data['total_public_lighting_tax']/1.03)*0.03).toFixed(0));
+						
+						$('#pspecific_10').text(data['p10']);
+						$('#pspecific_12').text(data['p12']);
+						
+						var total_tax_due=data['prepayment_06']+((data['specifictax3']/1.1)*0.03)+((data['specifictax10']/1.1)*0.1)+((data['total_accommodation_tax']/1.02)*0.02)+((data['total_public_lighting_tax']/1.03)*0.03);
+						$('#total_tax_19').val(total_tax_due.toFixed(0));
+						
+					}
+				});
+			}
 		});
 		
 		$(".btnSave").click(function(){

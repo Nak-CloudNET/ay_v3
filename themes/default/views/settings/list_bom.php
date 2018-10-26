@@ -23,7 +23,7 @@
             "aoColumns": [{
                 "bSortable": false,
                 "mRender": checkbox
-            }, {"mRender": fld}, null, null, {"mRender": formatPurDecimal}, null, null,{"bSortable": false}],
+            }, {"mRender": fld}, null, null, null, null,{"bSortable": false}],
             'fnRowCallback': function (nRow, aData, iDisplayIndex) {
                 var oSettings = oTable.fnSettings();
                 nRow.id = aData[0];
@@ -31,25 +31,28 @@
                 return nRow;
             },
             "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
-                var total = 0;
+                var total = 0, qty = 0;
                 for (var i = 0; i < aaData.length; i++) {
-                    total += parseFloat(aaData[aiDisplay[i]][4]);
+					qty 	+= parseFloat(aaData[aiDisplay[i]][3]);
                 }
                 var nCells = nRow.getElementsByTagName('th');
-                nCells[4].innerHTML = formatPurDecimal(total);
+				nCells[3].innerHTML = formatPurDecimal(qty);
             }
         }).fnSetFilteringDelay().dtFilter([
             {column_number: 1, filter_default_label: "[<?=lang('date');?> (yyyy-mm-dd)]", filter_type: "text", data: []},
             {column_number: 2, filter_default_label: "[<?=lang('name');?>]", filter_type: "text", data: []},
-			{column_number: 3, filter_default_label: "[<?=lang('quantity');?>]", filter_type: "text", data: []},
-            {column_number: 5, filter_default_label: "[<?=lang('note');?>]", filter_type: "text", data: []},
-            {column_number: 6, filter_default_label: "[<?=lang('created_by');?>]", filter_type: "text", data: []},
+            {column_number: 4, filter_default_label: "[<?=lang('note');?>]", filter_type: "text", data: []},
+            {column_number: 5, filter_default_label: "[<?=lang('created_by');?>]", filter_type: "text", data: []},
         ], "footer");
 
     });
 
 </script>
-
+<style>
+    .col-xs-3 {
+        height: 0 !important;
+    }
+</style>
 <?php if ($Owner) {
     echo form_open('system_settings/expense_actions', 'id="action-form"');
 } ?>
@@ -95,7 +98,6 @@
                             <th class="col-xs-2"><?php echo $this->lang->line("date"); ?></th>
                             <th class="col-xs-2"><?php echo $this->lang->line("name"); ?></th>
 							<th class="col-xs-2"><?php echo $this->lang->line("quantity"); ?></th>
-                            <th class="col-xs-1"><?php echo $this->lang->line("cost"); ?></th>
                             <th class="col-xs-3"><?php echo $this->lang->line("note"); ?></th>
                             <th class="col-xs-3"><?php echo $this->lang->line("created_by"); ?></th>
                             
@@ -117,8 +119,6 @@
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th></th>
-                            
                             <th style="width:100px; text-align: center;"><?php echo $this->lang->line("actions"); ?></th>
                         </tr>
                         </tfoot>

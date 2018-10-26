@@ -33,12 +33,12 @@ $lang['default_email']                  		= "អ៊ីមែល​លំនា�
 $lang['default_warehouse']              		= "ឃ្លាំង​លំនាំដើម​";
 $lang['product_tax']                    			= "ពន្ធ​លើ​ផលិតផល​";
 $lang['invoice_tax']                    			= "ពន្ធ​លើ​ការលក់";
-$lang['sales_prefix']                   			= "បុព្វប សម្រាប់ការលក់";
-$lang['quote_prefix']                   			= "បុព្វប សម្រាប់ការសម្រង់​តម្លៃ";
-$lang['purchase_prefix']                		= "បុព្វប សម្រាប់ការទិញ​";
-$lang['transfer_prefix']                			= "បុព្វប សម្រាប់ការ​ផ្ទេ";
-$lang['delivery_prefix']                			= "បុព្វប សម្រាប់ការដឹកជញ្ចូន";
-$lang['payment_prefix']                 		= "បុព្វប សម្រាប់ការទ​ទូទាត់";
+$lang['sales_prefix']                   			= "បុព្វបទ សម្រាប់ការលក់";
+$lang['quote_prefix']                   			= "បុព្វបទ សម្រាប់ការសម្រង់​តម្លៃ";
+$lang['purchase_prefix']                		= "បុព្វបទ សម្រាប់ការទិញ​";
+$lang['transfer_prefix']                			= "បុព្វបទ សម្រាប់ការ​ផ្ទេ";
+$lang['delivery_prefix']                			= "បុព្វបទ សម្រាប់ការដឹកជញ្ចូន";
+$lang['payment_prefix']                 		= "បុព្វបទ សម្រាប់ការទ​ទូទាត់";
 $lang['detect_barcode']                 		= "​Detect Barcode";
 $lang['theme']                          			= "សំបក់កម្មវិធី";
 $lang['rows_per_page']                  		= "ជួរ​ដេក​ក្នុង​មួយ​ទំព័រ​";
@@ -212,7 +212,17 @@ $lang['product_variants_feature_x']     	= "Product variants feature will not wo
 $lang['group_permissions_updated']      = "Group permissions successfully updated";
 $lang['tax_invoice']                    			= "Tax Invoice";
 $lang['standard']                       			= "Standard";
-$lang['invoice_view']                   			= "Invoice View";
+$lang["account_category_separate"]		= "កំណត់គណនីរត់តាមប្រភេទទំនិញ";
+$lang["boms_method"]					= "កំណត់លក្ខខ័ណ្ឌBOM";
+$lang["show_people_code"]				= "បង្ហាញលេខកូឌអ្នកប្រើ";
+$lang["serial"]							= "កំណត់Serial";
+$lang["separate_code"]					= "បំបែកលេខកូដ";
+$lang["show_code"]						= "បង្ហាញលេខកូឌ";
+
+$lang["show_bill_to"]					= "បង្ហាញអាស្រ៍យដ្ដាន";
+$lang["show_po"]						= "បង្ហាញការមង់ទិញ";
+$lang["credit_limit"]					= "កំណត់ប្រាក់បំណុលអតិថិជន";
+$lang["invoice_view"]					= "បង្ហាញតំរង់វិក័យប័ត្រ";
 $lang['restrict_user']                  			= "Restrict User";
 $lang['logo_image_tip']                 		= "Max. file size 1024KB and (width=300px) x (height=80px).";
 $lang['biller_logo_tip']                			= "Please edit the biller after uploading the new logo and select newly updated logo.";
@@ -272,9 +282,14 @@ $lang['qty_decimals']                   		= "បរិមាណ​ទសភា�
 $lang['display_all_products']           		= "ផលិតផល​បង្ហាញ​ឃ្លាំង​";
 $lang['hide_with_0_qty']                		= "លាក់ 0 បរិមាណ​";
 $lang['show_with_0_qty']                		= "បង្ហាញ​ទាំង​អស់​សូម្បី​តែ​ជា​មួយ​នឹង 0 បរិមាណ";
-$lang['alert_day']                 				= "Alert Day";
-
-
+$lang['alert_day']                 				= "កំណត់ថ្ងៃត្រូវជូនដំណឹង ";
+$lang['enter_using_stock_prefix']                 				= "បុព្វបទ សម្រាប់ទំនិញដកប្រើ";
+$lang['enter_using_stock_return_prefix']                 				= "បុព្វបទ សម្រាប់ទំនិញដកប្រើត្រឡប់វិញ";
+$lang['supplier_deposit_prefix']                 				= "បុព្វបទ សម្រាប់កក់ប្រាក់អ្នកផ្គត់ផ្គង់";
+$lang['purchase_request_prefix']                 				= "បុព្វបទ សម្រាប់សំណើរទិញទំនិញ";
+$lang['purchase_order_prefix']                 				= "បុព្វបទ សម្រាប់ការមង់ទំនិញ";
+$lang['sale_order_prefix']                 				= "បុព្វបទ សម្រាប់ការបញ្ជាលក់";
+	
 /* Terms */
 $lang['academic_year']                 		= "Academic Years";
 $lang['terms']                 					= "Terms";
@@ -304,12 +319,12 @@ $lang["actions"]                 					= "សកម្មភាព";
 $lang["floor"]                 						= "ជាន់";
 $lang["list_bom"]                 				= "បញ្ជីផ្គុំ";
 $lang["thumbnail_size"]                 		= "ទំហំរូបភាពតូច";
-$lang["sale_loan_prefix"]               		= "បុព្វប សម្រាប់ការលក់កម្ចី";
-$lang["convert_prefix"]                 		= "បុព្វប សម្រាប់ការបម្លែង";
-$lang["purchase_payment_prefix"]        	= "បុព្វប សម្រាប់ការទូទាត់ការទិញ";
-$lang["purchase_retrun_prefix"]         	= "បុព្វប សម្រាប់ការទិញត្រឡប់";
-$lang["sale_payment_prefix"]            	= "បុព្វប សម្រាប់ការទូទាត់ការលក់";
-$lang["return_prefix"]                 			= "បុព្វប សម្រាប់ការលក់ត្រឡប់";
+$lang["sale_loan_prefix"]               		= "បុព្វបទ សម្រាប់ការលក់កម្ចី";
+$lang["convert_prefix"]                 		= "បុព្វបទ សម្រាប់ការបម្លែង";
+$lang["purchase_payment_prefix"]        	= "បុព្វបទ សម្រាប់ការទូទាត់ការទិញ";
+$lang["purchase_retrun_prefix"]         	= "បុព្វបទ សម្រាប់ការទិញត្រឡប់";
+$lang["sale_payment_prefix"]            	= "បុព្វបទ សម្រាប់ការទូទាត់ការលក់";
+$lang["return_prefix"]                 			= "បុព្វបទ សម្រាប់ការលក់ត្រឡប់";
 $lang["image_size"]                 			= "ទំហំរូបភាព";
 $lang["purchase_decimals"]             		= "ការទិញជាទសភាគ";
 $lang["decimals_sep"]                 		= "សញ្ញាចែកទសភាគ";
@@ -322,7 +337,3 @@ $lang['default_biller']                 			= "អកំណត់្នកចេ�
 $lang['no']                 							= "ទេ";
 $lang['yes']                 						= "បាទ";
 $lang['suppend_layout']                 		= "ប្លង់បន្ទប់";
-
-
-
-

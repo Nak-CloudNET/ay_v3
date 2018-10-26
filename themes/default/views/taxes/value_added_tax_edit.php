@@ -78,7 +78,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 							padding-left: 2px;
 							padding-right: 2px;
 							text-align: center;
-							height: 20px;" value="<?=date('d',strtotime($front->covreturn_start))?>" ><p class="text-style"  >From (DD)</p>
+							height: 20px;" value="<?=date('d',strtotime($front->covreturn_start))?>" readonly="readonly"><p class="text-style"  >From (DD)</p>
 							</td>
 						<td class="vertical-align: middle !important padding-less">
 						<p class="text-style" style="margin-bottom: 0px;">ខែ</p>
@@ -344,7 +344,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 							<tr width="214px">
 								<td>ប្រសិនបើលោក/លោកស្រីគ្មានសកម្មភាពទិញលក់ទេ សូមសរសេរថា "គ្មាន" ក្នុងប្រអប់<br/>If you have made no purchases and no sales, insert "NIL" in this box. </td>
 								<td class="black-box dak-border">04</td>
-								<td width="214px" class="dak-border"><input type="text" class="checknb t_r form-control text-box pusa_act04" name="pusa_act04" style="
+								<td width="214px" class="dak-border"><input type="text" class=" t_r form-control text-box pusa_act04" name="pusa_act04" style="
 							width: 220px;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -369,13 +369,13 @@ Read VAT leaflet No. 03 before completing this form </p>
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;
-							height: 35px;" value="<?=$front->tax_credit_premonth05?>" ></td>
+							height: 35px;" value="<?=$front->tax_credit_premonth05?>" readonly="readonly" ></td>
 							</tr>
 						</table>
 						<p class="title-style"><u>ការទិញទំនិញឬសេវាក្នុងខែ</u>(ធាតុចូល) <u>Month's purchases of goods and services</u> (Input) តំលៃមិនរួមបញ្ចូលអាករ Value exclusive of VAT </p>
 					<table width="100%">
 						<tr>
-							<td>ការលក់មិនជាប់អាករ Non-taxable sales </td>
+							<td>ការទិញមិនជាប់អាករឬការទិញមិនអនុញ្ញាត ឥណទាន Non-taxable or non-creditable purchase</td>
 							<td class="black-box dak-border">06</td>
 							<td width="214px" class="dak-border"><input type="text" class="checknb t_r form-control text-box ncredit_purch06" name="ncredit_purch06" style="
 							width: 220px;
@@ -383,12 +383,12 @@ Read VAT leaflet No. 03 before completing this form </p>
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;float:left;
-							height: 35px;" value="<?=$front->ncredit_purch06?>" ></td>
+							height: 35px;" value="<?=$front->ncredit_purch06?>" readonly="readonly" ></td>
 							<td width="214px"  class="dak-border" colspan="2" style="background-color: #7f8c8d;"></td>
 						</tr>
 						
 						<tr>
-							<td>ការលក់តាមអត្រា 0% Exports </td>
+							<td>ការទិញក្នុងស្រុកតាមអត្រាធម្មតា 10% Standard rated local purchases</td>
 							<td class="black-box dak-border">07</td>
 							<td width="214px"  class="dak-border"><input type="text" class="checknb t_r form-control text-box strate_purch07" name="strate_purch07" style="
 							width: 220px;
@@ -396,7 +396,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;
-							height: 35px;" value="<?=$front->strate_purch07?>" ></td>
+							height: 35px;" value="<?=$front->strate_purch07?>" readonly="readonly" ></td>
 							<td class="black-box dak-border">08</td>
 							<td width="214px"  class="dak-border"><input type="text" class="checknb t_r form-control text-box strate_purch08" name="strate_purch08" style="
 							width: 220px;
@@ -404,10 +404,10 @@ Read VAT leaflet No. 03 before completing this form </p>
 							padding-bottom: 2px;
 							padding-left: 2px;float:left;
 							padding-right: 2px;
-							height: 35px;" value="<?=$front->strate_purch08?>" >	</td>
+							height: 35px;" value="<?=$front->strate_purch08?>" readonly="readonly" >	</td>
 						</tr>
 						<tr>
-							<td>ការលក់តាមអត្រាធម្មតា 10% Standard rated sales  </td>
+							<td>ការនាំចូលតាមអត្រាធម្មតា 10% Standard rated imports</td>
 							<td class="black-box dak-border">09</td>
 							<td width="214px"  class="dak-border"><input type="text" class="checknb t_r form-control text-box strate_imports09" name="strate_imports09" style="
 							width: 220px;
@@ -415,7 +415,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;
-							height: 35px;" value="<?=$front->strate_imports09?>" ></td>
+							height: 35px;" value="<?=$front->strate_imports09?>"  readonly="readonly"></td>
 							<td class="black-box dak-border">10</td>
 							<td width="214px"  class="dak-border"><input type="text" class="checknb t_r form-control strate_imports10 text-box" name="strate_imports10" style="
 							width: 220px;
@@ -423,7 +423,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;
-							height: 35px;" value="<?=$front->strate_imports10?>" ></td>
+							height: 35px;" value="<?=$front->strate_imports10?>"  readonly="readonly"></td>
 						</tr>
 						<tr>
 							<td colspan="3" style="text-align:right;">សរុបទឹកប្រាក់អាករលើធាតុចូល Total amount of input tax (05+08+10)</td>
@@ -435,7 +435,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 							padding-bottom: ;
 							padding-left: 2px;
 							padding-right: 2px;
-							height: 35px;" value="<?=$front->total_intax11?>" ></td>
+							height: 35px;" value="<?=$front->total_intax11?>"  readonly="readonly"></td>
 						</tr>
 					</table>
 					<p class="title-style"><u>ការលក់ទំនិញនិងសេវាឬការនាំចេញក្នុងខែ</u>(ធាតុចេញ) <u>Month's sales of goods and services or exports</u> (Output) តំលៃមិនរួមបញ្ចូលអាករ Value exclusive of VAT </p>			
@@ -449,11 +449,11 @@ Read VAT leaflet No. 03 before completing this form </p>
 							padding-bottom: 2px;
 							padding-left: 2px;float:left;
 							padding-right: 2px;
-							height: 35px;" value="<?=$front->ntaxa_sales12?>" ></td>
+							height: 35px;" value="<?=$front->ntaxa_sales12?>"  readonly="readonly"></td>
 							<td width="214px"  class="dak-border" colspan="2" style="background-color: #7f8c8d;"></td>
 						</tr>
 						<tr>
-							<td>ការលក់តាមអត្រាធម្មតា 10% Standard rated sales </td>
+							<td>ការលក់តាមអត្រា 0% Exports  </td>
 							<td class="black-box dak-border">13</td>
 							<td width="214px"  class="dak-border"><input type="text" class="checknb t_r form-control text-box exports13" name="exports13" style="
 							width: 220px;
@@ -461,12 +461,12 @@ Read VAT leaflet No. 03 before completing this form </p>
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;
-							height: 35px;" value="<?=$front->exports13?>" ></td>
+							height: 35px;" value="<?=$front->exports13?>" readonly="readonly"></td>
 							<td colspan="2" class="dak-border" style="background-color:#7f8c8d;"></td>
 							
 						</tr>
 						<tr>
-							<td>ការលក់តាមអត្រា 0% Exports  </td>
+							<td>ការលក់តាមអត្រាធម្មតា 10% Standard rated sales </td>
 							<td class="black-box dak-border">14</td>
 							<td width="214px"  class="dak-border"><input type="text" class="checknb t_r form-control text-box strate_sales14" name="strate_sales14" style="
 							width: 220px;
@@ -474,7 +474,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;
-							height: 35px;" value="<?=$front->strate_sales14?>" ></td>
+							height: 35px;" value="<?=$front->strate_sales14?>"  readonly="readonly"></td>
 							<td class="black-box dak-border">15</td>
 							<td width="214px"  class="dak-border"><input type="text" class="checknb t_r form-control text-box strate_sales15" name="strate_sales15" style="
 							width: 220px;
@@ -482,10 +482,10 @@ Read VAT leaflet No. 03 before completing this form </p>
 							padding-bottom: 2px;
 							padding-left: 2px;float:left;
 							padding-right: 2px;
-							height: 35px;" value="<?=$front->strate_sales15?>" ></td>
+							height: 35px;" value="<?=$front->strate_sales15?>"  readonly="readonly"></td>
 						</tr>
 						<tr>
-							<td colspan="3" style="text-align:right;">សរុបទឹកប្រាក់អាករលើធាតុចូល Total amount of input tax (05+08+10)</td>
+							<td colspan="3" style="text-align:left;">ប្រសិនបើចំនួនក្នុងប្រអប់លេស 15 លើសពីចំនួនក្នុងប្រអប់លេស 11 ប្រូវបង់ចំនួនលម្អៀង If box 15 exceeds box 11,pay the difference</td>
 						
 							<td class="black-box dak-border">16</td>
 							<td width="214px" class="dak-border"><input type="text" class="checknb t_r form-control text-box pay_difference16" name="pay_difference16" style="
@@ -494,7 +494,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;
-							height: 35px;" value="<?=$front->pay_difference16?>" ></td>
+							height: 35px;" value="<?=$front->pay_difference16?>"  readonly="readonly"></td>
 						</tr>
 					
 					</table>
@@ -520,7 +520,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;
-							height: 35px;" value="<?=$front->credit_forward18?>" ></td>
+							height: 35px;" value="<?=$front->credit_forward18?>"  readonly="readonly"></td>
 						</tr>
 					</table>
 				</div>
@@ -713,7 +713,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 				<td>
 				'.form_dropdown('product_1[]', $bl, $b20->productid, 'id="product_1"  required="required" class="form-control input-tip select" style="width:100%;"').'</td>
 				<td><input type="text" class="checknb t_c form-control qty_1" name="qty_1[]" value="'. $b20->qty .'"></td>
-				<td>'.form_input('date_1[]', $this->erp->hrsd($b20->date), 'class="form-control datetime date_1"  id="date_1" required="required"').'</td>
+				<td>'.form_input('date_1[]', $this->erp->hrsd($b20->date), 'class="form-control date date_1"  id="date_1" required="required"').'</td>
 				<td><input type="text" class="form-control inv_declare_1" name="inv_declare_1[]" value="'. $b20->inv_cust_desc .'" ></td>
 				<td><select class="form-control input-sm suppid_1" name="suppid_1[]" style="width:200px"><option value="" selected></option>'.$opt.'</select></td>
 				<td><input type="text" class="checknb t_r  form-control VAT_1" name="VAT_1[]" value="'. $b20->val_vat .'" ></td>
@@ -732,7 +732,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 					<td>
 					'.form_dropdown('product_1[]', $bl, "", 'id="product_1"  required="required" class="form-control input-tip select" style="width:100%;"').'</td>
 					<td><input type="text" class="checknb t_c form-control qty_1" name="qty_1[]"></td>
-					<td>'.form_input('date_1[]', "", 'class="form-control datetime date_1"  id="date_1" required="required"').'</td>
+					<td>'.form_input('date_1[]', "", 'class="form-control date date_1"  id="date_1" required="required"').'</td>
 					<td><input type="text" class="form-control inv_declare_1" name="inv_declare_1[]"></td>
 					<td><select class="form-control input-sm suppid_1" name="suppid_1[]" style="width:200px"><option value="" selected></option>'.$opt.'</select></td>
 					<td><input type="text" class="checknb t_r  form-control VAT_1" name="VAT_1[]"></td>
@@ -788,7 +788,7 @@ Export Value</td>
 		echo '<tr><td style="text-align:center">'.$j.'</td>
 					<td>'.form_dropdown('product_2[]', $bl, $b21->productid, 'id="product_2"  required="required" class="form-control input-tip select" style="width:100%;"').'</td>
 					<td><input type="text" class="checknb t_c form-control qty_2" name="qty_2[]" value="'. $b21->qty .'" ></td>
-					<td>'.form_input('date_2[]', $this->erp->hrsd($b21->date) , 'class="form-control datetime" id="date_2" required="required"').'</td>
+					<td>'.form_input('date_2[]', $this->erp->hrsd($b21->date) , 'class="form-control date" id="date_2" required="required"').'</td>
 					<td><input type="text" class="form-control inv_declare_2" name="inv_declare_2[]" value="'. $b21->inv_cust_desc .'" ></td>
 					<td><input type="text" class="form-control exp_2" name="exp_2[]" value="'. $b21->supp_exp_inn .'" ></td>
 					<td><input type="text" class="checknb t_r form-control exv_2" name="exv_2[]" value="'. $b21->val_vat .'" ></td>
@@ -802,7 +802,7 @@ Export Value</td>
 				echo '<tr><td style="text-align:center">'.$i.'</td>
 							<td>'.form_dropdown('product_2[]', $bl, "", 'id="product_2"  required="required" class="form-control input-tip select" style="width:100%;"').'</td>
 							<td><input type="text" class="checknb t_c form-control qty_2" name="qty_2[]"></td>
-							<td>'.form_input('date_2[]', "" , 'class="form-control datetime" id="date_2" required="required"').'</td>
+							<td>'.form_input('date_2[]', "" , 'class="form-control date" id="date_2" required="required"').'</td>
 							<td><input type="text" class="form-control inv_declare_2" name="inv_declare_2[]"></td>
 							<td><input type="text" class="form-control exp_2" name="exp_2[]"></td>
 							<td><input type="text" class="checknb t_r form-control exv_2" name="exv_2[]"></td>

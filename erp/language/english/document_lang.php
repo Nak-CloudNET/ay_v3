@@ -28,6 +28,15 @@ $lang["account_code"]						= "Account Code";
 $lang["account_name"]					= "Account Name";
 $lang["parent_account"]					= "Parent Account";
 $lang["account_section"]					= "Account Section";
+$lang["create_employee_salary"]		= "Create Employee Salary";
+//##################### Purchase Request
+$lang['purchase_request']             		= "Purchase Request";
+$lang['list_purchase_request']              = "List Purchase Request";
+$lang['add_purchase_request']               = "Add Purchase Request";
+$lang['requested']               			= "Requested";
+$lang['authorize']               			= "Authorize";
+$lang['request_status']               		= "Request Status";
+$lang['create_order']               		= "Create Order";
 
 
 

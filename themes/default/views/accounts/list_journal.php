@@ -1,8 +1,5 @@
 <?php
     $v = "";
-    /* if($this->input->post('name')){
-      $v .= "&name=".$this->input->post('name');
-      } */
     if ($this->input->post('reference_no')) {
         $v .= "&reference_no=" . $this->input->post('reference_no');
     }
@@ -13,13 +10,45 @@
         $v .= "&end_date=" . $this->input->post('end_date');
     }
 ?>
+<style>
+	.disabled {
+	   pointer-events: none;
+	   cursor: default;
+	  
+	}
+	.disabled i{
+		 color:gray;
+	}
+	.table {
+        /*white-space: nowrap ;*/
+    }
+	.table {
+		width: 100%;
+		display: block;
+
+	}
+    .table td:nth-child(10){
+        word-break:break-all;
+        min-width: 150px!important;
+    }
+
+</style>
 <script>
     $(document).ready(function () {
         var oTable = $('#SupData').dataTable({
             "aaSorting": [[1, "desc"]],
             "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
             "iDisplayLength": <?= $Settings->rows_per_page ?>,
-            'bProcessing': true, 'bServerSide': true,
+            'bProcessing': true,
+			'bServerSide': true,
+			"bStateSave": true,
+			"fnStateSave": function (oSettings, oData) {
+				__setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+			},
+			"fnStateLoad": function (oSettings) {
+				var data = __getItem('DataTables_' + window.location.pathname);
+				return JSON.parse(data);
+			},
             'sAjaxSource': '<?= site_url('account/getJournalList').'/?v=1'.$v ?>',
 			"bAutoWidth": false ,
             'fnServerData': function (sSource, aoData, fnCallback) {
@@ -32,37 +61,59 @@
             "aoColumns": [{
                 "bSortable": false,
                 "mRender": checkbox
-            },  { "width": "25px" },null, null, null, null, null, null, null, {"mRender":currencyFormat}, {"mRender":currencyFormat}, {"bSortable": false}],
+            },  
+			{"width": "25px"},
+			null, 
+			{"mRender": fld }, 
+			null, 
+			null,
+			null, 
+			null, 
+			null, 
+			null,
+			{"mRender":currencyFormat},
+			{"mRender":currencyFormat},
+			null,
+			{"bSortable": false}],
 			"fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
                 var total_debit = 0, total_credit = 0;
                 for (var i = 0; i < aaData.length; i++) {
-					if(isNaN(parseFloat(aaData[aiDisplay[i]][9]))){
+					if(isNaN(parseFloat(aaData[aiDisplay[i]][10]))){
 						total_debit += parseFloat(0);
 					}else{
-						total_debit += parseFloat(aaData[aiDisplay[i]][9]);
+						total_debit += parseFloat(aaData[aiDisplay[i]][10]);
 					}
 					
-					if(isNaN(parseFloat(aaData[aiDisplay[i]][10]))){
+					if(isNaN(parseFloat(aaData[aiDisplay[i]][11]))){
 						total_credit += parseFloat(0);
 					}else{
-						total_credit += parseFloat(aaData[aiDisplay[i]][10]);
+						total_credit += parseFloat(aaData[aiDisplay[i]][11]);
 					}
                 }
-                var nCells = nRow.getElementsByTagName('th');
-                nCells[9].innerHTML = currencyFormat(parseFloat(total_debit));
-                nCells[10].innerHTML = currencyFormat(parseFloat(total_credit));
+               var nCells = nRow.getElementsByTagName('th');
+                nCells[10].innerHTML = currencyFormat(parseFloat(total_debit));
+                nCells[11].innerHTML = currencyFormat(parseFloat(total_credit));
             },
+			'fnRowCallback': function (nRow, aData, iDisplayIndex) {
+				if(aData[2] != 'JOURNAL'){
+					nRow.id = aData[0];
+					$('td:eq(13)', nRow).addClass( 'disabled' );
+				}
+                return nRow;
+            }
         }).dtFilter([
             {column_number: 1, filter_default_label: "[<?=lang('no');?>]", filter_type: "text", data: []},
-			{column_number: 2, filter_default_label: "[<?=lang('project');?>]", filter_type: "text", data: []},
-			{column_number: 3, filter_default_label: "[<?=lang('type');?>]", filter_type: "text", data: []},
-			{column_number: 4, filter_default_label: "[<?=lang('date');?>]", filter_type: "text", data: []},
-            {column_number: 5, filter_default_label: "[<?=lang('reference');?>]", filter_type: "text", data: []},
-            {column_number: 6, filter_default_label: "[<?=lang('account_code');?>]", filter_type: "text", data: []},
-            {column_number: 7, filter_default_label: "[<?=lang('account_name');?>]", filter_type: "text", data: []},
-            {column_number: 8, filter_default_label: "[<?=lang('description');?>]", filter_type: "text", data: []},
-            {column_number: 9, filter_default_label: "[<?=lang('debit');?>]", filter_type: "text", data: []},
-            {column_number: 10, filter_default_label: "[<?=lang('credit');?>]", filter_type: "text", data: []},
+			{column_number: 2, filter_default_label: "[<?=lang('type');?>]", filter_type: "text", data: []},
+			{column_number: 3, filter_default_label: "[<?=lang('date');?>]", filter_type: "text", data: []},
+			{column_number: 4, filter_default_label: "[<?=lang('reference');?>]", filter_type: "text", data: []},
+			{column_number: 5, filter_default_label: "[<?=lang('project');?>]", filter_type: "text", data: []},
+			{column_number: 6, filter_default_label: "[<?=lang('name');?>]", filter_type: "text", data: []},
+            {column_number: 7, filter_default_label: "[<?=lang('account_code');?>]", filter_type: "text", data: []},
+            {column_number: 8, filter_default_label: "[<?=lang('account_name');?>]", filter_type: "text", data: []},
+            {column_number: 9, filter_default_label: "[<?=lang('note');?>]", filter_type: "text", data: []},
+            {column_number: 10, filter_default_label: "[<?=lang('debit');?>]", filter_type: "text", data: []},
+            {column_number: 11, filter_default_label: "[<?=lang('credit');?>]", filter_type: "text", data: []},
+			{column_number: 12, filter_default_label: "[<?=lang('created_by');?>]", filter_type: "text", data: []},
         ], "footer");
     });
 </script>
@@ -81,7 +132,6 @@
             source: '<?= site_url('reports/suggestions'); ?>',
             select: function (event, ui) {
                 $('#product_id').val(ui.item.id);
-                //$(this).val(ui.item.label);
             },
             minLength: 1,
             autoFocus: false,
@@ -89,9 +139,9 @@
         });
     });
 </script>
-<?php if ($Owner) {
+<?php
     echo form_open('account/journal_actions', 'id="action-form"');
-} ?>
+?>
 <div class="box">
     <div class="box-header">
         <h2 class="blue"><i class="fa-fw fa fa-users"></i><?= lang('list_journal'); ?></h2>
@@ -112,11 +162,15 @@
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
             		<i class="icon fa fa-tasks tip" data-placement="left" title="<?= lang("actions") ?>"></i></a>
                     <ul class="dropdown-menu pull-right" class="tasks-menus" role="menu" aria-labelledby="dLabel">
+                    <?php if ($Owner || $Admin || $GP['accounts-add']) { ?>
                         <li><a href="<?= site_url('account/add_journal'); ?>" data-toggle="modal" data-target="#myModal"
                                id="add"><i class="fa fa-plus-circle"></i> <?= lang("add_journal"); ?></a></li>
+                    <?php } ?>
+                    <?php if ($Owner || $Admin || $GP['accounts-import']) { ?>
                         <li><a href="<?= site_url('account/import_journal_csv'); ?>" data-toggle="modal"
                                data-target="#myModal"><i class="fa fa-plus-circle"></i> <?= lang("add_journal_by_csv"); ?>
                             </a></li>
+                    <?php } ?>
 						<?php if ($Owner || $Admin) { ?>
 							<li><a href="#" id="excel" data-action="export_excel"><i
 										class="fa fa-file-excel-o"></i> <?= lang('export_to_excel') ?></a></li>
@@ -138,17 +192,11 @@
             </ul>
         </div>
     </div>
-<?php if ($Owner) { ?>
-    <div style="display: none;">
-        <input type="hidden" name="form_action" value="" id="form_action"/>
-        <?= form_submit('performAction', 'performAction', 'id="action-form-submit"') ?>
-    </div>
-    <?php echo form_close(); ?>
-<?php } ?>
-<?php /* if ($action && $action == 'add') {
-    echo '<script>$(document).ready(function(){$("#add").trigger("click");});</script>';
-} */
-?>
+<div style="display: none;">
+    <input type="hidden" name="form_action" value="" id="form_action"/>
+    <?= form_submit('performAction', 'performAction', 'id="action-form-submit"') ?>
+</div>
+<?php echo form_close(); ?>
 	<div class="box-content">
         <div class="row">
             <div class="col-lg-12">
@@ -167,13 +215,13 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <?= lang("start_date", "start_date"); ?>
-                                <?php echo form_input('start_date', (isset($_POST['start_date']) ? $_POST['start_date'] : ""), 'class="form-control datetime" id="start_date"'); ?>
+                                <?php echo form_input('start_date', (isset($_POST['start_date']) ? $_POST['start_date'] : ""), 'class="form-control date" id="start_date"'); ?>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <?= lang("end_date", "end_date"); ?>
-                                <?php echo form_input('end_date', (isset($_POST['end_date']) ? $_POST['end_date'] : ""), 'class="form-control datetime" id="end_date"'); ?>
+                                <?php echo form_input('end_date', (isset($_POST['end_date']) ? $_POST['end_date'] : ""), 'class="form-control date" id="end_date"'); ?>
                             </div>
                         </div>
                     </div>
@@ -193,16 +241,18 @@
                             <th style="min-width:5%; width: 5%; text-align: center;">
                                 <input class="checkbox checkth" type="checkbox" name="check"/>
                             </th>
-							<th style='width:5%'><?= lang("no"); ?></th>
-							<th><?= lang("project"); ?></th>
+							<th><?= lang("no"); ?></th>
 							<th><?= lang("type"); ?></th>
                             <th><?= lang("date"); ?></th>
                             <th><?= lang("reference_no"); ?></th>
+							<th><?= lang("project"); ?></th>
+							<th><?= lang("name"); ?></th>
                             <th><?= lang("account_code"); ?></th>
                             <th><?= lang("account_name"); ?></th>
-							<th><?= lang("description"); ?></th>
+							<th><?= lang("note"); ?></th>
                             <th><?= lang("debit"); ?></th>
-							<th><?= lang("credit"); ?></th></th>
+							<th><?= lang("credit"); ?></th>
+							<th><?= lang("created_by"); ?></th>
                             <th style="text-align:center;"><?= lang("actions"); ?></th>
                         </tr>
                         </thead>
@@ -217,6 +267,8 @@
                                 <input class="checkbox checkft" type="checkbox" name="check"/>
                             </th>
                             <th></th>
+							<th></th>
+							<th></th>
 							<th></th>
 							<th></th>
 							<th></th>

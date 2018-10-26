@@ -57,6 +57,98 @@ class Drivers extends MY_Controller
         //->unset_column('id');
         echo $this->datatables->generate();
     }
+	  //Export in list driver
+    function driver_action(){
+          if (!$this->Owner) {
+            $this->session->set_flashdata('warning', lang('access_denied'));
+            redirect($_SERVER["HTTP_REFERER"]);
+        }
+
+        $this->form_validation->set_rules('form_action', lang("form_action"), 'required');
+
+        if ($this->form_validation->run() == true) {
+
+            if (!empty($_POST['val'])) {
+                if ($this->input->post('form_action') == 'delete') {
+                    $error = false;
+                    foreach ($_POST['val'] as $id) {
+                        if (!$this->companies_model->deleteCustomer($id)) {
+                            $error = true;
+                        }
+                    }
+                    if ($error) {
+                        $this->session->set_flashdata('warning', lang('customers_x_deleted_have_sales'));
+                    } else {
+                        $this->session->set_flashdata('message', lang("customers_deleted"));
+                    }
+                    redirect($_SERVER["HTTP_REFERER"]);
+                }
+
+                if ($this->input->post('form_action') == 'export_excel' || $this->input->post('form_action') == 'export_pdf') {
+
+                    $this->load->library('excel');
+                    $this->excel->setActiveSheetIndex(0);
+                    $this->excel->getActiveSheet()->setTitle(lang('customer'));
+                    $this->excel->getActiveSheet()->SetCellValue('A1', lang('driver_name'));
+                    $this->excel->getActiveSheet()->SetCellValue('B1', lang('email_address'));
+                    $this->excel->getActiveSheet()->SetCellValue('C1', lang('phone_number'));
+
+                    $row = 2;
+                    foreach ($_POST['val'] as $id) {
+                        $customer = $this->site->getDriverByID($id);
+                        $this->excel->getActiveSheet()->SetCellValue('A' . $row, $customer->name);
+                        $this->excel->getActiveSheet()->SetCellValue('B' . $row, $customer->email);
+                        $this->excel->getActiveSheet()->SetCellValue('C' . $row, $customer->phone." ");
+                        
+                        $row++;
+                    }
+
+                    $this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+                    $this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(40);
+                    $this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+                    
+                    $this->excel->getDefaultStyle()->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                    $filename = 'customers_' . date('Y_m_d_H_i_s');
+                    if ($this->input->post('form_action') == 'export_pdf') {
+                        $styleArray = array('borders' => array('allborders' => array('style' => PHPExcel_Style_Border::BORDER_THIN)));
+                        $this->excel->getDefaultStyle()->applyFromArray($styleArray);
+                        $this->excel->getActiveSheet()->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
+                        require_once(APPPATH . "third_party" . DIRECTORY_SEPARATOR . "MPDF" . DIRECTORY_SEPARATOR . "mpdf.php");
+                        $rendererName = PHPExcel_Settings::PDF_RENDERER_MPDF;
+                        $rendererLibrary = 'MPDF';
+                        $rendererLibraryPath = APPPATH . 'third_party' . DIRECTORY_SEPARATOR . $rendererLibrary;
+                        if (!PHPExcel_Settings::setPdfRenderer($rendererName, $rendererLibraryPath)) {
+                            die('Please set the $rendererName: ' . $rendererName . ' and $rendererLibraryPath: ' . $rendererLibraryPath . ' values' .
+                                PHP_EOL . ' as appropriate for your directory structure');
+                        }
+
+                        header('Content-Type: application/pdf');
+                        header('Content-Disposition: attachment;filename="' . $filename . '.pdf"');
+                        header('Cache-Control: max-age=0');
+
+                        $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'PDF');
+                        return $objWriter->save('php://output');
+                    }
+                    if ($this->input->post('form_action') == 'export_excel') {
+                        header('Content-Type: application/vnd.ms-excel');
+                        header('Content-Disposition: attachment;filename="' . $filename . '.xls"');
+                        header('Cache-Control: max-age=0');
+
+                        $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');
+                        return $objWriter->save('php://output');
+                    }
+
+                    redirect($_SERVER["HTTP_REFERER"]);
+                }
+            } else {
+                $this->session->set_flashdata('error', lang("no_customer_selected"));
+                redirect($_SERVER["HTTP_REFERER"]);
+            }
+        } else {
+            $this->session->set_flashdata('error', validation_errors());
+            redirect($_SERVER["HTTP_REFERER"]);
+        }
+    }
 
     function view($id = NULL)
     {

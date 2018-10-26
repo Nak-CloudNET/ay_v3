@@ -77,7 +77,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;
-							height: 20px;"><p class="text-style"  >From (DD)</p>
+							height: 20px;" readonly="readonly" value="1"><p class="text-style"  >From (DD)</p>
 							</td>
 						<td class="vertical-align: middle !important padding-less">
 						<p class="text-style" style="margin-bottom: 0px;">ខែ</p>
@@ -116,7 +116,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;
-							height: 20px;"><p class="text-style"  >To 	(DD)</p>
+							height: 20px;" readonly="readonly"><p class="text-style"  >To 	(DD)</p>
 							</td>
 						<td class="vertical-align: middle !important padding-less">
 						<p class="text-style" style="margin-bottom: 0px;">ខែ</p>
@@ -128,7 +128,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;
-							height: 20px;"><p class="text-style"  >Month(MM) </p>
+							height: 20px;" readonly="readonly"><p class="text-style"  >Month(MM) </p>
 							</td>
 						<td class="vertical-align: middle !important padding-less">
 						<p class="text-style" style="margin-bottom: 0px;">ឆ្នាំ</p>
@@ -140,7 +140,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;
-							height: 20px;"><p class="text-style"  >Year(YYYY)</p>
+							height: 20px;" readonly="readonly"><p class="text-style"  >Year(YYYY)</p>
 						</td>
 					</td>
 					
@@ -334,7 +334,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 							<tr width="214px">
 								<td>ប្រសិនបើលោក/លោកស្រីគ្មានសកម្មភាពទិញលក់ទេ សូមសរសេរថា "គ្មាន" ក្នុងប្រអប់<br/>If you have made no purchases and no sales, insert "NIL" in this box. </td>
 								<td class="black-box dak-border">04</td>
-								<td width="214px" class="dak-border"><input type="text" class="checknb t_r form-control text-box pusa_act04" name="pusa_act04" style="
+								<td width="214px" class="dak-border"><input type="text" class="t_r form-control text-box pusa_act04" name="pusa_act04" style="
 							width: 220px;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -353,7 +353,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 							<tr>
 								<td>ឥណទានអាករលើធាតុចូលពីខែមុន Input tax credit form previous month.</td>
 								<td class="black-box dak-border">05</td>
-								<td width="214px" class="dak-border"><input type="text" class="checknb t_r form-control text-box tax_credit_premonth05" name="tax_credit_premonth05" style="
+								<td width="214px" class="dak-border"><input type="text" class="checknb t_r form-control text-box tax_credit_premonth05" readonly="readonly" name="tax_credit_premonth05" style="
 							width: 220px;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -371,9 +371,9 @@ Read VAT leaflet No. 03 before completing this form </p>
 
 					<table width="100%">
 						<tr>
-							<td>ការលក់មិនជាប់អាករ Non-taxable sales </td>
+							<td>ការទិញមិនជាប់អាករឬការទិញមិនអនុញ្ញាត ឥណទាន Non-taxable or non-creditable purchase </td>
 							<td class="black-box dak-border">06</td>
-							<td width="214px" class="dak-border"><input type="text" class="checknb t_r form-control text-box ncredit_purch06" name="ncredit_purch06" style="
+							<td width="214px" class="dak-border"><input type="text" class="checknb t_r form-control text-box ncredit_purch06" readonly="readonly" name="ncredit_purch06" style="
 							width: 220px;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -384,9 +384,9 @@ Read VAT leaflet No. 03 before completing this form </p>
 						</tr>
 						
 						<tr>
-							<td>ការលក់តាមអត្រា 0% Exports </td>
+							<td>ការទិញក្នុងស្រុកតាមអត្រាធម្មតា 10% Standard rated local purchases </td>
 							<td class="black-box dak-border">07</td>
-							<td width="214px"  class="dak-border"><input type="text" class="checknb t_r form-control text-box strate_purch07" name="strate_purch07" style="
+							<td width="214px"  class="dak-border"><input type="text" class="checknb t_r form-control text-box strate_purch07" readonly="readonly" name="strate_purch07" style="
 							width: 220px;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -394,7 +394,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 							padding-right: 2px;
 							height: 35px;"></td>
 							<td class="black-box dak-border">08</td>
-							<td width="214px"  class="dak-border"><input type="text" class="checknb t_r form-control text-box strate_purch08" name="strate_purch08" style="
+							<td width="214px"  class="dak-border"><input type="text" class="checknb t_r form-control text-box strate_purch08" readonly="readonly" name="strate_purch08" style="
 							width: 220px;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -403,9 +403,9 @@ Read VAT leaflet No. 03 before completing this form </p>
 							height: 35px;">	</td>
 						</tr>
 						<tr>
-							<td>ការលក់តាមអត្រាធម្មតា 10% Standard rated sales  </td>
+							<td>ការនាំចូលតាមអត្រាធម្មតា 10% Standard rated imports  </td>
 							<td class="black-box dak-border">09</td>
-							<td width="214px"  class="dak-border"><input type="text" class="checknb t_r form-control text-box strate_imports09" name="strate_imports09" style="
+							<td width="214px"  class="dak-border"><input type="text" class="checknb t_r form-control text-box strate_imports09" readonly="readonly" name="strate_imports09" style="
 							width: 220px;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -413,7 +413,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 							padding-right: 2px;
 							height: 35px;"></td>
 							<td class="black-box dak-border">10</td>
-							<td width="214px"  class="dak-border"><input type="text" class="checknb t_r form-control strate_imports10 text-box" name="strate_imports10" style="
+							<td width="214px"  class="dak-border"><input type="text" class="checknb t_r form-control strate_imports10 text-box" readonly="readonly" name="strate_imports10" style="
 							width: 220px;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -425,7 +425,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 							<td colspan="3" style="text-align:right;">សរុបទឹកប្រាក់អាករលើធាតុចូល Total amount of input tax (05+08+10)</td>
 						
 							<td class="black-box dak-border">11</td>
-							<td width="214px" class="dak-border"><input type="text" class="checknb t_r form-control text-box total_intax11" name="total_intax11" style="
+							<td width="214px" class="dak-border"><input type="text" class="checknb t_r form-control text-box total_intax11" readonly="readonly" name="total_intax11" style="
 							width: 220px;
 							padding-top: 2px;
 							padding-bottom: ;
@@ -440,9 +440,9 @@ Read VAT leaflet No. 03 before completing this form </p>
 					<p class="title-style"><u>ការលក់ទំនិញនិងសេវាឬការនាំចេញក្នុងខែ</u>(ធាតុចេញ) <u>Month's sales of goods and services or exports</u> (Output) តំលៃមិនរួមបញ្ចូលអាករ Value exclusive of VAT </p>			
 					<table width="100%">
 						<tr>
-							<td>ការលក់មិនជាប់អាករ Non-taxable sales  </td>
+							<td>ការលក់មិនជាប់អាករ Non-taxable sales</td>
 							<td class="black-box dak-border">12</td>
-							<td width="214px" class="dak-border"><input type="text" class="checknb t_r form-control text-box ntaxa_sales12" name="ntaxa_sales12" style="
+							<td width="214px" class="dak-border"><input type="text" class="checknb t_r form-control text-box ntaxa_sales12" readonly="readonly" name="ntaxa_sales12" style="
 							width: 220px;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -453,9 +453,9 @@ Read VAT leaflet No. 03 before completing this form </p>
 						</tr>
 						
 						<tr>
-							<td>ការលក់តាមអត្រាធម្មតា 10% Standard rated sales </td>
+							<td>ការលក់តាមអត្រា 0% Exports </td>
 							<td class="black-box dak-border">13</td>
-							<td width="214px"  class="dak-border"><input type="text" class="checknb t_r form-control text-box exports13" name="exports13" style="
+							<td width="214px"  class="dak-border"><input type="text" class="checknb t_r form-control text-box exports13" readonly="readonly" name="exports13" style="
 							width: 220px;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -466,9 +466,9 @@ Read VAT leaflet No. 03 before completing this form </p>
 							
 						</tr>
 						<tr>
-							<td>ការលក់តាមអត្រា 0% Exports  </td>
+							<td>ការលក់តាមអត្រាធម្មតា 10% Standard rated sales</td>
 							<td class="black-box dak-border">14</td>
-							<td width="214px"  class="dak-border"><input type="text" class="checknb t_r form-control text-box strate_sales14" name="strate_sales14" style="
+							<td width="214px"  class="dak-border"><input type="text" class="checknb t_r form-control text-box strate_sales14" readonly="readonly" name="strate_sales14" style="
 							width: 220px;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -476,7 +476,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 							padding-right: 2px;
 							height: 35px;"></td>
 							<td class="black-box dak-border">15</td>
-							<td width="214px"  class="dak-border"><input type="text" class="checknb t_r form-control text-box strate_sales15" name="strate_sales15" style="
+							<td width="214px"  class="dak-border"><input type="text" class="checknb t_r form-control text-box strate_sales15" readonly="readonly" name="strate_sales15" style="
 							width: 220px;
 							padding-top: 2px;
 							padding-bottom: 2px;
@@ -485,7 +485,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 							height: 35px;"></td>
 						</tr>
 						<tr>
-							<td colspan="3" style="text-align:right;">សរុបទឹកប្រាក់អាករលើធាតុចូល Total amount of input tax (05+08+10)</td>
+							<td colspan="3" style="text-align:left;">ប្រសិនបើចំនួនក្នុងប្រអប់លេស 15 លើសពីចំនួនក្នុងប្រអប់លេស 11 ប្រូវបង់ចំនួនលម្អៀង If box 15 exceeds box 11,pay the difference</td>
 						
 							<td class="black-box dak-border">16</td>
 							<td width="214px" class="dak-border"><input type="text" class="checknb t_r form-control text-box pay_difference16" name="pay_difference16" style="
@@ -494,7 +494,7 @@ Read VAT leaflet No. 03 before completing this form </p>
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;
-							height: 35px;"></td>
+							height: 35px;" readonly="readonly"></td>
 						</tr>
 					
 					</table>
@@ -514,13 +514,18 @@ Read VAT leaflet No. 03 before completing this form </p>
 							height: 35px;"></td>
 							<td style="float:right;padding-top:10px;">ជាឥណទានសម្រាប់យោងទៅមុខ Credit carried forward </td>
 							<td class="black-box dak-border">18</td>
-							<td width="184px" class=" dak-border"><input type="text" class="checknb credit_forward18 text-box t_r " name="credit_forward18" style="
-							width: 190px;
+							
+							<td width="184px" class="dak-border">
+							<input type="text" class="checknb form-control credit_forward18 text-box t_r "  name="credit_forward18" 
+							style="width: 190px;
 							padding-top: 2px;
 							padding-bottom: 2px;
 							padding-left: 2px;
 							padding-right: 2px;
-							height: 35px;"></td>
+							height: 35px;"  readonly="readonly">
+							</td>
+							
+							
 						</tr>
 					</table>
 				</div>
@@ -834,10 +839,13 @@ Value exclusive of VAT</td>
   </div>
 </div>
 
+	<div>
+		<input type="hidden" name="state_change" value="0">
+	</div>
 	<div class="form-group text-center ">
 		
             <?php echo form_submit('save', lang('save'), 'class="btn btn-primary btnSave" id="add_submit"'); ?>
-        </div>
+    </div>
 
     </div>
     <?php echo form_close(); ?>
@@ -887,37 +895,96 @@ Value exclusive of VAT</td>
 				return false;
 			}
 		});
-		
+		$( ".st_mm" ).focusout(function() {
+				$( "#enterprise" ).trigger( "change" );
+		  })
+		  $( ".st_yy" ).focusout(function() {
+				$( "#enterprise" ).trigger( "change" );
+		  })
 		$('#enterprise').change(function(){
 			var ent_id = $(this).val();
-			$.ajax({
-				type: 'get',
-				url: '<?= site_url('taxes/getEnterpriceInfo'); ?>',
-				dataType: "json",
-				data: {
-					ent_id: ent_id
-				},
-				success: function (data) {
-					$('.vat').text('');
-					var str = data['vat_no'];
-					var i = 0;
-					$('.vat').each(function() {
-						$(this).text(str[i]);
-						i++;
-					});
-					$('.business_act').val(data['business_activity']);
-					$('.address').val(data['address']);	
-					$('.street').val(data['street']);
-					$('.group').val(data['group']);
-					$('.village').val(data['village']);
-					$('.sangkat').val(data['sangkat']);
-					$('.district').val(data['district']);
-					$('.municipality').val(data['']);
-					$('.municipality').val(data['city']);
-					$('.phone').val(data['phone']);
-					$('.email').val(data['email']);
-				}
-			});
+			var month = $('.st_mm').val();
+			var year = $('.st_yy').val();
+						$('.tax_credit_premonth05').val('');
+						$('.ncredit_purch06').val('');
+						$('.strate_purch07').val('');
+						$('.strate_purch08').val('');
+						$('.strate_imports09').val('');
+						$('.strate_imports10').val('');
+						$('.total_intax11').val('');
+						$('.ntaxa_sales12').val('');
+						$('.exports13').val('');
+						$('.strate_sales14').val('');
+						$('.strate_sales15').val('');
+						$('.pay_difference16').val('');
+						$('.credit_forward18').val('');
+			if(month =='' || year == '' || ent_id==''){
+				
+			}else{
+				$.ajax({
+					type: 'get',
+					url: '<?= site_url('taxes/getEnterpriceInfo'); ?>',
+					dataType: "json",
+					data: {
+						ent_id: ent_id,
+						month: month,
+						year: year,
+						tax_type: 2
+					},
+					success: function (data) {
+						$('.vat').text('');
+						var str = data['vat_no'];
+						var i = 0;
+						$('.vat').each(function() {
+							$(this).text(str[i]);
+							i++;
+						});
+						$('.business_act').val(data['business_activity']);
+						$('.address').val(data['address']);	
+						$('.street').val(data['street']);
+						$('.group').val(data['group']);
+						$('.village').val(data['village']);
+						$('.sangkat').val(data['sangkat']);
+						$('.district').val(data['district']);
+						$('.municipality').val(data['']);
+						$('.municipality').val(data['city']);
+						$('.phone').val(data['phone']);
+						$('.email').val(data['email']);
+						$('.tax_credit_premonth05').val(data['previous_vat']);
+						$('.ncredit_purch06').val(data['in_box6']);
+						$('.strate_purch07').val(data['in_box7']);
+						
+						//$('.strate_purch08').val(data['in_box8']);
+						$('.strate_purch08').val(Math.round((data['in_box7'])*0.1));
+						
+						$('.strate_imports09').val(data['in_box9']);
+						
+						//$('.strate_imports10').val(data['in_box10']);
+						$('.strate_imports10').val(Math.round((data['in_box9'])*0.1));
+						var box_11=(data['previous_vat'])+((data['in_box7'])*0.1)+((data['in_box9'])*0.1);
+						//$('.total_intax11').val(data['in_box11']);
+						$('.total_intax11').val(Math.round(box_11));
+						
+						$('.ntaxa_sales12').val(data['ntaxa_sales12']);
+						$('.exports13').val(data['exports13']);
+						$('.strate_sales14').val(data['strate_sales14']);
+						//$('.strate_sales15').val(data['strate_sales15']);
+						$('.strate_sales15').val(Math.round((data['strate_sales14'])*0.1));
+						
+						var box_16_18=( box_11 - (data['strate_sales14'] * 0.1));
+						
+						if(box_11<(data['strate_sales14']*0.1)){
+							$('.pay_difference16').val(Math.round(Math.abs(box_16_18)));
+						}else{
+							$('.credit_forward18').val(Math.round(Math.abs(box_16_18)));
+						}
+						
+						//$('.pay_difference16').val(data['box16']);
+						//$('.credit_forward18').val(data['box18']);
+				
+					}
+				});
+			}	
 		});
 		
 		$(".qty_1").change(function(){

@@ -26,11 +26,12 @@ $(".remove_line").on('click',function() {
                        class="table table-bordered table-hover table-striped">
                     <thead>
                     <tr>
-                        <th style="width:30%;"><?= $this->lang->line("date"); ?></th>
-                        <th style="width:30%;"><?= $this->lang->line("reference_no"); ?></th>
+                        <th style="width:20%;"><?= $this->lang->line("date"); ?></th>
+                        <th style="width:20%;"><?= $this->lang->line("reference_no"); ?></th>
 						<th style="width:15%;"><?= $this->lang->line("amount"); ?></th>
                         <th style="width:15%;"><?= $this->lang->line("amount_tax"); ?></th>
-                        <th style="width:15%;"><?= $this->lang->line("amount_declare"); ?></th>
+						<th style="width:20%;"><?= $this->lang->line("type"); ?></th>
+                        <th style="width:15%;"><?= $this->lang->line("amount"); ?></th>
 						<th style="width:15%;"><?= $this->lang->line("tax_ref_no"); ?></th>
 						<th style="width:10%;"><?= $this->lang->line("action"); ?></th>
                     </tr>
@@ -45,12 +46,19 @@ $(".remove_line").on('click',function() {
 								<td>
 									<input type="text" name="amount_tax[]" class="amount_tax form-control"  value="<?=$this->erp->formatMoney($combine_taxes->total_tax);?>" /> 
 								</td>
-								
+								<td>
+                                    <?php
+										$ptype["0"] = lang('none');
+										$ptype["2"] = lang('non_taxable_sales');
+										$ptype["1"] = lang('taxable_sales');
+										$ptype["3"] = lang('export');                 
+										echo form_dropdown('purchase_type[]', $ptype, '', 'id="sale_type" data-placeholder="' . lang("select") . ' ' . lang("sale_type") . '" class="form-control input-tip select" style="width:100%;"');
+                                    ?>
+								</td>
 								<td class="text-right">
 									<span name="amount_declear[]" class="amount_declear" id="amount_declear" rate="<?= $exchange_rate->rate ?>"> </span>
 									<input type="hidden" name="amount_decleared[]" class="amount_decleared" value="<?= $this->erp->formatMoney($exchange_rate->rate); ?>" />
-								</td>
-							
+								</td>							
                                 <td class="col-xs-3">
 									<input type="hidden" name="sale_id[]" class="form-control" value="<?= $combine_taxes->id ?>" id="refereno">
 									<input type="hidden" name="warehouse_id[]" class="form-control" value="<?= $combine_taxes->warehouse_id ?>">
@@ -60,7 +68,6 @@ $(".remove_line").on('click',function() {
                                     <input type="text" name="referent_line[]" class="referent_line form-control" style="width:200px" required >
                                 </td>
 								<td>
-									<!--<input type="button" class="btn btn-primary remove_line" value="Delete"/>-->
 									<button type="button" class="btn btn-primary remove_line"><i class="fa fa-trash-o"></i></button>
 								</td>
                             </tr>
@@ -99,7 +106,7 @@ $(".remove_line").on('click',function() {
                     <div class="col-sm-6">
                         <div class="form-group">
                             <?= lang("date", "date"); ?>
-                            <?= form_input('date', (isset($_POST['date']) ? $_POST['date'] : ""), 'class="form-control datetime" id="date" required="required"'); ?>
+                            <?= form_input('date', (isset($_POST['date']) ? $_POST['date'] : date('d/m/Y')), 'class="form-control datetime" id="date" required="required"'); ?>
                         </div>
                     </div>
                 <?php } ?>

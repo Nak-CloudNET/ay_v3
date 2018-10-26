@@ -37,20 +37,32 @@ $code = array(
                     ?> </div>
             </div>
             <div class="form-group">
-                <?php echo lang('category_code', 'category_code'); ?>
+                <?php echo lang('subcategory_code', 'category_code'); ?>
                 <div class="controls">
-                    <?php echo form_input($code); ?>
+                    <?php //echo form_input($code); ?>
+					<?= form_input('code', $subcategory->code, 'class="form-control" id="code" '); 
+				?>
                 </div>
             </div>
 
             <div class="form-group">
-                <?php echo lang('category_name', 'category_name'); ?>
+                <?php echo lang('subcategory_name', 'category_name'); ?>
                 <div class="controls">
-                    <?php echo form_input($name); ?>
+                    <?php //echo form_input($name); ?>
+					<?= form_input('name', $subcategory->name, 'class="form-control" id="name" '); ?>
+                </div>
+            </div>
+			 <div class="form-group">
+                <?php echo lang('cate_type', 'cate_type'); ?>
+                <div class="controls">
+                    <?php 
+					$type = array(''=>'','food'=>'FOOD','drink'=>'DRINK');
+					echo form_dropdown('cate_type', $type,(isset($_POST['cate_type']) ? $_POST['cate_type'] : $type_edit ) ,'id="cate_type" class="form-control"'); 
+					?>
                 </div>
             </div>
             <div class="form-group">
-                <?= lang("category_image", "image") ?>
+                <?= lang("subcategory_image", "image") ?>
                 <input id="image" type="file" name="userfile" data-show-upload="false" data-show-preview="false"
                        class="form-control file">
             </div>

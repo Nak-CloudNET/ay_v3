@@ -22,6 +22,10 @@ if ($this->input->post('end_date')) {
 if (isset($biller_id)) {
     $v .= "&biller_id=" . $biller_id;
 }
+
+if ($this->input->post('biller_ids')) {
+    $v .= "&biller_ids=" . $this->input->post('biller_ids');
+}
 ?>
 <script>
     $(document).ready(function () {
@@ -29,12 +33,13 @@ if (isset($biller_id)) {
             v = x.split('__');
             return formatQuantity2(v[0]);
         }
-        var oTable = $('#PrRData').dataTable({
+        var oTable = $('#PrRData1').dataTable({
             "aaSorting": [[0, "asc"]],
 			//"aaSorting": [[3, "desc"], [2, "desc"]],
             "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
             "iDisplayLength": <?= $Settings->rows_per_page ?>,
-            'bProcessing': true, 'bServerSide': true,
+            'bProcessing': true, 
+			'bServerSide': true,
             'sAjaxSource': '<?= site_url('reports/getProductsReportInOut/?v=1'.$v) ?>',
             'fnServerData': function (sSource, aoData, fnCallback) {
                 aoData.push({
@@ -43,7 +48,16 @@ if (isset($biller_id)) {
                 });
                 $.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
             },
-            "aoColumns": [{"bSortable": false, "mRender": checkbox}, null, null,{"mRender": currencyFormat},{"mRender": spb}, {"mRender": spb}, {"mRender": spb}, null],
+            "aoColumns": [
+			{"bSortable": false, "mRender": checkbox}, 
+			null, 
+			null,
+			{"mRender": spb, "bSortable" : false},
+			{"mRender": spb , "bSortable" : false}, 
+			{"mRender": spb , "bSortable" : false}, 
+			{"mRender": spb, "bSortable" : false},
+			{"bSortable": false}
+			],
             "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
                 var pq = 0, sq = 0, bq = 0, pl = 0, bs = 0, bl = 0;
                 for (var i = 0; i < aaData.length; i++) {
@@ -55,7 +69,6 @@ if (isset($biller_id)) {
 					bl += parseFloat(aaData[aiDisplay[i]][6]);
                 }
                 var nCells = nRow.getElementsByTagName('th');
-				
 			    nCells[3].innerHTML = currencyFormat(parseFloat(bs));
                 nCells[4].innerHTML = currencyFormat(parseFloat(pl));
 				nCells[5].innerHTML = '<div class="text-right">'+formatQuantity2(bq)+'</div>';
@@ -81,8 +94,7 @@ if (isset($biller_id)) {
         $("#product").autocomplete({
             source: '<?= site_url('reports/suggestions'); ?>',
             select: function (event, ui) {
-                $('#product_id').val(ui.item.id);
-                //$(this).val(ui.item.label);
+                $('#product_id').val(ui.item.id);                
             },
             minLength: 1,
             autoFocus: false,
@@ -130,11 +142,6 @@ if ($Owner) {
                         <i class="icon fa fa-file-excel-o"></i>
                     </a>
                 </li>
-            <!--    <li class="dropdown">
-                    <a href="#" id="image" class="tip" title="<?= lang('save_image') ?>">
-                        <i class="icon fa fa-file-picture-o"></i>
-                    </a>
-                </li> -->
 				<li class="dropdown">
 					<a data-toggle="dropdown" class="dropdown-toggle" href="#"><i
 							class="icon fa fa-building-o tip" data-placement="left"
@@ -172,8 +179,10 @@ if ($Owner) {
 
                     <?php echo form_open("reports/product_in_out"); ?>
                     <div class="row">
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <div class="form-group">
+                        	<?php $biller_ids = $this->uri->segment(3); ?>
+                        		<input type="hidden" name="biller_ids" value="<?= (isset($biller_ids)?$biller_ids:0) ?>" / >
                                 <?= lang("product", "product"); ?>
                                 <?php echo form_input('sproduct', (isset($_POST['sproduct']) ? $_POST['sproduct'] : ""), 'class="form-control" id="product"'); ?>
                                 <input type="hidden" name="product"
@@ -181,46 +190,20 @@ if ($Owner) {
                                        id="product_id"/>
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <div class="form-group">
                                 <?= lang("start_date", "start_date"); ?>
                                 <?php echo form_input('start_date', (isset($_POST['start_date']) ? $_POST['start_date'] : ""), 'class="form-control datetime" id="start_date"'); ?>
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <div class="form-group">
                                 <?= lang("end_date", "end_date"); ?>
                                 <?php echo form_input('end_date', (isset($_POST['end_date']) ? $_POST['end_date'] : ""), 'class="form-control datetime" id="end_date"'); ?>
                             </div>
                         </div>
 						
-						<div class="col-sm-4">
-                            <div class="form-group">
-                                <?= lang("supplier", "supplier") ?>
-                                <?php
-                                $sup[''] = "";
-                                foreach ($suppliers as $supplier) {
-                                    $sup[$supplier->id] = $supplier->name;
-                                }
-                                echo form_dropdown('supplier', $sup, (isset($_POST['supplier']) ? $_POST['supplier'] : ''), 'class="form-control select" id="suppliers" placeholder="' . lang("select") . " " . lang("supplier") . '" style="width:100%"')
-                                ?>
-                            </div>
-                        </div>
-						
-						<div class="col-sm-4">
-                            <div class="form-group">
-                                <?= lang("category", "category") ?>
-                                <?php
-                                $cat[''] = "";
-                                foreach ($categories as $category) {
-                                    $cat[$category->id] = $category->name;
-                                }
-                                echo form_dropdown('category', $cat, (isset($_POST['category']) ? $_POST['category'] : ''), 'class="form-control select" id="category" placeholder="' . lang("select") . " " . lang("category") . '" style="width:100%"')
-                                ?>
-                            </div>
-                        </div>
-                        
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <div class="form-group">
                                 <?= lang("in_out", "in_out") ?>
                                 <?php
@@ -246,21 +229,19 @@ if ($Owner) {
                 <div class="clearfix"></div>
 
                 <div class="table-responsive">
-                    <table id="PrRData"
-                           class="table table-striped table-bordered table-condensed table-hover dfTable reports-table"
-                           style="margin-bottom:5px;">
+                    <table id="PrRData1" class="table table-striped table-bordered table-condensed table-hover dfTable reports-table">
                         <thead>
                         <tr class="active">
 							<th style="min-width:30px; width: 30px; text-align: center;">
                                 <input class="checkbox checkth" type="checkbox" name="check"/>
                             </th>
-                            <th><?= lang("product_code"); ?></th>
+                            <th style="width:150px;"><?= lang("product_code"); ?></th>
                             <th><?= lang("product_name"); ?></th>
-							<th><?= lang("Begin"); ?></th>
-                            <th><?= lang("in"); ?></th>
-                            <th><?= lang("out"); ?></th>
-                            <th><?= lang("balance"); ?></th>
-                            <th><?= lang("actions"); ?></th>
+							<th style="width:150px;"><?= lang("Begin"); ?></th>
+                            <th style="width:150px;"><?= lang("in"); ?></th>
+                            <th style="width:150px;"><?= lang("out"); ?></th>
+                            <th style="width:150px;"><?= lang("balance"); ?></th>
+							<th style="width:150px;"><?= lang("action"); ?></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -279,7 +260,7 @@ if ($Owner) {
                             <th><?= lang("In"); ?></th>
                             <th><?= lang("Out"); ?></th>
                             <th><?= lang("balance"); ?></th>
-             				<th><?= lang("actions"); ?></th>
+							<th></th>
                         </tr>
                         </tfoot>
                     </table>
@@ -294,7 +275,7 @@ if ($Owner) {
 <script type="text/javascript">
     $(document).ready(function () {
 
-		$('#pdf').click(function (event) {
+		/*$('#pdf').click(function (event) {
             event.preventDefault();
             window.location.href = "<?=site_url('reports/getProductsReportInOut/pdf/?v=1'.$v)?>";
             return false;
@@ -303,7 +284,7 @@ if ($Owner) {
             event.preventDefault();
             window.location.href = "<?=site_url('reports/getProductsReportInOut/0/xls/?v=1'.$v)?>";
             return false;
-        });
+        });*/
 
         $('#image').click(function (event) {
             event.preventDefault();
@@ -315,5 +296,18 @@ if ($Owner) {
             });
             return false;
         });
+		
+		$('.datetime').datetimepicker({
+			format: site.dateFormats.js_ldate, 
+			fontAwesome: true, 
+			language: 'sma', 
+			weekStart: 1, 
+			todayBtn: 1, 
+			autoclose: 1, 
+			todayHighlight: 1, 
+			startView: 2, 
+			forceParse: 0
+		});
+		
     });
 </script>

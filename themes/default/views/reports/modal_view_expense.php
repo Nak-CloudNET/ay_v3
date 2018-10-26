@@ -11,7 +11,7 @@
         <div class="modal-body">
             <div class="table-responsive">
                     <table id="POData" cellpadding="0" cellspacing="0" border="0"
-                           class="table table-bordered table-hover table-striped">
+                           class="table table-bordered table-condensed table-striped">
                         <thead>
                         <tr class="active">
                             <th><?php echo $this->lang->line("no"); ?></th>
@@ -20,7 +20,6 @@
                             <th><?php echo $this->lang->line("amount"); ?></th>
                             <th><?php echo $this->lang->line("note"); ?></th>
                             <th><?php echo $this->lang->line("created_by"); ?></th>
-                            <!--<th style="width:100px;"><?php //echo $this->lang->line("actions"); ?></th>-->
                         </tr>
                         </thead>
                         <tbody>
@@ -32,9 +31,6 @@
 							if($expense_info->num_rows()>0){
 								$i=0;
 								foreach($expense_info->result() as $row){
-									/*$total_grand_total+=$row->grand_total;
-									$total_paid+=$row->paid;
-									$total_balance+=$row->balance;*/
 									$total_grand_total+=$row->amount;
 						?>
 								<tr>
@@ -75,8 +71,27 @@
         </div>
     </div>
 </div>
+<?php
+function row_status($x){
+	if($x == 'completed' || $x == 'paid' || $x == 'sent' || $x == 'received' || $x == 'deposit') {
+		return '<div class="text-center"><span class="label label-success">'.lang($x).'</span></div>';
+	}elseif($x == 'pending' || $x == 'book' || $x == 'free'){
+		return '<div class="text-center"><span class="label label-warning">'.lang($x).'</span></div>';
+	}elseif($x == 'partial' || $x == 'transferring' || $x == 'ordered'  || $x == 'busy'  || $x == 'processing'){
+		return '<div class="text-center"><span class="label label-info">'.lang($x).'</span></div>';
+	}elseif($x == 'due' || $x == 'returned' || $x == 'regular'){
+		return '<div class="text-center"><span class="label label-danger">'.lang($x).'</span></div>';
+	}else{
+		return '<div class="text-center"><span class="label label-default">'.lang($x).'</span></div>';
+	}
+}
+?>
+<style type="text/css">
+	#POData {white-space: nowrap; }
+</style>
 <script type="text/javascript" charset="UTF-8">
     $(document).ready(function () {
+		$("#POData").dataTable();
         $(document).on('click', '.po-delete', function () {
             var id = $(this).attr('id');
             $(this).closest('tr').remove();

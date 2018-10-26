@@ -18,12 +18,20 @@
 	<table class="table-responsive" width="1024px" border="0" cellspacing="0" style="margin:auto;">
 		<tr>
 			<td colspan="2" width="35%" style="virticle-align:middle;">
-				<?php if ($logo) { ?>
-					<div class="text-center" style="margin-bottom:20px;">
-						<img src="<?= base_url() . 'assets/uploads/logos/' . $biller->logo; ?>"
-							 alt="<?= $biller->company != '-' ? $biller->company : $biller->name; ?>">
-					</div>
-				<?php } ?>
+				<?php
+			        if ($Settings->system_management == 'project') { ?>
+			            <div class="text-center" style="margin-bottom:20px;">
+			                <img src="<?= base_url() . 'assets/uploads/logos/' . $Settings->logo2; ?>"
+			                     alt="<?= $Settings->site_name; ?>">
+			            </div>
+			    <?php } else { ?>
+			            <?php if ($logo) { ?>
+			                <div class="text-center" style="margin-bottom:20px;">
+			                    <img src="<?= base_url() . 'assets/uploads/logos/' . $biller->logo; ?>"
+			                         alt="<?= $biller->company != '-' ? $biller->company : $biller->name; ?>">
+			                </div>
+			            <?php } ?>
+			    <?php } ?>
 			</td>
 			<td colspan="3" width="65%" style="padding-left:50px;">
 				<div style="font-family:'Khmer OS Muol Light'; font-size:20px;"><?= lang("វិក័យប័ត្រ"); ?></div>
@@ -104,11 +112,11 @@
 						<td width="25%" style="text-align:right;"> <?= $seller->phone; ?> </td>
 					</tr>
 					<tr>
-						<td width="15%" style="font-size:14px;"> <?= lang('អាសយដ្ឋាន / Address ');?> : </td>
-						<td width="85%" colspan="3"><?= $addr_cus; ?> </td>
+						<td width="15%" style="font-size:14px;"> <?= lang('អាសយដ្ឋាន / Address ');?></td>
+						<td width="85%" colspan="3">: <?= $addr_cus; ?> </td>
 					</tr>
 					<tr>
-						<td width="15%" style="font-size:14px;"> <?= lang('លេខទូរស័ព្ទ / Tel ');?> : </td>
+						<td width="15%" style="font-size:14px;"> <?= lang('លេខទូរស័ព្ទ / Tel ');?></td>
 						<td width="85%" colspan="3">: <?= $customer->phone; ?></td>
 					</tr>
 					<!--<tr>

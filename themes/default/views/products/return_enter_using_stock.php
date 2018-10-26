@@ -91,11 +91,12 @@ if ($this->input->post('end_date')) {
 
 <div class="box">
     <div class="box-header">
-        <h2 class="blue"><i class="fa-fw fa fa-heart"></i><?= lang('enter_using_stock_return'); ?> <?php
-            if ($this->input->post('start_date')) {
-                echo "From " . $this->input->post('start_date') . " to " . $this->input->post('end_date');
-            }
-            ?></h2>
+        <h2 class="blue"><i class="fa-fw fa fa-heart"></i><?= lang('enter_using_stock_return'); ?> 	  <?php
+				if ($this->input->post('start_date')) {
+					echo "From " . $this->input->post('start_date') . " to " . $this->input->post('end_date');
+				}
+            ?>
+		</h2>
     </div>
     <div class="box-content">
         <div class="row">
@@ -103,7 +104,7 @@ if ($this->input->post('end_date')) {
 				<input type="hidden"  name="stock_id"  id="stock_id" value="<?=$stock->id?>" />
                 <div class="clearfix"></div>
 					
-				<div>
+				<div class="row">
 					<div class="col-md-4">
 						<div class="form-group">
 							<?= lang('date', 'date'); ?>
@@ -121,6 +122,7 @@ if ($this->input->post('end_date')) {
 							</div>-->
 							
 						</div>
+						
 						<div class="form-group">
 							<?= lang('return_reference_no', 'reference_no'); ?>
 							<div class="input-group">  
@@ -132,6 +134,7 @@ if ($this->input->post('end_date')) {
 								</div>
 							</div>
 						</div>
+						
 						<div class="form-group all">
                             <?= lang("from_location", "from_location") ?>
                             <?php
@@ -197,22 +200,15 @@ if ($this->input->post('end_date')) {
                     </div>
 					</div>
 				</div>	
-			
-					
-					
-					
+				
                 <div class="table-responsive">
-                    <table id="PrRData"
-                           class="table table-bordered table-hover table-striped table-condensed reports-table">
+                    <table id="PrRData" class="table table-bordered table-hover table-striped table-condensed reports-table">
                         <thead>
 							<tr>
 								<th style="width:3% !important;">
 												
 								<?= lang("item_code"); ?>
 								</th>
-								<!--
-								<th style="width:25% !important;"><?= lang("enterprise"); ?></th>
-								-->
 								<th style="width:7% !important;"><?= lang("description"); ?></th>
 								<th style="width:7% !important;"><?= lang("reason"); ?></th>
 								<th style="width:10% !important;"><?= lang("QOH"); ?></th>
@@ -223,68 +219,65 @@ if ($this->input->post('end_date')) {
 							</tr>
                         </thead>
                         <tbody class="tbody">
-						<?php
-						foreach($stock_item as $row){
-							//print_r($row);
-							//echo '|||<br/>';
-							
-							$product_qqh=NULL;
-							foreach($qqh as $qqh_row){
-								if($qqh_row->warehouse_id==$row->wh_id && $qqh_row->product_code == $row->product_code){
-									$product_qqh=$qqh_row->qqh;
+							<?php
+							foreach($stock_item as $row){
+								$product_qqh=NULL;
+								foreach($qqh as $qqh_row){
+									if($qqh_row->warehouse_id==$row->wh_id && $qqh_row->product_code == $row->product_code){
+										$product_qqh=$qqh_row->qqh;
+									}
 								}
-							}
-							
-						?>
-							<tr>
-								<td style="width:25%;">
-								<input type="text"  name="item_code_and_name[]" required id="add_item" class=" form-control add_item" value="<?=$row->name.' ( '.$row->product_code.' ) '?>">
-								<input type="hidden"  name="stock_item_id[]" id="stock_item_id" class=" form-control stock_item_id" value="<?=$row->e_id?>">
-								<input type="hidden"  name="item_code[]" id="item_code" class=" form-control item_code" value="<?=$row->product_code?>">
-								<input type="hidden"  name="cost[]" id="cost" class=" form-control cost" value="<?=$row->cost?>">
-								<input type="hidden"  name="total_cost[]" id="total_cost" class=" form-control total_cost" value="">
-								<input type="hidden"  name="wh_id[]" id="wh_id" class=" form-control wh_id" value="<?=$row->wh_id?>">
-								</td>
-								<td><input type="text"  name="description[]" id="description" class="checknb form-control description" value="<?=$row->description?>"></td>
-								<td><input type="text"  name="reason[]" id="s4" class="checknb form-control reason" value="<?=$row->reason?>"></td>
-								<td class="qqh"><?=$product_qqh?></td>
-								<td>
-									<?=($row->qty_by_unit - $this->products_model->getReturnStockItem($reference_no, $row->product_code) ).' '.$row->unit;?>
-								</td>
-								<td>
-									<input type="text"  name="qty_return[]" required id="qty_return" class="checknb form-control qty_return" value="">
-								</td>
-								<input type="hidden"  name="last_qty_use[]" id="last_qty_use" class=" form-control" value="<?=$row->qty_use?>">
-								<td>
-									<div class="form-group" style="margin-bottom: 0px;">
-										<?php
-										$unit="";
-										foreach ($unit_of_measure_by_code as $au) {
-											if($row->product_code==$au["product_code"] ){
-												 $unit[$au["description"] ]= $au["description"];
+								
+							?>
+								<tr>
+									<td style="width:25%;">
+									<input type="text"  name="item_code_and_name[]" required id="add_item" class=" form-control add_item" value="<?=$row->name.' ( '.$row->product_code.' ) '?>">
+									<input type="hidden"  name="stock_item_id[]" id="stock_item_id" class=" form-control stock_item_id" value="<?=$row->e_id?>">
+									<input type="hidden"  name="item_code[]" id="item_code" class=" form-control item_code" value="<?=$row->product_code?>">
+									<input type="hidden"  name="cost[]" id="cost" class=" form-control cost" value="<?=$row->cost?>">
+									<input type="hidden"  name="total_cost[]" id="total_cost" class=" form-control total_cost" value="">
+									<input type="hidden"  name="wh_id[]" id="wh_id" class=" form-control wh_id" value="<?=$row->wh_id?>">
+									</td>
+									<td><input type="text"  name="description[]" id="description" class="checknb form-control description" value="<?=$row->description?>"></td>
+									<td><input type="text"  name="reason[]" id="s4" class="checknb form-control reason" value="<?=$row->reason?>"></td>
+									<td class="qqh"><?=$product_qqh?></td>
+									<td>
+										<?=($row->qty_by_unit - $this->products_model->getReturnStockItem($reference_no, $row->product_code) ).' '.$row->unit;?>
+									</td>
+									<td>
+										<input type="text"  name="qty_return[]" required id="qty_return" class="checknb form-control qty_return" value="">
+									</td>
+									<input type="hidden"  name="last_qty_use[]" id="last_qty_use" class=" form-control" value="<?=$row->qty_use?>">
+									<td>
+										<div class="form-group" style="margin-bottom: 0px;">
+											<?php
+											$unit="";
+											foreach ($unit_of_measure_by_code as $au) {
+												if($row->product_code==$au["product_code"] ){
+													 $unit[$au["description"] ]= $au["description"];
+												}
+											   
 											}
-										   
-										}
-										echo form_dropdown('unit[]', $unit,$row->unit, 'id="unit" data-placeholder="' . lang("select") . ' ' . lang("unit") . '"  class="form-control input-tip select" style="width:100%;"');
-										?>
-									</div>
-								</td>
-								<td style="text-align:center;"><span class="btn_delete sotre_delete_id" id="<?=$row->e_id?>" style="cursor:pointer;"><i class="fa fa-trash-o" style="font-size: 15px; color:#2A79B9;"></i></span></td>
-							</tr>
-						<?php
-						}
-						?>
+											echo form_dropdown('unit[]', $unit,$row->unit, 'id="unit" data-placeholder="' . lang("select") . ' ' . lang("unit") . '"  class="form-control input-tip select" style="width:100%;"');
+											?>
+										</div>
+									</td>
+									<td style="text-align:center;"><span class="btn_delete sotre_delete_id" id="<?=$row->e_id?>" style="cursor:pointer;"><i class="fa fa-trash-o" style="font-size: 15px; color:#2A79B9;"></i></span></td>
+								</tr>
+							<?php
+							}
+							?>
                         </tbody>
                         <tfoot class="dtFilter">
-                        <tr class="active">
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-							<th></th>
-                            <th></th>
-                        </tr>
+							<tr class="active">
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+							</tr>
                         </tfoot>
                     </table>
                 </div>
@@ -296,7 +289,7 @@ if ($this->input->post('end_date')) {
                             class="controls"> <?php echo form_submit('submit_report', $this->lang->line("return"), 'class="btn btn-primary"'); ?> </div>
                 </div>
 				</center>
-                    <?php echo form_close(); ?>
+<?php echo form_close(); ?>
 				
             </div>
         </div>

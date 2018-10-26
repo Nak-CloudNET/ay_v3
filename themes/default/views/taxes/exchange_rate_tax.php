@@ -24,9 +24,9 @@
             }
         }).dtFilter([
            // {column_number: 1, filter_default_label: "[<?=lang('code');?>]", filter_type: "text", data: []},
-            {column_number: 1, filter_default_label: "[<?=lang('type');?>]", filter_type: "text", data: []},
-            {column_number: 2, filter_default_label: "[<?=lang('usd_currency');?>]", filter_type: "text", data: []},
-            {column_number: 3, filter_default_label: "[<?=lang('kh_currency');?>]", filter_type: "text", data: []},
+            {column_number: 1, filter_default_label: "[<?=lang('usd');?>]", filter_type: "text", data: []},
+            {column_number: 2, filter_default_label: "[<?=lang('salary_kh');?>]", filter_type: "text", data: []},
+            {column_number: 3, filter_default_label: "[<?=lang('average_kh');?>]", filter_type: "text", data: []},
 			{column_number: 4, filter_default_label: "[<?=lang('month');?>]", filter_type: "text", data: []},
             {column_number: 5, filter_default_label: "[<?=lang('year');?>]", filter_type: "text", data: []},
         ], "footer");
@@ -64,7 +64,7 @@
 							<?php }?>
 						<?php }?>				
                         <li class="divider"></li>
-                        <li><a href="#" class="bpo" title="<?= $this->lang->line("delete_condition_tax") ?>"
+                        <li style="display:none"><a href="#" class="bpo" title="<?= $this->lang->line("delete_condition_tax") ?>"
                                data-content="<p><?= lang('r_u_sure') ?></p><button type='button' class='btn btn-danger' id='delete' data-action='delete'><?= lang('i_m_sure') ?></a> <button class='btn bpo-close'><?= lang('no') ?></button>"
                                data-html="true" data-placement="left"><i
                                     class="fa fa-trash-o"></i> <?= lang('delete_condition_tax') ?></a></li>
@@ -88,9 +88,9 @@
                                 <input class="checkbox checkth" type="checkbox" name="check"/>
                             </th>
                            <!-- <th style="width:20%;"><?= lang("code"); ?></th>-->
-                            <th style="width:20%;"><?= lang("type"); ?></th>
-							<th style="width:20%;"><?= lang("usd_currency"); ?></th>
-                            <th style="width:20%;"><?= lang("kh_currency"); ?></th>
+							<th style="width:20%;"><?= lang("usd"); ?></th>
+                            <th style="width:20%;"><?= lang("salary_kh"); ?></th>
+                            <th style="width:20%;"><?= lang("average_kh"); ?></th>
 							<th style="width:20%;"><?= lang("month"); ?></th>
 							<th style="width:20%;"><?= lang("year"); ?></th>
                             <th style="width:10%; text-align:center;"><?= lang("actions"); ?></th>

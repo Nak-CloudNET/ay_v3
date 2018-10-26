@@ -35,30 +35,7 @@ if ($this->input->post('end_date')) {
         function ref(x) {
             return (x != null) ? x : ' ';
         }
-		function totalDiscountFooter(dis){
-			var str = dis.split('_');
-			var percentage = str[1].split('%');
-			var get_dis = (parseFloat(percentage[0]) * (parseFloat(str[2]) * parseFloat(str[3])))/100;
-			var total_dis = parseFloat(str[0]) + parseFloat(get_dis);
-			if (total_dis != null) {
-				return formatMoney(total_dis);
-			}
-		}
-		function itemDiscountFooter(dis){
-			var str = dis.split('_');
-			var get_dis = parseFloat(str[1]);
-			if (get_dis != null) {
-				return formatMoney(get_dis);
-			}
-		}
-		function orderDiscountFooter(dis){
-			var str = dis.split('_');
-			var percentage = str[0].split('%');
-			var get_dis = (parseFloat(percentage[0]) * (parseFloat(str[1]) * parseFloat(str[2])))/100;
-			if (get_dis != null) {
-				return formatMoney(get_dis);
-			}
-		}
+
         var oTable = $('#PayRData').dataTable({
             "aaSorting": [[2, "desc"]],
             "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
@@ -75,9 +52,11 @@ if ($this->input->post('end_date')) {
             "aoColumns": [{
                 "bSortable": false,
                 "mRender": checkbox
-            }, {"mRender": fld}, null,null, null,  {"mRender": currencyFormat},{"mRender": formatQuantity2}, {"mRender": itemDiscount}, {"mRender": orderDiscount}, {"mRender": totalDiscount}, {"mRender": row_status}],
+            }, {"mRender": fld}, null,null, null, {"mRender": currencyFormat},{"mRender": formatQuantity2}, null, {"mRender": row_status}],
             'fnRowCallback': function (nRow, aData, iDisplayIndex) {
                 var oSettings = oTable.fnSettings();
+				nRow.id = aData[0];
+				nRow.className = "invoice_link";
                 if (aData[8] == 'sent') {
                     nRow.className = "warning";
                 } else if (aData[8] == 'returned') {
@@ -88,30 +67,20 @@ if ($this->input->post('end_date')) {
             "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
                 var total_price = 0;
 				var total_quantity = 0;
-				var total_discount = 0;
-				var order_discount = 0;
-				var item_discount = 0;
-				var total_cost = 0;
-                for (var i = 0; i < aaData.length; i++) {
-                        total_price += parseFloat(aaData[aiDisplay[i]][5]);
-						total_quantity += parseFloat(aaData[aiDisplay[i]][6]);
-						item_discount += parseFloat(itemDiscountFooter(aaData[aiDisplay[i]][7]));
-						order_discount += parseFloat(orderDiscountFooter(aaData[aiDisplay[i]][8]));
-						total_discount += parseFloat(totalDiscountFooter(aaData[aiDisplay[i]][9]));
+                for (var i = 0; i < aaData.length; i++) {	
+                        total_price += parseFloat(aaData[aiDisplay[i]][6]);
+						total_quantity += parseFloat(aaData[aiDisplay[i]][7]);
                 }
                 var nCells = nRow.getElementsByTagName('th');
-                nCells[5].innerHTML = currencyFormat(parseFloat(total_price));
-				nCells[6].innerHTML = currencyFormat(parseFloat(total_quantity));
-				nCells[7].innerHTML = currencyFormat(parseFloat(item_discount));
-				nCells[8].innerHTML = currencyFormat(parseFloat(order_discount));
-				nCells[9].innerHTML = currencyFormat(parseFloat(total_discount));
+                nCells[6].innerHTML = currencyFormat(parseFloat(total_price));
+				nCells[7].innerHTML = currencyFormat(parseFloat(total_quantity));
             }
         }).fnSetFilteringDelay().dtFilter([
             {column_number: 1, filter_default_label: "[<?=lang('date');?>]", filter_type: "text", data: []},
             {column_number: 2, filter_default_label: "[<?=lang('product_code');?>]", filter_type: "text", data: []},
             {column_number: 3, filter_default_label: "[<?=lang('product_name');?>]", filter_type: "text", data: []},
 			{column_number: 4, filter_default_label: "[<?=lang('customer');?>]", filter_type: "text", data: []},
-            {column_number: 10, filter_default_label: "[<?=lang('status');?>]", filter_type: "text", data: []},
+            {column_number: 8, filter_default_label: "[<?=lang('status');?>]", filter_type: "text", data: []},
         ], "footer");
 
     });
@@ -201,9 +170,9 @@ if ($this->input->post('end_date')) {
         });
     });
 </script>
-<?php if ($Owner) {
+<?php
     echo form_open('reports/sales_discount_actions', 'id="action-form"');
-} ?>
+?>
 <div class="box">
     <div class="box-header">
         <h2 class="blue"><i class="fa-fw fa fa-money"></i><?= lang('sales_discount_report'); ?> <?php
@@ -226,20 +195,17 @@ if ($this->input->post('end_date')) {
                             class="icon fa fa-file-pdf-o"></i></a></li>
                 <li class="dropdown"><a href="#" id="excel" data-action="export_excel" class="tip" title="<?= lang('download_xls') ?>"><i
                             class="icon fa fa-file-excel-o"></i></a></li>
-            <!--    <li class="dropdown"><a href="#" id="image" class="tip" title="<?= lang('save_image') ?>"><i
-                            class="icon fa fa-file-picture-o"></i></a></li> -->
+                <li class="dropdown"><a href="#" id="image" class="tip" title="<?= lang('save_image') ?>"><i
+                            class="icon fa fa-file-picture-o"></i></a></li>
             </ul>
         </div>
     </div>
-<?php if ($Owner) { ?>
+
     <div style="display: none;">
         <input type="hidden" name="form_action" value="" id="form_action"/>
         <?= form_submit('performAction', 'performAction', 'id="action-form-submit"') ?>
     </div>
     <?php echo form_close(); ?>
-<?php } ?>
-<?php 
-?> 
 	
 	<div class="box-content">
         <div class="row">
@@ -259,13 +225,13 @@ if ($this->input->post('end_date')) {
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <?= lang("start_date", "start_date"); ?>
-                                <?php echo form_input('start_date', (isset($_POST['start_date']) ? $_POST['start_date'] : ""), 'class="form-control date" id="start_date"'); ?>
+                                <?php echo form_input('start_date', (isset($_POST['start_date']) ? $_POST['start_date'] : $this->erp->hrsd($start_date)), 'class="form-control datetime" id="start_date"'); ?>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <?= lang("end_date", "end_date"); ?>
-                                <?php echo form_input('end_date', (isset($_POST['end_date']) ? $_POST['end_date'] : ""), 'class="form-control date" id="end_date"'); ?>
+                                <?php echo form_input('end_date', (isset($_POST['end_date']) ? $_POST['end_date'] : $this->erp->hrsd($end_date)), 'class="form-control datetime" id="end_date"'); ?>
                             </div>
                         </div>
                     </div>
@@ -288,14 +254,12 @@ if ($this->input->post('end_date')) {
 									<input class="checkbox checkth" type="checkbox" name="check"/>
 								</th>
 								<th><?= lang("date"); ?></th>
+								<th><?= lang("customer"); ?></th>
 								<th><?= lang("product_code"); ?></th>
 								<th><?= lang("product_name"); ?></th>
-								<th><?= lang("customer"); ?></th>
 								<th><?= lang("unit_price"); ?></th>
 								<th><?= lang("quantity"); ?></th>
-								<th><?= lang("item_discount"); ?></th>
-								<th><?= lang("order_discount"); ?></th>
-								<th><?= lang("total_discount"); ?></th>
+								<th><?= lang("discount"); ?></th>
 								<th><?= lang("status"); ?></th>
 							</tr>
                         </thead>
@@ -317,8 +281,6 @@ if ($this->input->post('end_date')) {
 								<th></th>
 								<th></th>
 								<th></th>
-								<th></th>
-								<th></th>
 							</tr>
                         </tfoot>
                     </table>
@@ -328,21 +290,12 @@ if ($this->input->post('end_date')) {
         </div>
     </div>
 </div>
+<style type="text/css">
+	table{ white-space: nowrap; }
+</style>
 <script type="text/javascript" src="<?= $assets ?>js/html2canvas.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-		/*
-        $('#pdf').click(function (event) {
-            event.preventDefault();
-            window.location.href = "<?=site_url('reports/getPaymentsReport/pdf/?v=1'.$v)?>";
-            return false;
-        });
-        $('#xls').click(function (event) {
-            event.preventDefault();
-            window.location.href = "<?=site_url('reports/getPaymentsReport/0/xls/?v=1'.$v)?>";
-            return false;
-        });
-		*/
         $('#image').click(function (event) {
             event.preventDefault();
             html2canvas($('.box'), {

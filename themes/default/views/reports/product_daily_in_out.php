@@ -1,51 +1,61 @@
 <?php
-$currentMonth = date('m');
-$list=array();
-$month = date('m');
-$year = date('Y');
+	$currentMonth = date('m');
+	$list=array();
+	$month = date('m');
+	$year = date('Y');
 
-for($d=1; $d<=31; $d++)
-{
-    $time=mktime(12, 0, 0, $month, $d, $year);          
-    if (date('m', $time)==$month)       
-        $list[]= date('d', $time);
-}
-$v = "";
+	for($d=1; $d<=31; $d++)
+	{
+		$time=mktime(12, 0, 0, $month, $d, $year);          
+		if (date('m', $time)==$month)       
+			$list[]= date('d', $time);
+	}
+	$v = "";
 
-if ($this->input->post('year')) {
-    $v .= "&year=" . $this->input->post('year');
-} else {
-    $v .= "&year=" . $year;
-}
+	if ($this->input->post('year')) {
+		$v .= "&year=" . $this->input->post('year');
+	} else {
+		$v .= "&year=" . $year;
+	}
 
-if ($this->input->post('month')) {
-    $v .= "&month=" . $this->input->post('month');
-} else {
-    $v .= "&month=" . $month;
-}
+	if ($this->input->post('month')) {
+		$v .= "&month=" . $this->input->post('month');
+	} else {
+		$v .= "&month=" . $month;
+	}
 
-if ($this->input->post('product')) {
-    $v .= "&product=" . $this->input->post('product');
-}
-if ($this->input->post('category')) {
-    $v .= "&category=" . $this->input->post('category');
-}
-if ($this->input->post('in_out')) {
-    $v .= "&in_out=" . $this->input->post('in_out');
-}
-if(isset($warehouse_id)){
-	$v .= "&warehouse=" . $warehouse_id;
-}
+	if ($this->input->post('product')) {
+		$v .= "&product=" . $this->input->post('product');
+	}
+	if ($this->input->post('category')) {
+		$v .= "&category=" . $this->input->post('category');
+	}
+	if ($this->input->post('in_out')) {
+		$v .= "&in_out=" . $this->input->post('in_out');
+	}
+	if(isset($warehouse_id)){
+		$v .= "&warehouse=" . $warehouse_id;
+	}
 ?>
+<style>
+	#PrRData2 {
+        overflow-x: scroll;
+		max-width: 100%;
+		min-height: 300px;
+		display: block;
+		cursor: pointer;
+		white-space: nowrap;
+       
+    }
+</style>
 <script>
     $(document).ready(function () {
         function spb(x) {
             v = x.split('__');
             return formatQuantity2(v[0]);
         }
-        var oTable = $('#PrRData').dataTable({
+        var oTable = $('#PrRData2').dataTable({
             "aaSorting": [[0, "asc"]],
-			//"aaSorting": [[3, "desc"], [2, "desc"]],
             "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
             "iDisplayLength": <?= $Settings->rows_per_page ?>,
             'bProcessing': true, 'bServerSide': true,
@@ -65,7 +75,7 @@ if(isset($warehouse_id)){
                         foreach($list as $rws)
                         {
                             ?>
-                            <?=(",")?>{"mRender": formatQuantity2}
+                            <?=(",")?>{"mRender": formatQuantity2, "bSortable" : false}
                             <?php
                             $r ++;
                         }
@@ -337,7 +347,7 @@ if(isset($warehouse_id)){
     </div>
     <div class="box-content">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-12" >
 
                 <p class="introtext"><?= lang('customize_report'); ?></p>
 
@@ -365,6 +375,12 @@ if(isset($warehouse_id)){
                                 }
                                 echo form_dropdown('category', $cat, (isset($_POST['category']) ? $_POST['category'] : ''), 'class="form-control select" id="category" placeholder="' . lang("select") . " " . lang("category") . '" style="width:100%"')
                                 ?>
+								<?php
+								$m = date('m');
+								$y = date('Y');
+								$d=cal_days_in_month(CAL_GREGORIAN,$m,$y);
+								?>
+								
                             </div>
                         </div>
                         
@@ -415,17 +431,17 @@ if(isset($warehouse_id)){
                 <div class="clearfix"></div>
 
                 <div class="table-responsive" id="style">
-                    <table id="PrRData" class="table table-striped table-bordered table-condensed table-hover dfTable reports-table"
+                    <table id="PrRData2" class="table table-striped table-bordered table-condensed table-hover dfTable reports-table"
                            style="margin-bottom:5px;">
                         <thead>
 							<tr class="active">
 								<th><?= lang("product_code"); ?></th>
-								<th><?= lang("product_name"); ?></th>
+								<th style="width:200px;"><?= lang("product_name"); ?></th>
 
 								<?php
 								foreach($list as $rws)
 								{
-									echo "<th>" . lang($rws) . "</th>";
+									echo "<th style='width:150px'>" . lang($rws) . "</th>";
 								}
 								?>
 							</tr>

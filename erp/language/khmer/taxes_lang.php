@@ -41,8 +41,8 @@
 $lang["from_date"]							= "ពីថ្ងៃ";
 $lang["to_date"]								= "ដល់ថ្ងៃ";
 $lang["create_date"]						= "ថ្ងៃបង្កើត";
-$lang["view_report"]						= "មើលរបាយការណ៍";
-$lang["delete_report"]						= "លុបរបាយការណ៍";
+$lang["view_report"]						= "មើលរបាយការណ៏​ ";
+$lang["delete_report"]						= "លុបរបាយការណ៏​ ";
 $lang["enterprise"]							= "សហគ្រាស";
 
 

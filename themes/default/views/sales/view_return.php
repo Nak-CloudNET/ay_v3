@@ -1,7 +1,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $(document).on('click', '.sledit', function (e) {
-            if (localStorage.getItem('slitems')) {
+            if (__getItem('slitems')) {
                 e.preventDefault();
                 var href = $(this).attr('href');
                 bootbox.confirm("<?=lang('you_will_loss_sale_data')?>", function (result) {
@@ -241,12 +241,12 @@
                             </td>
                             <td style="text-align:right; padding-right:10px;"><?= $this->erp->formatMoney($inv->total + $inv->product_tax); ?></td>
                         </tr>
-                        <?php /*if ($inv->product_discount != 0) {
+                        <?php if ($inv->product_discount != 0) {
                             echo '<tr><td colspan="' . $col . '" style="text-align:right; padding-right:10px;;">' . lang("product_discount") . ' (' . $default_currency->code . ')</td><td style="text-align:right; padding-right:10px;">' . $this->erp->formatMoney($inv->product_discount) . '</td></tr>';
-                        } */?>
-                        <?php if ($Settings->tax1 && $inv->product_tax != 0) {
-                            echo '<tr><td colspan="' . $col . '" style="text-align:right; padding-right:10px;;">' . lang("product_tax") . ' (' . $default_currency->code . ')</td><td style="text-align:right; padding-right:10px;">' . $this->erp->formatMoney($inv->product_tax) . '</td></tr>';
                         } ?>
+                        <!--<?php if ($Settings->tax1 && $inv->product_tax != 0) {
+                            echo '<tr><td colspan="' . $col . '" style="text-align:right; padding-right:10px;;">' . lang("product_tax") . ' (' . $default_currency->code . ')</td><td style="text-align:right; padding-right:10px;">' . $this->erp->formatMoney($inv->product_tax) . '</td></tr>';
+                        } ?>-->
                         <?php if ($inv->order_discount != 0) {
                             echo '<tr><td colspan="' . $col . '" style="text-align:right; padding-right:10px;;">' . lang("order_discount") . ' (' . $default_currency->code . ')</td><td style="text-align:right; padding-right:10px;">' . $this->erp->formatMoney($inv->order_discount) . '</td></tr>';
                         } ?>
@@ -255,7 +255,7 @@
                         } ?>
                         <?php if ($inv->surcharge != 0) {
                             echo '<tr><td colspan="' . $col . '" style="text-align:right; padding-right:10px;;">' . lang("surcharge") . ' (' . $default_currency->code . ')</td><td style="text-align:right; padding-right:10px;">' . $this->erp->formatMoney($inv->surcharge) . '</td></tr>';
-                        } ?> 
+                        } ?>
                         <tr>
                             <td colspan="<?= $col; ?>"
                                 style="text-align:right; padding-right:10px; font-weight:bold;"><?= lang("total_amount"); ?>
@@ -263,7 +263,22 @@
                             </td>
                             <td style="text-align:right; padding-right:10px; font-weight:bold;"><?= $this->erp->formatMoney($inv->grand_total); ?></td>
                         </tr>
-
+						<?php 
+							$grand_total = 0;
+							if ($inv->paid > 0) {
+								echo '<tr><td colspan="' . $col . '" style="text-align:right; padding-right:10px;;">' . lang("paid") . ' (' . $default_currency->code . ')</td><td style="text-align:right; padding-right:10px;">' . $this->erp->formatMoney($inv->paid) . '</td></tr>';
+								$grand_total = $inv->grand_total - $inv->paid;
+						?>
+						<tr>
+                            <td colspan="<?= $col; ?>"
+                                style="text-align:right; padding-right:10px; font-weight:bold;"><?= lang("grand_total"); ?>
+                                (<?= $default_currency->code; ?>)
+                            </td>
+                            <td style="text-align:right; padding-right:10px; font-weight:bold;"><?= $this->erp->formatMoney($grand_total); ?></td>
+                        </tr>
+						<?php
+							} 
+						?>
                         </tfoot>
                     </table>
 

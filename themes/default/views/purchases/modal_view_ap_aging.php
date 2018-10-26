@@ -1,10 +1,21 @@
-<style>
-    hr{
-    border-color:#333;
-    
-    }
+<style type="text/css">
+	#SLData { white-space: nowrap;}
 </style>
-
+<?php
+function row_status($x){
+	if($x == 'completed' || $x == 'paid' || $x == 'sent' || $x == 'received' || $x == 'deposit') {
+		return '<div class="text-center"><span class="label label-success">'.lang($x).'</span></div>';
+	}elseif($x == 'pending' || $x == 'book' || $x == 'free'){
+		return '<div class="text-center"><span class="label label-warning">'.lang($x).'</span></div>';
+	}elseif($x == 'partial' || $x == 'transferring' || $x == 'ordered'  || $x == 'busy'  || $x == 'processing'){
+		return '<div class="text-center"><span class="label label-info">'.lang($x).'</span></div>';
+	}elseif($x == 'due' || $x == 'returned' || $x == 'regular'){
+		return '<div class="text-center"><span class="label label-danger">'.lang($x).'</span></div>';
+	}else{
+		return '<div class="text-center"><span class="label label-default">'.lang($x).'</span></div>';
+	}
+}
+?>
 <div class="modal-dialog modal-lg no-modal-header">
     <div class="modal-content">
         <div class="modal-body">
@@ -50,7 +61,11 @@
             <div class="row" style="margin-bottom:15px;">
                 <div class="col-xs-6">
                     <?php echo $this->lang->line("from"); ?>:
-                    <h2 style="margin-top:10px;"><?= $biller->company != '-' ? $biller->company : $biller->name; ?></h2>
+                    <?php if ($Settings->system_management == 'project') { ?>
+                        <h2 style="margin-top:10px;"><?= $Settings->site_name; ?></h2>
+                    <?php } else { ?>
+                        <h2 style="margin-top:10px;"><?= $biller->company != '-' ? $biller->company : $biller->name; ?></h2>
+                        <?php } ?>
                     <?= $biller->company ? "" : "Attn: " . $biller->name ?>
 
                     <?php
@@ -140,7 +155,9 @@
                         ->from('purchases')
                         ->where('payment_status !=','paid')
                         ->where('supplier_id', $supplier_id);
-                        
+                        if (!$this->Customer && !$this->Supplier && !$this->Owner && !$this->Admin && !$this->session->userdata('view_right')){
+                            $this->db->where('created_by',$this->session->userdata('user_id'));
+                        }
                         if($type_view == 'ap_0_30'){
                             $this->db->where('date(date) > CURDATE() AND date(date) <= DATE_ADD(now(), INTERVAL + 30 DAY)');
 
@@ -168,11 +185,11 @@
                                 echo '<td>' . $rws->date . '</td>';
                                 echo '<td>' . $rws->reference_no . '</td>';
                                 echo '<td>' . $rws->supplier . '</td>';
-                                echo '<td>' . $rws->status . '</td>';
-                                echo '<td>' . $rws->grand_total . '</td>';
-                                echo '<td>' . $rws->paid . '</td>';
-                                echo '<td>' . $rws->balance . '</td>';
-                                echo '<td>' . $rws->payment_status . '</td>';
+                                echo '<td>' . row_status($rws->status) . '</td>';
+                                echo '<td>' . $this->erp->formatMoney($rws->grand_total) . '</td>';
+                                echo '<td>' . $this->erp->formatMoney($rws->paid) . '</td>';
+                                echo '<td>' . $this->erp->formatMoney($rws->balance) . '</td>';
+                                echo '<td>' . row_status($rws->payment_status) . '</td>';
                                 echo '</tr>';
                                 $grandTotal += $rws->grand_total;
                                 $paidTotal += $rws->paid;
@@ -269,30 +286,31 @@
                         <div class="btn-group">
                             <a href="<?= site_url('sales/tax_invoice/' . $inv->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('tax_invoice') ?>">
                                 <i class="fa fa-print"></i>
-                                <span class="hidden-sm hidden-xs"><?= lang('print_tax_invoice') ?></span>
+                                <span class="hidden-sm hidden-xs"><?= lang('tax_invoice') ?></span>
                             </a>
                         </div>
-                        
+                        <!--
                         <div class="btn-group">
                             <a href="<?= site_url('sales/print_hch/' . $inv->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('Print_HCH_Invoice') ?>">
                                 <i class="fa fa-print"></i>
-                                <span class="hidden-sm hidden-xs"><?= lang('Print_HCH_Invoice') ?></span>
+                                <span class="hidden-sm hidden-xs"><?= lang('HCH_Invoice') ?></span>
                             </a>
                         </div>
-                        
+                        -->
                         <div class="btn-group">
                             <a href="<?= site_url('sales/invoice/' . $inv->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('invoice') ?>">
                                 <i class="fa fa-print"></i>
                                 <span class="hidden-sm hidden-xs"><?= lang('invoice') ?></span>
                             </a>
                         </div>
+                        <!--
                         <div class="btn-group">
                             <a href="<?=base_url()?>sales/cabon_print/<?=$inv->id?>" target="_blank" class="tip btn btn-primary" title="<?= lang('print_cabon') ?>">
                                 <i class="fa fa-print"></i>
                                 <span class="hidden-sm hidden-xs"><?= lang('print_cabon') ?></span>
                             </a>
                         </div>
-                        
+                        -->
                         <div class="btn-group">
                             <a href="<?= site_url('sales/view/' . $inv->id) ?>" class="tip btn btn-primary" title="<?= lang('view') ?>">
                                 <i class="fa fa-file-text-o"></i>
@@ -307,24 +325,31 @@
                                 </a>
                             </div>
                         <?php } ?>
+                        <?php if ($Owner || $Admin || $GP['sales-email']) { ?>
                         <div class="btn-group">
                             <a href="<?= site_url('sales/email/' . $inv->id) ?>" data-toggle="modal" data-target="#myModal2" class="tip btn btn-primary" title="<?= lang('email') ?>">
                                 <i class="fa fa-envelope-o"></i>
                                 <span class="hidden-sm hidden-xs"><?= lang('email') ?></span>
                             </a>
                         </div>
+                        <?php } ?>
+                        <?php if ($Owner || $Admin || $GP['sales-export']) { ?>
                         <div class="btn-group">
                             <a href="<?= site_url('sales/pdf/' . $inv->id) ?>" class="tip btn btn-primary" title="<?= lang('download_pdf') ?>">
                                 <i class="fa fa-download"></i>
                                 <span class="hidden-sm hidden-xs"><?= lang('pdf') ?></span>
                             </a>
                         </div>
+                        <?php } ?>
+                        <?php if ($Owner || $Admin || $GP['sales-edit']) { ?>
                         <div class="btn-group">
                             <a href="<?= site_url('sales/edit/' . $inv->id) ?>" class="tip btn btn-warning sledit" title="<?= lang('edit') ?>">
                                 <i class="fa fa-edit"></i>
                                 <span class="hidden-sm hidden-xs"><?= lang('edit') ?></span>
                             </a>
                         </div>
+                        <?php } ?>
+                        <?php if ($Owner || $Admin || $GP['sales-delete']) { ?>
                         <div class="btn-group">
                             <a href="#" class="tip btn btn-danger bpo" title="<b><?= $this->lang->line("delete_sale") ?></b>"
                                 data-content="<div style='width:150px;'><p><?= lang('r_u_sure') ?></p><a class='btn btn-danger' href='<?= site_url('sales/delete/' . $inv->id) ?>'><?= lang('i_m_sure') ?></a> <button class='btn bpo-close'><?= lang('no') ?></button></div>"
@@ -333,6 +358,7 @@
                                 <span class="hidden-sm hidden-xs"><?= lang('delete') ?></span>
                             </a>
                         </div>
+                        <?php } ?>
                     </div>
                 </div>
             <?php } ?>

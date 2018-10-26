@@ -5,6 +5,15 @@
             "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
             "iDisplayLength": <?= $Settings->rows_per_page ?>,
             'bProcessing': true, 'bServerSide': true,
+			//
+			"bStateSave": true,
+			"fnStateSave": function (oSettings, oData) {
+				__setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+			},
+			"fnStateLoad": function (oSettings) {
+				var data = __getItem('DataTables_' + window.location.pathname);
+				return JSON.parse(data);
+			},
             'sAjaxSource': '<?= site_url('taxes/getChartAccountTaxes') ?>',
             'fnServerData': function (sSource, aoData, fnCallback) {
                 aoData.push({

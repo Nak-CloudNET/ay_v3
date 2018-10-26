@@ -38,8 +38,8 @@
             <div class="clearfix"></div>
 				
 			<div class="text-center" style="margin-bottom:20px;">
-                    <img src="<?= base_url() . 'assets/uploads/logos/logo.png'?>">
-                </div>	
+				<img src="<?= base_url() . 'assets/uploads/logos/logo.png'?>">
+			</div>	
 				
 			<div class="row padding10">
                 <div class="col-xs-4" style="float: left;font-size:14px">
@@ -90,11 +90,13 @@
 						<tr>
 							<th><?= lang("no"); ?></th>
 							<th><?= lang("item_code"); ?></th>
+							<th><?= lang("category_expense"); ?></th>
 							<th><?= lang("item_description"); ?></th>
 							<th><?= lang("reason"); ?></th>
 							<th><?= lang("quantity"); ?></th>
 							<th><?= lang("unit"); ?></th>									
 							<th><?= lang("cost"); ?></th>								
+							<th><?= lang("total"); ?></th>								
 						</tr>
                     </thead>
                     <tbody style="font-size: 13px;">
@@ -105,11 +107,13 @@
 									<tr>
 										<td style="text-align:center;">'.$i.'</td>
 										<td>'.$si->product_name.' ( '.$si->code.' ) </td>
-										<td>'.$si->description.'</td>
-										<td>'.$si->reason.'</td>
+										<td>'. $si->exp_cate_name .'</td>
+										<td>'.$si->pname.'</td>
+										<td>'.$si->rdescription.'</td>
 										<td style="text-align:center;">'.number_format($si->qty_by_unit,0).'</td>
 										<td>'.$si->unit_name.'</td>
-										<td style="text-align:right;">'.$this->erp->formatMoney($si->qty_use*$si->cost).'</td>
+										<td style="text-align:right;">'. ($si->option_id ? $si->cost * $si->variant_qty : $si->cost) .'</td>
+										<td style="text-align:right;">'.$this->erp->formatMoney($si->qty_use * $si->cost).'</td>
 									</tr>
 								
 								';
@@ -117,22 +121,20 @@
 							}
 						?>
 							<tr>
-								<td colspan="6" style="text-align:right"><b>Total Cost</b></td>
-								<td  style="text-align:right"><b><?=$this->erp->formatMoney($using_stock->total_cost)?></b></td>
+								<td colspan="6"><span><b>Note : </b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo strip_tags($using_stock->note); ?></span></td>
+								<td colspan="2" style="text-align:right"><b>Total Cost</b></td>
+								<td  style="text-align:right"><b><?= $this->erp->formatMoney($using_stock->total_cost) ?></b></td>
 							</tr>
                     </tfoot>
                 </table>
             </div>
 
             <div class="row">
-                <div class="col-md-12">
-                    
-                </div>
-                <div class="col-md-3  pull-left" style="text-align:center">
+                <div class="col-md-6  pull-left" style="text-align:center">
 					<hr/>
                     <p><b><?= lang("manager"); ?></b></p>
                 </div>
-				<div class="col-md-4 " style="text-align:center">
+				<div class="col-md-6 " style="text-align:center">
                     <hr/>
 					<p><b><?= lang("stock_controller"); ?></b></p>
                 </div>
@@ -151,7 +153,7 @@
 				<button type="button" class="btn btn-primary btn-default no-print pull-left" onclick="window.print();">
 						<i class="fa fa-print"></i> <?= lang('print'); ?>
 				</button>&nbsp;&nbsp;
-			<a href="<?= site_url('products/view_using_stock'); ?>"><button class="btn btn-warning no-print" ><i class="fa fa-backward "></i>&nbsp;<?= lang("back"); ?></button></a>
+			<a href="<?= site_url('products/view_enter_using_stock'); ?>"><button class="btn btn-warning no-print" ><i class="fa fa-backward "></i>&nbsp;<?= lang("back"); ?></button></a>
 
         </div>
     </div>
@@ -162,20 +164,5 @@
 <div class="col-md-12" style="margin-bottom:20px;">
 </div>
 </div>
-<div></div>
-<!--<div style="margin-bottom:50px;">
-	<div class="col-xs-4" id="hide" >
-		<a href="<?= site_url('sales'); ?>"><button class="btn btn-warning " ><?= lang("Back to AddSale"); ?></button></a>&nbsp;&nbsp;&nbsp;
-		<button class="btn btn-primary" id="print_receipt"><?= lang("Print"); ?>&nbsp;<i class="fa fa-print"></i></button>
-	</div>
-</div>-->
-<!--<script type="text/javascript">
-$(document).ready(function(){
-	$(window).load(function(){
-		window.print();
-	});
-});-->
-	
-</script>
 </body>
 </html>

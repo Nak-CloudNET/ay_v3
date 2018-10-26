@@ -1,3 +1,4 @@
+<!-- <?php //echo $warehouse_id;exit();?> -->
 <div class="row">
     <div class="col-sm-12">
         <div class="row">
@@ -204,14 +205,14 @@
 
                         <div id="form">
 
-                            <?php echo form_open("reports/customer_report/" . $user_id); ?>
+                            <?php echo form_open("reports/biller_report/" . $user_id); ?>
                             <div class="row">
 
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label class="control-label" for="user"><?= lang("created_by"); ?></label>
-                                        <?php
-                                        $us[""] = "";
+<?php
+                                                                                $us[""] = "";
                                         foreach ($users as $user) {
                                             $us[$user->id] = $user->first_name . " " . $user->last_name;
                                         }
@@ -359,7 +360,7 @@
 					"aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
 					"iDisplayLength": <?= $Settings->rows_per_page ?>,
 					'bProcessing': true, 'bServerSide': true,
-					'sAjaxSource': '<?= site_url('reports/getPurchasesReport/?v=1' . $v) ?>',
+					'sAjaxSource': '<?= site_url('reports/getPurchasesReportForProjectReport/?v=1' . $v) ?>',
 					'fnServerData': function (sSource, aoData, fnCallback) {
 						aoData.push({
 							"name": "<?= $this->security->get_csrf_token_name() ?>",
@@ -367,39 +368,30 @@
 						});
 						$.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
 					},
-					"aoColumns": [{"bVisible": false}, {"mRender": fld}, null, null, null, {
-						"bSearchable": false,
-						"mRender": pqFormatPurchaseReports
-					},{
-						"bSearchable": false,
-						"mRender": pqFormatPurchaseReports
-					}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": row_status}],
+					"aoColumns": [{"bVisible": false}, {"mRender": fld}, null, null, null,
+					{"mRender": currencyFormat},
+					{"mRender": currencyFormat}, 
+					{"mRender": currencyFormat}, 
+					{"mRender": row_status}],
 					"fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
-						var gtotal = 0, paid = 0, balance = 0, qtotal = 0;
+						var gtotal = 0, paid = 0, balance = 0;
 						for (var i = 0; i < aaData.length; i++) {
-							var qty = parseFloat(aaData[aiDisplay[i]][6]);
-							if(isNaN(qty)) {
-								qty = 0;	
-							}
-							qtotal += qty;
-
-							gtotal += parseFloat(aaData[aiDisplay[i]][7]);
-							paid += parseFloat(aaData[aiDisplay[i]][8]);
-							balance += parseFloat(aaData[aiDisplay[i]][9]);
+							
+							gtotal += parseFloat(aaData[aiDisplay[i]][5]);
+							paid += parseFloat(aaData[aiDisplay[i]][6]);
+							balance += parseFloat(aaData[aiDisplay[i]][7]);
 						}
 						var nCells = nRow.getElementsByTagName('th');
-						nCells[6].innerHTML = currencyFormat(parseFloat(qtotal));
-						nCells[7].innerHTML = currencyFormat(parseFloat(gtotal));
-						nCells[8].innerHTML = currencyFormat(parseFloat(paid));
-						nCells[9].innerHTML = currencyFormat(parseFloat(balance));
+						nCells[4].innerHTML = currencyFormat(parseFloat(gtotal));
+						nCells[5].innerHTML = currencyFormat(parseFloat(paid));
+						nCells[6].innerHTML = currencyFormat(parseFloat(balance));
 					}
 				}).fnSetFilteringDelay().dtFilter([
 					{column_number: 1, filter_default_label: "[<?=lang('date');?> (yyyy-mm-dd)]", filter_type: "text", data: []},
 					{column_number: 2, filter_default_label: "[<?=lang('ref_no');?>]", filter_type: "text", data: []},
 					{column_number: 3, filter_default_label: "[<?=lang('warehouse');?>]", filter_type: "text", data: []},
 					{column_number: 4, filter_default_label: "[<?=lang('supplier');?>]", filter_type: "text", data: []},
-					{column_number: 5, filter_default_label: "[<?=lang('product');?>]", filter_type: "text", data: []},
-					{column_number: 10, filter_default_label: "[<?=lang('status');?>]", filter_type: "text", data: []},
+					{column_number: 8, filter_default_label: "[<?=lang('status');?>]", filter_type: "text", data: []},
 				], "footer");
 			});
         </script>
@@ -468,7 +460,7 @@
 
                         <div id="purchaseform">
 
-                            <?php echo form_open("reports/customer_report/" . $user_id."/#payments-con"); ?>
+                            <?php echo form_open("reports/biller_report/" . $user_id."#purchase-con"); ?>
                             <div class="row">
 
                                 <div class="col-sm-4">
@@ -514,9 +506,8 @@
 									<th><?= lang("date"); ?></th>
 									<th><?= lang("reference_no"); ?></th>
 									<th><?= lang("warehouse"); ?></th>
+									<!--<th><?= lang("container"); ?></th>-->
 									<th><?= lang("supplier"); ?></th>
-									<th><?= lang("product"); ?></th>
-									<th><?= lang("qty"); ?></th>
 									<th><?= lang("grand_total"); ?></th>
 									<th><?= lang("paid"); ?></th>
 									<th><?= lang("balance"); ?></th>
@@ -525,7 +516,7 @@
 								</thead>
 								<tbody>
 								<tr>
-									<td colspan="9" class="dataTables_empty"><?= lang('loading_data_from_server') ?></td>
+									<td colspan="8" class="dataTables_empty"><?= lang('loading_data_from_server') ?></td>
 								</tr>
 								</tbody>
 								<tfoot class="dtFilter">
@@ -536,9 +527,6 @@
 									<th></th>
 									<th></th>
 									<th></th>
-									<th></th>
-									<th><?= lang("qty"); ?></th>
-									<th><?= lang("grand_total"); ?></th>
 									<th><?= lang("paid"); ?></th>
 									<th><?= lang("balance"); ?></th>
 									<th></th>
@@ -602,7 +590,16 @@
                     });
                     $.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
                 },
-                "aoColumns": [{"bVisible": false},{"mRender": fld}, null, null, {"bVisible": false},{"bVisible": false}, {"mRender": paid_by}, {"mRender": currencyFormat}, {"mRender": row_status}],
+                "aoColumns": [{"bVisible": false},
+				{"mRender": fld}, 
+				null, 
+				null,
+				{"bVisible": false},
+				{"bVisible": false}, 
+				{"mRender": paid_by}, 
+				{"mRender": currencyFormat}, 
+				{"mRender": currencyFormat},
+				{"mRender": row_status}, null],
                 'fnRowCallback': function (nRow, aData, iDisplayIndex) {
                     var oSettings = oTable.fnSettings();
                     if (aData[6] == 'returned') {
@@ -611,34 +608,37 @@
                     return nRow;
                 },
                 "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
-                    var total = 0;
+                    var discount = 0, amount = 0;
                     for (var i = 0; i < aaData.length; i++) {
-                        total += parseFloat(aaData[aiDisplay[i]][5]);
+                        discount += parseFloat(aaData[aiDisplay[i]][7]);
+                        amount   += parseFloat(aaData[aiDisplay[i]][8]);
                     }
                     var nCells = nRow.getElementsByTagName('th');
-                    nCells[4].innerHTML = currencyFormat(parseFloat(total));
+                    nCells[4].innerHTML = currencyFormat(parseFloat(discount));
+                    nCells[5].innerHTML = currencyFormat(parseFloat(amount));
                 }
             }).fnSetFilteringDelay().dtFilter([
-                {column_number: 0, filter_default_label: "[<?=lang('date');?> (yyyy-mm-dd)]", filter_type: "text", data: []},
-                {column_number: 1, filter_default_label: "[<?=lang('payment_ref');?>]", filter_type: "text", data: []},
-                {column_number: 2, filter_default_label: "[<?=lang('sale_ref');?>]", filter_type: "text", data: []},
-                {column_number: 4, filter_default_label: "[<?=lang('paid_by');?>]", filter_type: "text", data: []},
-                {column_number: 6, filter_default_label: "[<?=lang('type');?>]", filter_type: "text", data: []},
+                {column_number: 1, filter_default_label: "[<?=lang('date');?> (yyyy-mm-dd)]", filter_type: "text", data: []},
+                {column_number: 2, filter_default_label: "[<?=lang('payment_ref');?>]", filter_type: "text", data: []},
+                {column_number: 3, filter_default_label: "[<?=lang('sale_ref');?>]", filter_type: "text", data: []},
+                {column_number: 6, filter_default_label: "[<?=lang('paid_by');?>]", filter_type: "text", data: []},
+                {column_number: 9, filter_default_label: "[<?=lang('type');?>]", filter_type: "text", data: []},
+                {column_number: 10, filter_default_label: "[<?=lang('created_by');?>]", filter_type: "text", data: []},
             ], "footer");
         });
         </script>
         <script type="text/javascript">
-        $(document).ready(function () {
-            $('#payform').hide();
-            $('.paytoggle_down').click(function () {
-                $("#payform").slideDown();
-                return false;
+            $(document).ready(function () {
+                $('#payform').hide();
+                $('.paytoggle_down').click(function () {
+                    $("#payform").slideDown();
+                    return false;
+                });
+                $('.paytoggle_up').click(function () {
+                    $("#payform").slideUp();
+                    return false;
+                });
             });
-            $('.paytoggle_up').click(function () {
-                $("#payform").slideUp();
-                return false;
-            });
-        });
         </script>
 
         <div class="box payments-table">
@@ -692,7 +692,7 @@
 
                         <div id="payform">
 
-                            <?php echo form_open("reports/customer_report/" . $user_id."/#payments-con"); ?>
+                            <?php echo form_open("reports/biller_report/" . $user_id."/#payments-con"); ?>
                             <div class="row">
 
                                 <div class="col-sm-4">
@@ -742,8 +742,10 @@
                                     <th></th>
 									<th></th>
                                     <th><?= lang("paid_by"); ?></th>
+                                    <th><?= lang("discount"); ?></th>
                                     <th><?= lang("amount"); ?></th>
                                     <th><?= lang("type"); ?></th>
+                                    <th><?= lang("created_by"); ?></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -760,7 +762,9 @@
 									<th></th>
 									<th></th>
                                     <th></th>
+                                    <th></th>
                                     <th><?= lang("amount"); ?></th>
+                                    <th></th>
                                     <th></th>
                                 </tr>
                             </tfoot>
@@ -897,12 +901,6 @@
 						'success': fnCallback
 					});
 				},
-				'fnRowCallback': function (nRow, aData, iDisplayIndex) {
-					var oSettings = oTable.fnSettings();
-					nRow.id = aData[7];
-					nRow.className = "return_link";
-					return nRow;
-				},
 				"aoColumns": [{"mRender": fld}, null, null, null, null, {
 					"bSearchable": false,
 					"mRender": pqFormat
@@ -1003,12 +1001,14 @@
 		<?php
 			$v = "&biller=" . $user_id;
 
-			if ($this->input->post('product')) {
-				$v .= "&product=" . $this->input->post('product');
+			if ($this->input->post('sproduct')) {
+				$v .= "&product=" . $this->input->post('sproduct');
 			}
+			
 			if ($this->input->post('category')) {
 				$v .= "&category=" . $this->input->post('category');
 			}
+			
 			if ($this->input->post('start_date')) {
 				$v .= "&start_date=" . $this->input->post('start_date');
 			}
@@ -1033,6 +1033,7 @@
 			if ($this->input->post('cf6')) {
 				$v .= "&cf6=" . $this->input->post('cf6');
 			}
+			
 		?>
 		<script>
 			$(document).ready(function () {
@@ -1045,7 +1046,8 @@
 					"aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
 					"iDisplayLength": <?= $Settings->rows_per_page ?>,
 					'bProcessing': true, 'bServerSide': true,
-					'sAjaxSource': '<?= site_url('reports/getProductsBiller/?v=1'.$v) ?>',
+                    'sAjaxSource': '<?= site_url('reports/getProductsBiller'.($wares ? '/'.$wares->cf5 : '').'/?v=1'.$v) ?>',
+					// 'sAjaxSource': '<?= site_url('reports/getProductsBiller/?v=1'.$v) ?>',
 					'fnServerData': function (sSource, aoData, fnCallback) {
 						aoData.push({
 							"name": "<?= $this->security->get_csrf_token_name() ?>",
@@ -1143,6 +1145,20 @@
 								<i class="icon fa fa-file-picture-o"></i>
 							</a>
 						</li>
+                        <?php if (!empty($warehouses)) { ?>
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon fa fa-building-o tip" data-placement="left" title="<?= lang("warehouses") ?>"></i></a>
+                            <ul class="dropdown-menu pull-right" class="tasks-menus" role="menu" aria-labelledby="dLabel">
+                                <li><a href="<?= site_url('reports/biller_report') ?>"><i class="fa fa-building-o"></i> <?= lang('all_warehouses') ?></a></li>
+                                <li class="divider"></li>
+                                <?php
+                                foreach ($warehouses as $warehouse) {
+                                   echo '<li><a href="' . site_url('reports/biller_report/' . ($user_id ? $user_id : '') . '/' . $warehouse->id) . '"><i class="fa fa-building"></i>' . $warehouse->name . '</a></li>';
+                                }
+                                ?>
+                            </ul>
+                        </li>
+                    <?php } ?>
 					</ul>
 				</div>
 			</div>
@@ -1155,26 +1171,18 @@
 
 						<div id="productform">
 
-							<?php echo form_open("reports/products"); ?>
+							<?php echo form_open("reports/biller_report/".$user_id."/#product-con"); ?>
 								<div class="row">
-									<div class="col-sm-4">
-										<div class="form-group">
-											<?= lang("product", "product"); ?>
-											<?php echo form_input('sproduct', (isset($_POST['sproduct']) ? $_POST['sproduct'] : ""), 'class="form-control" id="product"'); ?>
-											<input type="hidden" name="product"
-												   value="<?= isset($_POST['product']) ? $_POST['product'] : "" ?>"
-												   id="product_id"/>
-										</div>
-									</div>
+									
 									<div class="col-sm-4">
 										<div class="form-group">
 											<?= lang("category", "category") ?>
 											<?php
-											$cat[''] = "";
-											foreach ($categories as $category) {
-												$cat[$category->id] = $category->name;
-											}
-											echo form_dropdown('category', $cat, (isset($_POST['category']) ? $_POST['category'] : ''), 'class="form-control select" id="category" placeholder="' . lang("select") . " " . lang("category") . '" style="width:100%"')
+												$cat = array("");
+												foreach ($categories as $category) {
+													$cat[$category->id] = $category->name;
+												}
+												echo form_dropdown('category', $cat, (isset($_POST['category']) ? $_POST['category'] : ''), 'class="form-control select" id="category" placeholder="' . lang("select") . " " . lang("category") . '" style="width:100%"')
 											?>
 										</div>
 									</div>
@@ -1281,7 +1289,7 @@
 		
 		</div>
 	</div>
-
+</div>
 <script type="text/javascript" src="<?= $assets ?>js/html2canvas.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function () {
@@ -1299,7 +1307,7 @@ $(document).ready(function () {
         event.preventDefault();
         html2canvas($('.sales-table'), {
             onrendered: function (canvas) {
-                var img = canvas.toDataURL()
+                var img = canvas.toDataURL();
                 window.open(img);
             }
         });
@@ -1319,7 +1327,7 @@ $(document).ready(function () {
         event.preventDefault();
         html2canvas($('.payments-table'), {
             onrendered: function (canvas) {
-                var img = canvas.toDataURL()
+                var img = canvas.toDataURL();
                 window.open(img);
             }
         });

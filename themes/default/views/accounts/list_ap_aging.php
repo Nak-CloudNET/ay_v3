@@ -144,21 +144,27 @@ if(isset($date)){
 
 						<div id="form">
 
-							<?php echo form_open("reports/customer_report/" . $user_id); ?>
+							<?php echo form_open("account/list_ap_aging" . $user_id); ?>
 							<div class="row">
-
+                                <?php
+                                if ($this->Owner || $this->Admin || $this->session->userdata('view_right')){
+                                ?>
 								<div class="col-sm-4">
+
 									<div class="form-group">
 										<label class="control-label" for="user"><?= lang("created_by"); ?></label>
 										<?php
-										$us[""] = "";
-										foreach ($users as $user) {
-											$us[$user->id] = $user->first_name . " " . $user->last_name;
-										}
-										echo form_dropdown('user', $us, (isset($_POST['user']) ? $_POST['user'] : ""), 'class="form-control" id="user" data-placeholder="' . $this->lang->line("select") . " " . $this->lang->line("user") . '"');
-										?>
+                                            $us[""] = "";
+                                            foreach ($users as $user) {
+                                                $us[$user->id] = $user->first_name . " " . $user->last_name;
+                                            }
+                                            echo form_dropdown('user', $us, (isset($_POST['user']) ? $_POST['user'] : ""), 'class="form-control" id="user" data-placeholder="' . $this->lang->line("select") . " " . $this->lang->line("user") . '"');
+                                            ?>
 									</div>
 								</div>
+                                    <?php
+                                        }
+                                    ?>
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label class="control-label" for="biller"><?= lang("biller"); ?></label>
@@ -231,7 +237,14 @@ if(isset($date)){
 									"aoColumns": [{
 										"bSortable": false,
 										"mRender": checkbox
-									}, null, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat},{"bSortable": false}],
+									},
+									null,
+									{"mRender": currencyFormat,"bSortable" : false},
+									{"mRender": currencyFormat,"bSortable" : false},
+									{"mRender": currencyFormat,"bSortable" : false},
+									{"mRender": currencyFormat,"bSortable" : false},
+									{"mRender": fld, "sClass": "center"}
+									],
 									'fnRowCallback': function (nRow, aData, iDisplayIndex) {
 										var oSettings = oTable.fnSettings();
 										nRow.id = aData[0];
@@ -259,10 +272,10 @@ if(isset($date)){
 							});
 						</script>
 						<div class="table-responsive">
-							<table id="POData" cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover table-striped">
+							<table id="POData" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed table-hover dtable">
 								<thead>
 									<tr class="active">
-										<th style="min-width:30px; width: 30px; text-align: center;">
+										<th style="min-width:3%; width: 3%; text-align: center;">
 											<input class="checkbox checkft" type="checkbox" name="check"/>
 										</th>
 										<th><?php echo $this->lang->line("supplier"); ?></th>
@@ -270,7 +283,7 @@ if(isset($date)){
 										<th><?php echo $this->lang->line("paid"); ?></th>
 										<th><?php echo $this->lang->line("balance"); ?></th>
 										<th><?php echo $this->lang->line("AP Number"); ?></th>
-										<th><?php echo $this->lang->line("actions"); ?></th>
+										<th><?php echo $this->lang->line("date"); ?></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -288,12 +301,11 @@ if(isset($date)){
 										<th><?php echo $this->lang->line("paid"); ?></th>
 										<th><?php echo $this->lang->line("balance"); ?></th>
 										<th><?php echo $this->lang->line("AP Number"); ?></th>
-										<th><?php echo $this->lang->line("actions"); ?></th>
+										<th><?php echo $this->lang->line("date"); ?></th>
 									</tr>
 								</tfoot>
 							</table>
 						</div>
-
 					</div>
 				</div>
 			</div>
@@ -362,11 +374,11 @@ if(isset($date)){
 									"aoColumns": [{
 										"bSortable": false,
 										"mRender": checkbox
-									}, null, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat},{"bSortable": false}],
+									}, null, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat},{"bVisible": false}],
 									'fnRowCallback': function (nRow, aData, iDisplayIndex) {
 										var oSettings = oTable.fnSettings();
 										nRow.id = aData[0];
-										nRow.className = "purchase_link_ap_0_30";
+										nRow.className = "purchase_link_ap";
 										return nRow;
 									},
 									"fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
@@ -390,7 +402,7 @@ if(isset($date)){
 							});
 						</script>
 						<div class="table-responsive">
-							<table id="POData0_30" cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover table-striped">
+							<table id="POData0_30" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed table-hover dtable">
 
 							<thead>
 								<tr class="active">
@@ -482,11 +494,11 @@ if(isset($date)){
 							"aoColumns": [{
 								"bSortable": false,
 								"mRender": checkbox
-							}, null, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat},{"bSortable": false}],
+							}, null, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat},{"bVisible": false}],
 							'fnRowCallback': function (nRow, aData, iDisplayIndex) {
 								var oSettings = oTable.fnSettings();
 								nRow.id = aData[0];
-								nRow.className = "purchase_link_ap_30_60";
+								nRow.className = "purchase_link_ap";
 								return nRow;
 							},
 							"fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
@@ -510,7 +522,7 @@ if(isset($date)){
 					});
 				</script>
 				<div class="table-responsive">
-				  <table id="POData30_60" cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover table-striped">
+				  <table id="POData30_60" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed table-hover dtable">
 
 					<thead>
 						<tr class="active">
@@ -573,7 +585,7 @@ if(isset($date)){
 						 <a href="#" id="xls5" class="tip" title="<?= lang('download_xls') ?>"><i class="icon fa fa-file-excel-o"></i></a>
 					 </li>
 					 <?php }?>
-					 <?php }?>	
+					 <?php }?>
 					 <li class="dropdown">
 					   <a href="#" id="image5" class="tip image" title="<?= lang('save_image') ?>"><i class="icon fa fa-file-picture-o"></i></a>
 				   </li>
@@ -603,11 +615,11 @@ if(isset($date)){
 						"aoColumns": [{
 							"bSortable": false,
 							"mRender": checkbox
-						}, null, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat},{"bSortable": false}],
+						}, null, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat},{"bVisible": false}],
 						'fnRowCallback': function (nRow, aData, iDisplayIndex) {
 							var oSettings = oTable.fnSettings();
 							nRow.id = aData[0];
-							nRow.className = "purchase_link_ap_60_90";
+							nRow.className = "purchase_link_ap";
 							return nRow;
 						},
 						"fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
@@ -631,7 +643,7 @@ if(isset($date)){
 				});
 			</script>
 			<div class="table-responsive">
-			  <table id="POData60_90" cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover table-striped">
+			  <table id="POData60_90" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed table-hover dtable">
 
 				 <thead>
 					<tr class="active">
@@ -725,11 +737,11 @@ if(isset($date)){
 							"aoColumns": [{
 								"bSortable": false,
 								"mRender": checkbox
-							}, null, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat},{"bSortable": false}],
+							}, null, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat},{"bVisible": false}],
 							'fnRowCallback': function (nRow, aData, iDisplayIndex) {
 								var oSettings = oTable.fnSettings();
 								nRow.id = aData[0];
-								nRow.className = "purchase_link_ap_90_over";
+								nRow.className = "purchase_link_ap";
 								return nRow;
 							},
 							"fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
@@ -751,7 +763,7 @@ if(isset($date)){
 					});
 				</script>
 				<div class="table-responsive">
-				 <table id="POData_over_90" cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover table-striped">
+				 <table id="POData_over_90" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed table-hover dtable">
 
 					 <thead>
 						<tr class="active">
@@ -791,19 +803,53 @@ if(isset($date)){
 	</div>
 	</div>
 	</div>
-
 </div>
+
+<style type="text/css">
+	.dtable{ white-space: nowrap; }
+</style>
 <script type="text/javascript" src="<?= $assets ?>js/html2canvas.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function () {
+        $('#biller').change(function(){
+            billerChange();
+        });
+        var $biller = $("#biller");
+        function billerChange() {
+            var id = $biller.val();
+            var admin = '<?= $Admin?>';
+            var owner = '<?= $Owner?>';
+            $("#warehouse").empty();
+            $.ajax({
+                url: '<?= base_url() ?>auth/getWarehouseByProject/' + id,
+                dataType: 'json',
+                success: function (result) {
+                    var the_same_ware = false;
+                    var default_ware = "<?=$Settings->default_warehouse;?>";
+                    $.each(result, function (i, val) {
+                        var b_id = val.id;
+                        var code = val.code;
+                        var name = val.name;
+                        var opt = '<option value="' + b_id + '">' + code + '-' + name + '</option>';
+                        $("#warehouse").append(opt);
+                        if (default_ware == b_id) {
+                            the_same_ware = true;
+                        }
+                    });
+                    var opt_first = $('#warehouse option:first-child').val();
+                    $("#warehouse").select2("val", opt_first);
+                }
+            });
+        }
+
 		$('#pdf').click(function (event) {
 			event.preventDefault();
-			window.location.href = "<?=site_url('reports/getSalesReport/pdf/?v=1'.$v)?>";
+			window.location.href = "<?= site_url('reports/getSalesReport/pdf/?v=1'.$v) ?>";
 			return false;
 		});
 		$('#xls').click(function (event) {
 			event.preventDefault();
-			window.location.href = "<?=site_url('reports/getSalesReport/0/xls/?v=1'.$v)?>";
+			window.location.href = "<?= site_url('reports/getSalesReport/0/xls/?v=1'.$v) ?>";
 			return false;
 		});
 		$('#image').click(function (event) {
@@ -818,12 +864,12 @@ if(isset($date)){
 		});
 		$('#pdf1').click(function (event) {
 			event.preventDefault();
-			window.location.href = "<?=site_url('reports/getPaymentsReport/pdf/?v=1'.$p)?>";
+			window.location.href = "<?= site_url('reports/getPaymentsReport/pdf/?v=1'.isset($p)) ?>";
 			return false;
 		});
 		$('#xls1').click(function (event) {
 			event.preventDefault();
-			window.location.href = "<?=site_url('reports/getPaymentsReport/0/xls/?v=1'.$p)?>";
+			window.location.href = "<?= site_url('reports/getPaymentsReport/0/xls/?v=1'.isset($p)) ?>";
 			return false;
 		});
 		$('#image1').click(function (event) {

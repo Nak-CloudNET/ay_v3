@@ -23,7 +23,7 @@ $lang["to_date"]								= "To Date	";
 $lang["create_date"]						= "Create Date";
 $lang["view_report"]						= " View Report";
 $lang["delete_report"]						= " Delete Report";
- 
+$lang["create_employee_salary"]		= "Create Employee Salary";
  
  
  

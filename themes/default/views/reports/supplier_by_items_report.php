@@ -65,32 +65,27 @@
 						});
 						$.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
 					},
-					"aoColumns": [{"bVisible": false},null,null, null, {"mRender": formatQuantity2}, {"mRender": currencyFormat},{"mRender": formatQuantity2}, null],
+					"aoColumns": [/*{"bVisible": false},*/null,null, null, {"mRender": formatQuantity2}, {"mRender": formatQuantity2},{"mRender": formatQuantity2}],
 					"fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
-						var pq = 0, sq = 0, bq = 0, pa = 0, sa = 0, ba = 0, pl = 0, ga = 0;
+						var  sa = 0, ba = 0, ga = 0;
 						for (var i = 0; i < aaData.length; i++) {
-							s = aaData[aiDisplay[i]][4];
-							b = aaData[aiDisplay[i]][5];
-							g = aaData[aiDisplay[i]][6];
-							//pa += parseFloat(p);
-							sa += parseFloat(s);
-							ba += parseFloat(b);
-							ga += parseFloat(g);
+							
+							sa += parseFloat(aaData[aiDisplay[i]][3]);
+							ba += parseFloat( aaData[aiDisplay[i]][4]);
+							ga += parseFloat(aaData[aiDisplay[i]][5]);
 							//pl += parseFloat(aaData[aiDisplay[i]][5]);
 						}
 						var nCells = nRow.getElementsByTagName('th');
-
-						nCells[3].innerHTML = '<div class="text-right">'+formatMoney(sa)+'</div>';
-						//nCells[4].innerHTML = '<div class="text-right">'+formatMoney(sa)+'</div>';
+						nCells[3].innerHTML =formatMoney(sa);
 						nCells[4].innerHTML = currencyFormat(parseFloat(ba));
-						nCells[5].innerHTML = '<div class="text-right">'+formatMoney(ga)+'</div>';
+						nCells[5].innerHTML =formatMoney(ga);
 
 						//nCells[6].innerHTML = '<div class="text-right">('+formatQuantity2(bq)+') '+formatMoney(ba)+'</div>';
 					}
 				}).fnSetFilteringDelay().dtFilter([
-                    {column_number: 1, filter_default_label: "[<?=lang('supplier');?>]", filter_type: "text", data: []},
-					{column_number: 2, filter_default_label: "[<?=lang('product_code');?>]", filter_type: "text", data: []},
-					{column_number: 3, filter_default_label: "[<?=lang('product_name');?>]", filter_type: "text", data: []},
+                    {column_number: 0, filter_default_label: "[<?=lang('date');?>]", filter_type: "text", data: []},
+                    {column_number: 1, filter_default_label: "[<?=lang('reference_no');?>]", filter_type: "text", data: []},
+					{column_number: 2, filter_default_label: "[<?=lang('supplier');?>]", filter_type: "text", data: []}
 				], "footer");
 			});
 		</script>
@@ -233,14 +228,12 @@
 								   style="margin-bottom:5px;">
 								<thead>
 									<tr class="active">
-										<th></th>
+									    <th><?= lang("date"); ?></th>
+									    <th><?= lang("reference_no"); ?></th>
 									    <th><?= lang("supplier"); ?></th>
-										<th><?= lang("product_code"); ?></th>
-										<th><?= lang("product_name"); ?></th>
-										<th><?= lang("purchased_amount"); ?></th>
-										<th><?= lang("purchased_qty"); ?></th>
-										<th><?= lang("stock_in_hand"); ?></th>
-										<th><?= lang("action"); ?></th>
+										<th><?= lang("grand_total"); ?></th>
+										<th><?= lang("paid"); ?></th>
+										<th><?= lang("balance"); ?></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -254,10 +247,8 @@
 									    <th></th>
 										<th></th>
 										<th></th>
-										<th><?= lang("purchased_amount"); ?></th>
-										<th><?= lang("purchased_qty"); ?></th>
-										<th><?= lang("stock_in_hand"); ?></th>
-										<th><?= lang("action"); ?></th>
+										<th></th>
+										<th></th>
 									</tr>
 								</tfoot>
 							</table>

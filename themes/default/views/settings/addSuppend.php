@@ -1,3 +1,6 @@
+<?php
+	//$this->erp->print_arrays($warehouses);
+?>
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
         <div class="modal-header">
@@ -22,7 +25,7 @@
                         <?= lang("floor", "floor"); ?>
 						<?php
 						$acc_section = array(""=>"");
-						echo form_input('floor', '', 'class="form-control" id="floor" required="required"');
+						echo form_input('floor', '', 'class="form-control " id="floor" required="required"');
 						/*
 						foreach($sectionacc as $section){
 							$acc_section[$section["sectionid"]] = $section["sectionname"];
@@ -35,6 +38,16 @@
                         <?= lang("people", "people"); ?>
                         <?php 
 							echo form_input('people', '', 'class="form-control" id="people"');
+						?>
+                    </div>
+					<div class="form-group">
+                        <?= lang("warehouse", "swarehouse"); ?>
+						<?php
+							$wh[''] = '';
+							foreach ($warehouses as $warehouse) {
+								$wh[$warehouse->id] = $warehouse->name;
+							}
+							echo form_dropdown('warehouse', $wh, (isset($_POST['warehouse']) ? $_POST['warehouse'] : $Settings->default_warehouse), 'id="swarehouse" class="form-control input-tip select" data-placeholder="' . lang("select") . ' ' . lang("warehouse") . '" required="required" style="width:100%;" ');
 						?>
                     </div>
                     
@@ -51,6 +64,7 @@
                             echo form_dropdown('inactive', $ssp, '', 'class="form-control select" id="inactive" placeholder="' . lang('select_active') . '" ');
 						?>
                     </div>
+					
 				</div>
 				<div class="col-md-12">
 					<div class="form-group">

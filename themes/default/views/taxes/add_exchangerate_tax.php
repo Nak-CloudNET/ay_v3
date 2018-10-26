@@ -6,7 +6,7 @@
             <h4 class="modal-title" id="myModalLabel"><?php echo lang('add_condition_tax'); ?></h4>
         </div>
         <?php $attrib = array('data-toggle' => 'validator', 'role' => 'form', 'id' => 'addAcc');
-        echo form_open_multipart("account/condition_tax", $attrib); ?>
+        echo form_open_multipart("taxes/insert_exchange_tax_rate", $attrib); ?>
         <div class="modal-body" >
             <p><?= lang('enter_info'); ?></p>
 
@@ -16,31 +16,18 @@
                        class="table table-bordered table-hover table-striped">
                     <thead>
                     <tr>
-                        <th style="width:5%;"  rowspan="2"><?= $this->lang->line("#"); ?></th>
-                        <th style="width:10%;"  rowspan="2"><?= $this->lang->line("Tax Type"); ?></th>
-						<th style="width:15%;" colspan="2"><?= $this->lang->line("Exchange Rate"); ?></th>
-						<th style="width:15%;" rowspan="2"><?= $this->lang->line("Month"); ?></th>
-						<th style="width:10%;" rowspan="2"><?= $this->lang->line("Year"); ?></th>
-						<th style="width:2%;"  rowspan="2"><button type="button" class="btn btn-primary" id="addDescription"><i class="fa fa-plus-circle"></i></button></th>
-					</tr>
-					<tr>
-						<th style="width:15%;"><?= $this->lang->line("USD"); ?></th>
-                        <th style="width:15%;"><?= $this->lang->line("KHR"); ?></th>
+						<th style="width:15%;"><?= $this->lang->line("salary_KHR"); ?></th>
+                        <th style="width:15%;"><?= $this->lang->line("average_KHR"); ?></th>
+						<th style="width:15%;" rowspan=""><?= $this->lang->line("Month"); ?></th>
+						<th style="width:10%;" rowspan=""><?= $this->lang->line("Year"); ?></th>
+						<th style="width:2%;"  rowspan=""><button type="button" class="btn btn-primary" id="addDescription"><i class="fa fa-plus-circle"></i></button></th>
 					</tr>
                     </thead>
                     <tbody class="tbody">
 					<?php if($edit!=""){?>
 					<tr>
-						<td>#</td>
-						<td>
-						<select name="tax_type[]" class="form-control"   style="width:100%" >
-							<option value=""></option>
-							<option value="salary">Salary</option>
-							<option value="average">Average</option>
-						</select>
-						</td>
-						<td><?= form_input('usd_rate[]', '', 'class="form-control usd_rate" id="usd_rate"'); ?></td>
-						<td><?= form_input('khr_rate[]', '', 'class="form-control khr_rate" id="khr_rate"'); ?></td>
+						<td><?= form_input('salary_khr[]', '', 'class="form-control salary_khr" id="salary_khr"'); ?></td>
+						<td><?= form_input('average_khr[]', '', 'class="form-control average_khr" id="average_khr"'); ?></td>
 						<td>
 						<select name="month[]" class="form-control" style="width:100%">
 						<?php 
@@ -86,10 +73,8 @@ $("#addDescription").change();
 $(AddButton).click(function (e){
 		var my_i = ($(".tbody tr").size())-0+1;
 			var div  ='<tr>';
-				div +='<td class="no">'+my_i+'</td>';
-				div +='<td><select name="tax_type[]" style="width:100%" class="form-control"><option value=""></option><option value="salary">Salary</option><option value="average">Average</option></select></td>';
-				div +='<td><input type="text" name="usd_rate[]" class="form-control usd_rate" id="usd_rate" /></td>';
-				div +='<td><input type="text" name="khr_rate[]" class="form-control khr_rate" id="khr_rate" /></td>';
+				div +='<td><input type="text" name="salary_khr[]" class="form-control salary_khr" id="salary_khr" /></td>';
+				div +='<td><input type="text" name="average_khr[]" class="form-control average_khr" id="average_khr" /></td>';
 				div +='<td>';
 				div +='<select name="month[]" style="width:100%" class="form-control"><?php for($i=1;$i<=12;$i++){$dateObj   = DateTime::createFromFormat('!m', $i);$monthName = $dateObj->format('F');echo "<option value=".$i.">".$monthName."</option>";}?>"</select></td>';
 				div +='<td><select name="year[]" style="width:100%" class="form-control"><?php $startingYear = date('Y');$endingYear = $startingYear + 20;for ($i = $startingYear;$i <= $endingYear;$i++){echo '<option value='.$i.'>'.$i.'</option>';}?>"</select></td>';
@@ -109,5 +94,6 @@ $(AddButton).click(function (e){
 				$(this).html(j);
 			});
 	});
+	$('#addDescription').trigger('click');
 </script>
 

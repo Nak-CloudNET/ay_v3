@@ -57,9 +57,13 @@
             }, {"bSortable": false}],
             'fnRowCallback': function (nRow, aData, iDisplayIndex) {
                 var oSettings = oTable.fnSettings();
+				var action =$('td:eq(8)',nRow);
                 nRow.id = aData[0];
                 nRow.className = "expense_link";
-                return nRow;
+				if(aData[8]){
+					 action.find('.delete').remove();
+				}
+				return nRow;
             },
             "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
                 var total = 0, total_kh = 0;

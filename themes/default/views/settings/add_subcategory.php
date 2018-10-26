@@ -1,4 +1,4 @@
-<div class="modal-dialog">
+<div class="modal-dialog"  tabindex="1">
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-2x">&times;</i>
@@ -21,16 +21,25 @@
                     ?> </div>
             </div>
             <div class="form-group">
-                <?php echo lang('category_code', 'code'); ?>
+                <?php echo lang('subcategory_code', 'code'); ?>
                 <div class="controls">
                     <?php echo form_input($code); ?>
                 </div>
             </div>
 
             <div class="form-group">
-                <?php echo lang('category_name', 'name'); ?>
+                <?php echo lang('subcategory_name', 'name'); ?>
                 <div class="controls">
                     <?php echo form_input($name); ?>
+                </div>
+            </div>
+			 <div class="form-group">
+                <?php echo lang('cate_type', 'cate_type'); ?>
+                <div class="controls">
+                    <?php 
+					$type = array(''=>'None','food'=>'FOOD','drink'=>'DRINK');
+					echo form_dropdown('cate_type', $type, '' ,'id="cate_type" class="form-control select" " style="width:100%;" '); 
+					?>
                 </div>
             </div>
             <div class="form-group">

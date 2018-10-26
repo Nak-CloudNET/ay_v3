@@ -12,7 +12,10 @@
 
             <div class="row">
                 <div class="col-sm-12">
-				
+					<div class="form-group">
+						<?= lang('reference_no', 'reference_no'); ?>
+						<?= form_input('reference_no',(($deposit && $deposit->reference)? $deposit->reference:''), 'class="form-control tip"  required  id="reference_no" readonly '); ?>
+					</div>
 					<?php if ($Owner || $Admin) { ?>
 						<div class="form-group">
 							<?= lang("biller", "biller"); ?>
@@ -47,7 +50,7 @@
                     <div class="form-group">
                         <?php echo lang('amount', 'amount'); ?>
                         <div class="controls">
-                            <?php echo form_input('amount', set_value('amount', $this->erp->formatMoney($deposit->amount)), 'class="form-control" id="amount" required="required"'); ?>
+                            <?php echo form_input('amount', set_value('amount', str_replace(',', '', $this->erp->formatDecimal($deposit->amount))), 'class="form-control" id="amount" required="required"'); ?>
                         </div>
                     </div>
 
@@ -56,6 +59,17 @@
 						<?php 
 						$paid_by_arr = array('cash' => lang("cash"), 'CC' => lang("CC"), 'gift_card' => lang("gift_card"), 'Cheque' => lang("cheque"), 'other' =>lang("other") );
 						echo form_dropdown('paid_by', $paid_by_arr, $deposit->paid_by, 'class="form-control" id="paid_by"') ?>
+						<input type="hidden" name="status" class="status" id="status" value="<?= $deposit->status; ?>" />
+					</div>
+					
+					<div class="form-group">
+						<?= lang("bank_account", "bank_account_1"); ?>
+						<?php $bank = array('' => '');
+						foreach($bankAccounts as $bankAcc) {
+							$bank[$bankAcc->accountcode] = $bankAcc->accountcode . ' | '. $bankAcc->accountname;
+						}
+						echo form_dropdown('bank_account', $bank, (($deposit && $deposit->bank_code)? $deposit->bank_code:''), 'id="bank_account_1" class="ba form-control kb-pad bank_account" required="required"');
+						?>
 					</div>
 					
 					<div class="form-group gc" style="display: none;">
@@ -128,7 +142,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <?php echo form_submit('edit_deposit', lang('edit_deposit'), 'class="btn btn-primary"'); ?>
+            <?php echo form_submit('edit_deposit', lang('edit_deposit'), 'class="btn btn-primary" id="edit_deposit"'); ?>
         </div>
     </div>
     <?php echo form_close(); ?>
@@ -163,6 +177,29 @@
                 });
             }
         });
+		
+		$('#edit_deposit').click(function(){
+			if(!$(".bank_account option:selected").val()){
+				alert('Bank account not selected, Please try again!');				
+				return false;
+			}
+		});
+		
+		<?php if($deposit->so_id) { ?>
+		$('#amount').on('keyup, change', function() {
+			var amount = parseFloat($(this).val());
+			var grand_total = <?= (($sale_order->grand_total - $sale_order->paid) + $deposit->amount) ?>;
+			if(amount > grand_total) {
+				$(this).val(formatDecimal(grand_total));
+				$(this).focus();
+			}else if(amount < 0) {
+				$(this).val(0);
+				$(this).focus();
+				$(this).select();
+			}
+		});
+		<?php } ?>
+		
         $(document).on('change', '.paid_by', function () {
             var p_val = $(this).val();
             $('#rpaidby').val(p_val);
@@ -195,7 +232,7 @@
         });
         $('#pcc_no_1').change(function (e) {
             var pcc_no = $(this).val();
-            localStorage.setItem('pcc_no_1', pcc_no);
+            __setItem('pcc_no_1', pcc_no);
             var CardType = null;
             var ccn1 = pcc_no.charAt(0);
             if (ccn1 == 4)

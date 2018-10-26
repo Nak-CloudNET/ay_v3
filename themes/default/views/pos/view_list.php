@@ -7,13 +7,13 @@
             <h4 class="modal-title" id="myModalLabel">POS List</h4>
         </div>
         <div class="modal-body">
-			<script type="text/javascript">
-				var lang = {paid: '<?=lang('paid');?>', pending: '<?=lang('pending');?>', completed: '<?=lang('completed');?>', ordered: '<?=lang('ordered');?>', received: '<?=lang('received');?>', partial: '<?=lang('partial');?>', sent: '<?=lang('sent');?>', r_u_sure: '<?=lang('r_u_sure');?>', due: '<?=lang('due');?>', returned: '<?=lang('returned');?>', transferring: '<?=lang('transferring');?>', active: '<?=lang('active');?>', inactive: '<?=lang('inactive');?>', unexpected_value: '<?=lang('unexpected_value');?>', select_above: '<?=lang('select_above');?>'};
-			</script>
-			<script type="text/javascript" src="<?= $assets ?>js/jquery.dataTables.min.js"></script>
-			<script type="text/javascript" src="<?= $assets ?>js/jquery.dataTables.dtFilter.min.js"></script>
-			<script type="text/javascript" src="<?= $assets ?>js/core.js"></script>
-			<script>
+			    <script type="text/javascript">
+				    var lang = {paid: '<?=lang('paid');?>', pending: '<?=lang('pending');?>', completed: '<?=lang('completed');?>', ordered: '<?=lang('ordered');?>', received: '<?=lang('received');?>', partial: '<?=lang('partial');?>', sent: '<?=lang('sent');?>', r_u_sure: '<?=lang('r_u_sure');?>', due: '<?=lang('due');?>', returned: '<?=lang('returned');?>', transferring: '<?=lang('transferring');?>', active: '<?=lang('active');?>', inactive: '<?=lang('inactive');?>', unexpected_value: '<?=lang('unexpected_value');?>', select_above: '<?=lang('select_above');?>'};
+			    </script>
+                <script type="text/javascript" src="<?= $assets ?>js/jquery.dataTables.min.js"></script>
+                <script type="text/javascript" src="<?= $assets ?>js/jquery.dataTables.dtFilter.min.js"></script>
+                <script type="text/javascript" src="<?= $assets ?>js/core.js"></script>
+			    <script>
 				$(document).ready(function () {
 					var oTable = $('#POSData').dataTable({
 						"aaSorting": [[0, "asc"], [1, "desc"]],
@@ -26,18 +26,23 @@
 								"name": "<?= $this->security->get_csrf_token_name() ?>",
 								"value": "<?= $this->security->get_csrf_hash() ?>"
 							});
+							
 							$.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
 						},
 						'fnRowCallback': function (nRow, aData, iDisplayIndex) {
 							var oSettings = oTable.fnSettings();
 							nRow.id = aData[0];
 							nRow.className = "receipt_link";
+							var delivery_status = aData[10].split('___');
+							if(delivery_status[1] == "completed"){
+								$('td:eq(11)', nRow).find('.add_delivery').remove();
+							}
 							return nRow;
 						},
 						"aoColumns": [{
 							"bSortable": false,
 							"mRender": checkbox
-						}, {"mRender": fld}, null, null, null, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": row_status}, {"bSortable": false}],
+						}, {"mRender": fld}, null, null, null, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": row_status}, {"mRender": row_status},{"mRender": pos_delivery_status},{"bSortable": false}],
 						"fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay){
 							var gtotal = 0, paid = 0, balance = 0;
 							for (var i = 0; i < aaData.length; i++) {
@@ -56,9 +61,12 @@
 						{column_number: 3, filter_default_label: "[<?=lang('biller');?>]", filter_type: "text", data: []},
 						{column_number: 4, filter_default_label: "[<?=lang('customer');?>]", filter_type: "text"},
 						{column_number: 8, filter_default_label: "[<?=lang('payment_status');?>]", filter_type: "text", data: []},
+						{column_number: 9, filter_default_label: "[<?=lang('payment_status');?>]", filter_type: "text", data: []},
+						{column_number: 10, filter_default_label: "[<?=lang('payment_status');?>]", filter_type: "text", data: []},
 					], "footer");
 				});
-				$('.close').click(function(){
+				$('.close').click(function(event){
+                    event.preventDefault();
 					$('.ajaxCall').show();
 					document.location.reload(true);
 					$('.ajaxCall').hide();
@@ -121,6 +129,8 @@
 											<th><?= lang("paid"); ?></th>
 											<th><?= lang("balance"); ?></th>
 											<th><?= lang("payment_status"); ?></th>
+											<th><?= lang("sale_status"); ?></th>
+											<th><?= lang("delivery_status"); ?></th>
 											<th style="width:80px; text-align:center;"><?= lang("actions"); ?></th>
 										</tr>
 									</thead>
@@ -141,6 +151,8 @@
 											<th><?= lang("grand_total"); ?></th>
 											<th><?= lang("paid"); ?></th>
 											<th><?= lang("balance"); ?></th>
+											<th class="defaul-color"></th>
+											<th class="defaul-color"></th>
 											<th class="defaul-color"></th>
 											<th style="width:80px; text-align:center;"><?= lang("actions"); ?></th>
 										</tr>

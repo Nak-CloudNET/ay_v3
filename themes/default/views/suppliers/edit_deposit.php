@@ -3,13 +3,22 @@
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-2x">&times;</i>
             </button>
-            <h4 class="modal-title" id="myModalLabel"><?php echo lang('edit_deposit') . " (" . $company->name . ")"; ?></h4>
+            <h4 class="modal-title" id="myModalLabel"><?php echo lang('edit_deposit') . " (" . $supplier->name . ")"; ?></h4>
         </div>
-        <?php $attrib = array('data-toggle' => 'validator', 'role' => 'form');
+		
+        
+		<?php if($deposit->amount < 0){
+			echo "<div class='modal-body'>";
+			echo lang("<p>Can not edit this deposit.</p>");
+			echo "</div>";
+		}else{
+		?>
+		<?php $attrib = array('data-toggle' => 'validator', 'role' => 'form');
         echo form_open("suppliers/edit_deposit/" . $deposit->id, $attrib); ?>
         <div class="modal-body">
+		
             <p><?= lang('enter_info'); ?></p>
-
+			
             <div class="row">
                 <div class="col-sm-12">
 						<div class="form-group">
@@ -17,14 +26,14 @@
 							<div class="input-group">  
 							<?= form_input('reference_no',$deposit->reference, 'class="form-control tip"  required  id="reference_no"'); ?>
 							<input type="hidden"  name="temp_reference_no"  id="temp_reference_no" value="<?= $deposit->reference ?>" />
-							<div class="input-group-addon no-print" style="padding: 2px 5px;background-color:white;">
-									<input type="checkbox" name="ref_status" id="ref_st" value="1" style="margin-top:3px;">
+							<div class="input-group-addon no-print">
+									<!--<input type="checkbox" name="ref_status" id="ref_st" value="1" style="margin-top:3px;">-->
 								</div>
 							</div>
 						</div>
 					<?php if ($Owner || $Admin) { ?>
 						<div class="form-group">
-							<?= lang("biller", "biller"); ?>
+							<?= lang("project", "biller"); ?>
 							<?php
 							foreach ($billers as $biller) {
 								$bl[$biller->id] = $biller->company != '-' ? $biller->company : $biller->name;
@@ -52,7 +61,7 @@
                         </div>
                     </div>
                     <?php } ?>
-
+					
                     <div class="form-group">
                         <?php echo lang('amount', 'amount'); ?>
                         <div class="controls">
@@ -67,6 +76,18 @@
 						echo form_dropdown('paid_by', $paid_by_arr, $deposit->paid_by, 'class="form-control" id="paid_by"') ?>
 					</div>
 					
+					<?php if ($deposit->opening == 0) { ?>
+						<div class="form-group">
+							<?= lang("bank_account", "bank_account_1"); ?>
+							<?php $bank = array('' => '');
+							foreach($bankAccounts as $bankAcc) {
+								$bank[$bankAcc->accountcode] = $bankAcc->accountcode . ' | '. $bankAcc->accountname;
+							}
+							echo form_dropdown('bank_account', $bank, $deposit->bank_code, 'id="bank_account_1" class="ba form-control kb-pad bank_account" required="required"');
+							?>
+						</div>
+					<?php } ?>
+                            
 					<div class="form-group gc" style="display: none;">
 						<?= lang("gift_card_no", "gift_card_no"); ?>
 						<input name="gift_card_no" type="text" id="gift_card_no" class="pa form-control kb-pad"/>
@@ -137,6 +158,7 @@
         <div class="modal-footer">
             <?php echo form_submit('edit_deposit', lang('edit_deposit'), 'class="btn btn-primary"'); ?>
         </div>
+		<?php } ?>
     </div>
     <?php echo form_close(); ?>
 </div>
@@ -217,7 +239,7 @@
         });
         $('#pcc_no_1').change(function (e) {
             var pcc_no = $(this).val();
-            localStorage.setItem('pcc_no_1', pcc_no);
+            __setItem('pcc_no_1', pcc_no);
             var CardType = null;
             var ccn1 = pcc_no.charAt(0);
             if (ccn1 == 4)

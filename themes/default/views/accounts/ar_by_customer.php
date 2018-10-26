@@ -13,7 +13,6 @@
             source: '<?= site_url('reports/suggestions'); ?>',
             select: function (event, ui) {
                 $('#product_id').val(ui.item.id);
-                //$(this).val(ui.item.label);
             },
             minLength: 1,
             autoFocus: false,
@@ -22,16 +21,37 @@
     });
 </script>
 <style type="text/css">
-	.numeric {
-		text-align:right !important;
-	}
+    .numeric {
+        text-align:right !important;
+    }
+    @media print{
+        .current-date-print {
+            display: block !important;
+        }
+        /*tr th:first-child,*/
+        /*tr td:first-child{*/
+            /*display: block !important;*/
+        /*}*/
+    }
+</style>
+<?php //if ($Owner || $Admin) {
+echo form_open('account/arByCustomer_actions', 'id="action-form"');
+//}
+?>
+<style>
+    #POData .active th,#POData .foot td{
+        color: #fff;
+        background-color: #428BCA;
+        border-color: #357ebd;
+    }
+
 </style>
 <div class="box">
     <div class="box-header">
         <h2 class="blue"><i
-                class="fa-fw fa fa-star"></i><?=lang('ar_by_customer') . ' (' . lang('All_Customer') . ')';?>
+                    class="fa-fw fa fa-star"></i><?=lang('AR by Customer') ;?>
         </h2>
-		<div class="box-icon">
+        <div class="box-icon">
             <ul class="btn-tasks">
                 <li class="dropdown">
                     <a href="#" class="toggle_up tip" title="<?= lang('hide_form') ?>">
@@ -50,41 +70,36 @@
                 <li class="dropdown">
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon fa fa-tasks tip" data-placement="left" title="<?=lang("actions")?>"></i></a>
                     <ul class="dropdown-menu pull-right" class="tasks-menus" role="menu" aria-labelledby="dLabel">
-						 <li>
+                        <li>
                             <a href="javascript:void(0)" id="combine_payable" data-action="combine_payable">
                                 <i class="fa fa-money"></i> <?=lang('combine_payable')?>
                             </a>
                         </li>
-                        <!--<li>
-                            <a href="<?=site_url('sales/add')?>">
-                                <i class="fa fa-plus-circle"></i> <?=lang('add_sale')?>
-                            </a>
-                        </li>-->
-						<?php if ($Owner || $Admin) { ?>
-							<li>
-								<a href="#" id="excel" data-action="export_excel">
-									<i class="fa fa-file-excel-o"></i> <?=lang('export_to_excel')?>
-								</a>
-							</li>
-							<li>
-								<a href="#" id="pdf" data-action="export_pdf">
-									<i class="fa fa-file-pdf-o"></i> <?=lang('export_to_pdf')?>
-								</a>
-							</li>
-						<?php }else{ ?>
-							<?php if($GP['accounts-export']) { ?>
-								<li>
-									<a href="#" id="excel" data-action="export_excel">
-										<i class="fa fa-file-excel-o"></i> <?=lang('export_to_excel')?>
-									</a>
-								</li>
-								<li>
-									<a href="#" id="pdf" data-action="export_pdf">
-										<i class="fa fa-file-pdf-o"></i> <?=lang('export_to_pdf')?>
-									</a>
-								</li>
-							<?php }?>
-						<?php }?>	
+                        <?php if ($Owner || $Admin) { ?>
+                            <li>
+                                <a href="#" id="excel" data-action="export_excel">
+                                    <i class="fa fa-file-excel-o"></i> <?=lang('export_to_excel')?>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" id="pdf" data-action="export_pdf">
+                                    <i class="fa fa-file-pdf-o"></i> <?=lang('export_to_pdf')?>
+                                </a>
+                            </li>
+                        <?php }else{ ?>
+                            <?php if($GP['accounts-export']) { ?>
+                                <li>
+                                    <a href="#" id="excel" data-action="export_excel">
+                                        <i class="fa fa-file-excel-o"></i> <?=lang('export_to_excel')?>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" id="pdf" data-action="export_pdf">
+                                        <i class="fa fa-file-pdf-o"></i> <?=lang('export_to_pdf')?>
+                                    </a>
+                                </li>
+                            <?php }?>
+                        <?php }?>
                         <li>
                             <a href="#" id="combine" data-action="combine">
                                 <i class="fa fa-file-pdf-o"></i> <?=lang('combine_to_pdf')?>
@@ -92,6 +107,11 @@
                         </li>
                         <li class="divider"></li>
                     </ul>
+                </li>
+                <li class="dropdown">   <!--print icon-->
+                    <a href="javascript:void(0)" id="print" class="tip" title="<?= lang('print') ?>" onclick="window.print()">
+                        <i class="icon fa fa-print"></i>
+                    </a>
                 </li>
                 <?php if (!empty($warehouses)) {
                     ?>
@@ -101,10 +121,10 @@
                             <li><a href="<?=site_url('purchases')?>"><i class="fa fa-building-o"></i> <?=lang('all_warehouses')?></a></li>
                             <li class="divider"></li>
                             <?php
-                            	foreach ($warehouses as $warehouse) {
-                            	        echo '<li ' . ($warehouse_id && $warehouse_id == $warehouse->id ? 'class="active"' : '') . '><a href="' . site_url('purchases/' . $warehouse->id) . '"><i class="fa fa-building"></i>' . $warehouse->name . '</a></li>';
-                            	    }
-                                ?>
+                            foreach ($warehouses as $warehouse) {
+                                echo '<li ' . ($warehouse_id && $warehouse_id == $warehouse->id ? 'class="active"' : '') . '><a href="' . site_url('purchases/' . $warehouse->id) . '"><i class="fa fa-building"></i>' . $warehouse->name . '</a></li>';
+                            }
+                            ?>
                         </ul>
                     </li>
                 <?php }
@@ -112,168 +132,280 @@
             </ul>
         </div>
     </div>
-<?php if ($Owner) {?>
     <div style="display: none;">
         <input type="hidden" name="form_action" value="" id="form_action"/>
         <?=form_submit('performAction', 'performAction', 'id="action-form-submit"')?>
     </div>
     <?= form_close()?>
-<?php }
-?>  
-	<div class="box-content">
+    <div class="box-content">
         <div class="row">
             <div class="col-lg-12">
 
                 <p class="introtext"><?=lang('list_results');?></p>
-				<div id="form">
+                <div id="form">
 
                     <?php echo form_open("account/ar_by_customer"); ?>
                     <div class="row">
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <?= lang("start_date", "start_date"); ?>
-                                <?php echo form_input('start_date', (isset($_POST['start_date']) ? $_POST['start_date'] : $start_date), 'class="form-control datetime" id="start_date"'); ?>
+                                <?php echo form_input('start_date', (isset($_POST['start_date']) ? $_POST['start_date'] : ''), 'class="form-control date" id="start_date"'); ?>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <?= lang("end_date", "end_date"); ?>
-                                <?php echo form_input('end_date', (isset($_POST['end_date']) ? $_POST['end_date'] : $end_date), 'class="form-control datetime" id="end_date"'); ?>
+                                <?php echo form_input('end_date', (isset($_POST['end_date']) ? $_POST['end_date'] : ''), 'class="form-control date" id="end_date"'); ?>
                             </div>
                         </div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<?= lang("customer", "customer"); ?>
-								<?php echo form_input('customer', (isset($_POST['customer'])? $_POST['customer'] : ""), 'class="form-control" id="customer"'); ?>
-							</div>
-						</div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <?= lang("customer", "customer"); ?>
+                                <?php echo form_input('customer', (isset($_POST['customer'])? $_POST['customer'] : ''), 'class="form-control" id="customer"'); ?>
+                            </div>
+                        </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="control-label" for="balance"><?= lang("balance"); ?></label>
                                 <?php
-                                    $wh["all"] = "All";
-                                    $wh["balance0"] = "Zero Balance";
-                                    $wh["owe"] = "Owe";
-                                
-                                echo form_dropdown('balance', $wh, (isset($_POST['balance']) ? $_POST['balance'] : "all"), 'class="form-control" id="balance" data-placeholder="' . $this->lang->line("select") . " " . $this->lang->line("balance") . '"');
+                                $wh["all"] = "All";
+                                $wh["balance0"] = "Zero Balance";
+                                $wh["owe"] = "Owe";
+
+                                echo form_dropdown('balance', $wh, (isset($_POST['balance']) ? $_POST['balance'] : ''), 'class="form-control" id="balance" data-placeholder="' . $this->lang->line("select") . " " . $this->lang->line("balance") . '"');
                                 ?>
                             </div>
                         </div>
-						
+
                     </div>
                     <div class="form-group">
                         <div
-                            class="controls"> <?php echo form_submit('submit_report', $this->lang->line("submit"), 'class="btn btn-primary"'); ?> </div>
+                                class="controls"> <?php echo form_submit('submit_report', $this->lang->line("submit"), 'class="btn btn-primary"'); ?> </div>
                     </div>
                     <?php echo form_close(); ?>
 
                 </div>
 
                 <div class="clearfix"></div>
+                <!-- report title-->
+                <div class="head-report">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <div class="current-date-print" style="display: none">
+                                <br>
+                                <br>
+                                <span><?php echo date("F d, Y"); ?></span><br>
+                                <span><?php echo date("h:i a") ?></span>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <div class="com-name text-center">  <!-- get company name -->
+                                <h3 style="font-size: 22px;">
+                                    <?= $billers->company; ?>
+                                </h3>     <!-- display company name from database -->
+                            </div>
+                            <h3 class="text-center" style="font-size: 25px">Collections Report</h3>
+                            <p class="text-center">
+                                <b>As of
+                                    <?php
+                                        if ($start_date2 != NULL){
+                                            echo $start_date2;
+                                        }else{
+                                            echo date("F d, Y");
+                                        }
+                                    ?>
+                                </b>
+                            </p> <!--get date filter-->
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
+
+                    </div>
+                </div>
                 <div class="table-responsive">
-                    <table id="POData" cellpadding="0" cellspacing="0" border="0"
-                           class="table table-bordered table-hover table-striped">
-                        <thead>
-						<?php 
-							foreach($cust_data as $cus){
-								$gbalance=0;
-						?>
-                        <tr>
-                            <th class="th_parent" colspan="10">Customer: <?= $cus['customerName'] ?></th>
-                        </tr>
-						<tr class="active">
-                            <th class="th_data"><?php echo $this->lang->line("reference_no"); ?></th>
-                            <th class="th_data"><?php echo $this->lang->line("date"); ?></th>
-                            <th class="th_data"><?php echo $this->lang->line("type"); ?></th>
-                            <th class="th_data"><?php echo $this->lang->line("amount"); ?></th>
-                            <th class="th_data"><?php echo $this->lang->line("return"); ?></th>
-                            <th class="th_data"><?php echo $this->lang->line("paid"); ?></th>
-                            <th class="th_data"><?php echo $this->lang->line("deposit"); ?></th>
-                            <th class="th_data"><?php echo $this->lang->line("discount"); ?></th>
-                            <th class="th_data"><?php echo $this->lang->line("balance"); ?></th>
-                            <th class="th_data" style="width:100px;"><?php echo $this->lang->line("actions"); ?></th>
-                        </tr>
-						<?php 
-								
-								$subTotal = $subReturn = $subDeposit = $subPaid = $subDiscount = 0;
-								foreach($cus['customerDatas']['custSO'] as $custData){
-									$subTotal += $custData->grand_total;
-									$subReturn += $custData->amount_return;
-									$subDeposit += $custData->amount_deposit;
-									$subDiscount += $custData->order_discount;
-									$sub_balance = ($custData->grand_total - $custData->amount_return - $custData->amount_deposit - $custData->order_discount);
-									$gbalance+=$sub_balance;
-						?>
-									<tr>
-										<td nowrap="nowrap"><?= $custData->reference_no ?></td>
-										<td><?= $this->erp->hrsd($custData->date) ?></td>
-										<td><?= (explode('-', $custData->reference_no)[0]=='INV'?"Invoice":(explode('/', $custData->reference_no)[0]=='SALE'?"Sale":"Not Assigned")) ?></td>
-										<td class="numeric"><?= $this->erp->formatMoney($custData->grand_total) ?></td>
-										<td class="numeric"><?= $this->erp->formatMoney($custData->amount_return) ?></td>
-										<td class="numeric"><?= $this->erp->formatMoney(0) ?></td>
-										<td class="numeric"><?= $this->erp->formatMoney($custData->amount_deposit) ?></td>
-										<td class="numeric"><?= $this->erp->formatMoney($custData->order_discount) ?></td>
-										<td class="numeric"><?= $this->erp->formatMoney($sub_balance) ?></td>
-										<td><a style="color:#000 !important;">View</a></td>
-									</tr>
-						<?php 	
-									foreach($custData->payments as $cusPmt){
-										$subPaid += abs($cusPmt->amount);
-						?>
-										<tr>
-											<td nowrap="nowrap" style="text-align:right;"><?= $cusPmt->reference_no ?></td>
-											<td><?= $this->erp->hrsd($cusPmt->date) ?></td>
-											<td><?= (explode('/', $cusPmt->reference_no)[0]=='RV'?"Payment":(explode('-', $cusPmt->reference_no)[0]=='RV'?"Payment":"Not Assigned")) ?></td>
-											<td class="numeric"><?= $this->erp->formatMoney(0) ?></td>
-											<td class="numeric"><?= $this->erp->formatMoney(0) ?></td>
-											<td class="numeric"><?= $this->erp->formatMoney(abs($cusPmt->amount)) ?></td>
-											<td class="numeric"><?= $this->erp->formatMoney(0) ?></td>
-											<td class="numeric"><?= $this->erp->formatMoney(0) ?></td>
-											<td class="numeric"><?= $this->erp->formatMoney(abs($cusPmt->amount)-$sub_balance) ?></td>
-											<td><a style="color:#000 !important;">View</a></td>
-										</tr>
-						<?php
-										$gbalance -= abs($cusPmt->amount);
-										$sub_balance -= abs($cusPmt->amount);
-									}//end supp payment
-								}//end supp data
-								
-								//********** total *********//
-						?>
-									<tr>
-										<td colspan="3" align="right">Total:</td>
-										<td class="numeric"><?= $this->erp->formatMoney($subTotal) ?></td>
-										<td class="numeric"><?= $this->erp->formatMoney($subReturn) ?></td>
-										<td class="numeric"><?= $this->erp->formatMoney($subPaid) ?></td>
-										<td class="numeric"><?= $this->erp->formatMoney($subDeposit) ?></td>
-										<td class="numeric"><?= $this->erp->formatMoney($subDiscount) ?></td>
-										<td class="numeric"><?= $this->erp->formatMoney($gbalance) ?></td>
-									</tr>
-						<?php
-							}//end supp list
-						?>
-                        
-                        </thead>
-                        <tbody>
-						
-                        </tbody>
-                        <tfoot class="dtFilter">
+                    <table id="POData" cellpadding="0" cellspacing="0" border="0" class="table table-condensed table-bordered table-hover table-striped">
+
                         <tr class="active">
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
+                            <th class="text-center" ><?php echo $this->lang->line("saleman"); ?></th>
+                            <th class="text-center"><?php echo $this->lang->line("Project"); ?></th>
+                            <th class="text-center"><?php echo $this->lang->line("type"); ?></th>
+                            <th class="text-center"><?php echo $this->lang->line("date"); ?></th>
+                            <th class="text-center"><?php echo $this->lang->line("reference"); ?></th>
+
+                            <th class="text-center"><?php echo $this->lang->line("amount"); ?></th>
+                            <th class="text-center"><?php echo $this->lang->line("return"); ?></th>
+                            <th class="text-center"><?php echo $this->lang->line("paid"); ?></th>
+                            <th class="text-center"><?php echo $this->lang->line("deposit"); ?></th>
+                            <th class="text-center"><?php echo $this->lang->line("discount"); ?></th>
+                            <th class="text-center"><?php echo $this->lang->line("balance"); ?></th>
                         </tr>
-                        </tfoot>
+
+                        <?php
+                        $total_sale2 = 0;
+                        $total_am2 = 0;
+                        $total_pay_amoun2 = 0;
+                        $total_return_amoun2 = 0;
+                        foreach($customers as $cus){
+                            $items = $this->accounts_model->getSaleByCustomerV2($cus->customer_id);
+                            if(is_array($items)){
+                                $am = 0;
+                                ?>
+                                <tr class="success">
+                                    <th class="th_parent" colspan="12"><?= lang("customer")?> <i class="fa fa-angle-double-right" aria-hidden="true"></i> <?= $cus->customer?></th>
+                                </tr>
+
+                                <?php
+                                $total_sale = 0;
+                                $total_pay_amoun = 0;
+                                $total_return_amoun = 0;
+                                $total_am = 0;
+                                foreach($items as $row){
+                                    $sale = $this->accounts_model->getSaleBySID($row->id);
+                                    $am = $sale->grand_total;
+                                    ?>
+                                    <tr>
+                                        <td>&nbsp;&nbsp;&nbsp;&nbsp;<?=$row->fullname?></td>
+                                        <td><?=$sale->biller?></td>
+                                        <td>Invoice</td>
+                                        <td><?=$this->erp->hrsd($sale->date)?></td>
+                                        <td><?=$sale->reference_no?></td>
+
+                                        <td class="text-right"><?=number_format($sale->grand_total,2)?></td>
+                                        <td  class="text-right"></td>
+                                        <td  class="text-right"></td>
+                                        <td  class="text-right"></td>
+                                        <td  class="text-right"></td>
+                                        <td  class="text-right"><?=number_format($am,2)?></td>
+                                    </tr>
+
+                                    <?php
+                                    $total_pay = 0;
+
+                                    $payment = $this->accounts_model->getPaymentBySID($row->id);
+                                    foreach($payment  as $pay){
+
+                                        if($pay->return_id){
+                                            $pay_return = (-1)*$pay->amount;
+                                            $payy = '('.number_format($pay->amount,2).')';
+                                        }else{
+                                            $pay_return = $pay->amount;
+                                            $payy = number_format($pay->amount,2);
+                                        }
+
+                                        if($pay->paid_by == "deposit"){
+                                            $deposit = 	$payy;
+                                            $payy = '';
+                                        }else{
+                                            $deposit = '';
+
+                                        }
+                                        $am = $am - ($pay_return+$pay->discount);
+                                        ?>
+                                        <tr>
+                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$row->fullname?></td>
+                                            <td><?=$pay->biller?></td>
+                                            <td>Payment</td>
+                                            <td><?=$this->erp->hrsd($pay->date)?></td>
+                                            <td><?=$pay->reference_no?></td>
+
+                                            <td></td>
+                                            <td></td>
+                                            <td class="text-right"><?= $payy?></td>
+                                            <td  class="text-right"><?= $deposit?></td>
+                                            <td  class="text-right"><?=$pay->discount?></td>
+                                            <td  class="text-right"><?php if($am<0){?>(<?=number_format(abs($am),2)?>) <?php }else{ echo number_format($am,2);}?></td>
+                                        </tr>
+
+                                        <?php
+                                        if($pay->paid_by != "deposit"){
+                                            $total_pay += $pay_return;
+                                        }
+                                    }
+                                    ?>
+                                    <?php
+                                    $total_return = 0;
+                                    $return_sale = $this->accounts_model->getReturnBySID($row->id);
+                                    foreach($return_sale as $return){
+                                        $am = $am - $return->grand_total;
+                                        ?>
+                                        <tr>
+                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$row->fullname?></td>
+                                            <td><?=$return->biller?></td>
+                                            <td>Return</td>
+                                            <td><?=$this->erp->hrsd($return->date)?></td>
+                                            <td><?=$return->reference_no?></td>
+
+                                            <td></td>
+                                            <td class="text-right"><?=number_format($return->grand_total,2)?></td>
+                                            <td class="text-right"></td>
+                                            <td class="text-right"></td>
+                                            <td class="text-right"></td>
+                                            <td  class="text-right"><?php if($am<0){?>(<?(number_format(abs($am),2))?>) <?php }else{ echo number_format($am,2);}?></td>
+                                        </tr>
+
+                                        <?php
+                                        $total_return += $return->grand_total;
+                                    }
+                                    ?>
+                                    <tr class="noBorder">
+                                        <td colspan="11" style="border:0;"></td>
+                                    </tr>
+                                    <?php
+                                    $total_sale += $sale->grand_total;
+                                    $total_pay_amoun += $total_pay;
+                                    $total_return_amoun += $total_return;
+                                    $total_am += $am;
+                                }
+                                ?>
+                                <tr>
+                                    <td class="text-right" colspan="5"><b>Total</b></td>
+
+
+                                    <td class="text-right"><b><?=number_format($total_sale,2)?></b></td>
+                                    <td class="text-right"><b><?=number_format($total_return_amoun,2)?></b></td>
+                                    <td class="text-right"><b><?=number_format($total_pay_amoun,2)?></b></td>
+                                    <td class="text-right"><b></b></td>
+                                    <td class="text-right"><b></b></td>
+                                    <td class="text-right"><b><?php if($total_am<0){?>(<?=number_format(abs($total_am),2)?>) <?php }else{ echo number_format($total_am,2);}?></b></td>
+                                </tr>
+                                <?php
+                                $total_sale2 +=$total_sale;
+                                $total_pay_amoun2 +=$total_pay_amoun;
+                                $total_return_amoun2 +=$total_return_amoun;
+                                $total_am2 += $total_am;
+                            }
+                        }
+                        ?>
+
+                        <tr class="foot">
+                            <td class="text-right" colspan="5"><b>Grand Total</b></td>
+
+                            <td class="text-right"><b><?=number_format($total_sale2,2)?></b></td>
+                            <td class="text-right"><b><?=number_format($total_return_amoun2,2)?></b></td>
+                            <td class="text-right"><b><?=number_format($total_pay_amoun2,2)?></b></td>
+                            <td class="text-right"><b></b></td>
+                            <td class="text-right"><b></b></td>
+                            <td class="text-right"><b><?php if($total_am2<0){?>(<?=number_format(abs($total_am2),2)?>) <?php }else{ echo number_format($total_am2,2);}?></b></td>
+                        </tr>
                     </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function(){
+
+        $("#excel").click(function(e){
+            e.preventDefault();
+            window.location.href = "<?=site_url('Account/arByCustomer/0/xls/'.$customer2.'/'.$start_date2.'/'.$end_date2.'/'.$balance2)?>";
+            return false;
+        });
+        $('#pdf').click(function (event) {
+            event.preventDefault();
+            window.location.href = "<?=site_url('Account/arByCustomer/pdf/?v=1'.$v)?>";
+            return false;
+        });
+
+    });
+</script>

@@ -10,10 +10,12 @@
             <div class="table-responsive">
                 <table class="table table-striped table-bordered" style="margin-bottom:0;">
                     <tbody>
+					<?php if($setting->show_company_code == 1) { ?>
 					<tr>
                         <td><strong><?= lang("code"); ?></strong></td>
                         <td><?= $supplier->code; ?></strong></td>
                     </tr>
+					<?php } ?>
                     <tr>
                         <td><strong><?= lang("company"); ?></strong></td>
                         <td><?= $supplier->company; ?></strong></td>

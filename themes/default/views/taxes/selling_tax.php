@@ -1,38 +1,15 @@
 <?php
 	$v = "";
-	/* if($this->input->post('name')){
-	  $v .= "&product=".$this->input->post('product');
-	  } */
-	if ($this->input->post('reference_no')) {
-		$v .= "&reference_no=" . $this->input->post('reference_no');
-	}
-	if ($this->input->post('customer')) {
-		$v .= "&customer=" . $this->input->post('customer');
-	}
-	if ($this->input->post('biller')) {
-		$v .= "&biller=" . $this->input->post('biller');
-	}
-	if ($this->input->post('warehouse')) {
-		$v .= "&warehouse=" . $this->input->post('warehouse');
-	}
-	if ($this->input->post('user')) {
-		$v .= "&user=" . $this->input->post('user');
-	}
-	if ($this->input->post('serial')) {
-		$v .= "&serial=" . $this->input->post('serial');
-	}
-	if ($this->input->post('start_date')) {
-		$v .= "&start_date=" . $this->input->post('start_date');
-	}
-	if ($this->input->post('end_date')) {
-		$v .= "&end_date=" . $this->input->post('end_date');
-	}
-	if(isset($date)){
-		$v .= "&d=" . $date;
+	if ($this->input->post('hide_tax')) {
+	$v .= "&hide=" . $this->input->post('hide_tax');
 	}
 
 ?>
-
+<style type="text/css">
+	.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td{
+		font-size:13px !important;
+	}
+</style>
 <script>
     $(document).ready(function () {
         var oTable = $('#SlRData').dataTable({
@@ -55,191 +32,203 @@
             },"aoColumns":[{
                 "bSortable": false,
                 "mRender": checkbox
-            },{"mRender": fld}, null, null, null, {"mRender": row_status},{"mRender": currencyFormat}, {"mRender": currencyFormat},{"mRender": currencyFormat},null,{"mRender": row_status_confirm}],
+            },{"mRender": fld}, null, null, null ,{"mRender": currencyFormat}, {"mRender": currencyFormat},{"mRender": currencyFormat},{"mRender": currencyFormat},{"mRender": currencyFormat},{"mRender": currencyFormat},null,{"mRender": row_status_confirm}],
             "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
-                var amount = 0, amount_tax = 0, total_amount = 0;
+                var amount = 0, amount_tax = 0, total_amount = 0,amount_d = 0, amount_tax_d = 0, total_amount_d = 0;
                 for (var i = 0; i < aaData.length; i++) {
-					amount 	   += parseFloat(aaData[aiDisplay[i]][6]);
-                    amount_tax += parseFloat(aaData[aiDisplay[i]][7]);
-					total_amount+=parseFloat(aaData[aiDisplay[i]][8])
-                        
+					amount +=parseFloat(aaData[aiDisplay[i]][5]);
+                    amount_tax 	+=parseFloat(aaData[aiDisplay[i]][6]);
+					total_amount+=parseFloat(aaData[aiDisplay[i]][7]);
+					if((aaData[aiDisplay[i]][8])!=null){
+						amount_d+=parseFloat(aaData[aiDisplay[i]][8]);
+					}
+					if((aaData[aiDisplay[i]][9])!=null){
+                    amount_tax_d+=parseFloat(aaData[aiDisplay[i]][9]);
+					}
+					if((aaData[aiDisplay[i]][10])!=null){
+					total_amount_d+=parseFloat(aaData[aiDisplay[i]][10]);
+					}
                 }
+
 				var nCells = nRow.getElementsByTagName('th');
-				nCells[6].innerHTML = currencyFormat(parseFloat(amount));
-                nCells[7].innerHTML = currencyFormat(parseFloat(amount_tax));
-				nCells[8].innerHTML = currencyFormat(parseFloat(total_amount));
-          
+				nCells[5].innerHTML = currencyFormat(parseFloat(amount));
+                nCells[6].innerHTML = currencyFormat(parseFloat(amount_tax));
+				nCells[7].innerHTML = currencyFormat(parseFloat(total_amount));
+				nCells[8].innerHTML = currencyFormat(parseFloat(amount_d));
+                nCells[9].innerHTML = currencyFormat(parseFloat(amount_tax_d));
+				nCells[10].innerHTML = currencyFormat(parseFloat(total_amount_d));
             }
         }).fnSetFilteringDelay().dtFilter([
-            {column_number: 1, filter_default_label: "[<?=lang('date');?> (yyyy-mm-dd)]", filter_type: "text", data: []},
-            {column_number: 2, filter_default_label: "[<?=lang('reference_no');?>]", filter_type: "text", data: []},
-            {column_number: 3, filter_default_label: "[<?=lang('biller');?>]", filter_type: "text", data: []},
-            {column_number: 4, filter_default_label: "[<?=lang('customer');?>]", filter_type: "text", data: []},
-            {column_number: 5, filter_default_label: "[<?=lang('payment_status');?>]", filter_type: "text", data: []},
-			{column_number: 6, filter_default_label: "[<?=lang('amount');?>]", filter_type: "text", data: []},
-			{column_number: 7, filter_default_label: "[<?=lang('amount_tax');?>]", filter_type: "text", data: []},
-			{column_number: 8, filter_default_label: "[<?=lang('total_amount');?>]", filter_type: "text", data: []},
-			{column_number: 9, filter_default_label: "[<?=lang('tax_ref_no');?>]", filter_type: "text", data: []},
-			{column_number: 10, filter_default_label: "[<?=lang('action');?>]", filter_type: "text", data: []},
+            {column_number: 1, 	filter_default_label: "[<?=lang('date');?> (yyyy-mm-dd)]", filter_type: "text", data: []},
+            {column_number: 2, 	filter_default_label: "[<?=lang('reference_no');?>]", filter_type: "text", data: []},
+            {column_number: 3, 	filter_default_label: "[<?=lang('biller');?>]", filter_type: "text", data: []},
+            {column_number: 4, 	filter_default_label: "[<?=lang('customer');?>]", filter_type: "text", data: []},
+			{column_number: 5, 	filter_default_label: "[<?=lang('amount');?>]", filter_type: "text", data: []},
+			{column_number: 6, 	filter_default_label: "[<?=lang('amount_tax');?>]", filter_type: "text", data: []},
+			{column_number: 7, 	filter_default_label: "[<?=lang('total_amount');?>]", filter_type: "text", data: []},
+			{column_number: 8, 	filter_default_label: "[<?=lang('amount_declare');?>]", filter_type: "text", data: []},
+			{column_number: 9, 	filter_default_label: "[<?=lang('amount_tax_declare');?>]", filter_type: "text", data: []},
+			{column_number: 10, 	filter_default_label: "[<?=lang('total_amount_declare');?>]", filter_type: "text", data: []},		
+			{column_number: 11, 	filter_default_label: "[<?=lang('remark');?>]", filter_type: "text", data: []},
         ], "footer");
     });
 </script>
 <script>
  $(document).ready(function () {
-        if (localStorage.getItem('remove_slls')) {
-            if (localStorage.getItem('slitems')) {
-                localStorage.removeItem('slitems');
+        if (__getItem('remove_slls')) {
+            if (__getItem('slitems')) {
+                __removeItem('slitems');
             }
-            if (localStorage.getItem('sldiscount')) {
-                localStorage.removeItem('sldiscount');
+            if (__getItem('sldiscount')) {
+                __removeItem('sldiscount');
             }
-            if (localStorage.getItem('sltax2')) {
-                localStorage.removeItem('sltax2');
+            if (__getItem('sltax2')) {
+                __removeItem('sltax2');
             }
-            if (localStorage.getItem('slref')) {
-                localStorage.removeItem('slref');
+            if (__getItem('slref')) {
+                __removeItem('slref');
             }
-            if (localStorage.getItem('slshipping')) {
-                localStorage.removeItem('slshipping');
+            if (__getItem('slshipping')) {
+                __removeItem('slshipping');
             }
-            if (localStorage.getItem('slwarehouse')) {
-                localStorage.removeItem('slwarehouse');
+            if (__getItem('slwarehouse')) {
+                __removeItem('slwarehouse');
             }
-            if (localStorage.getItem('slnote')) {
-                localStorage.removeItem('slnote');
+            if (__getItem('slnote')) {
+                __removeItem('slnote');
             }
-            if (localStorage.getItem('slinnote')) {
-                localStorage.removeItem('slinnote');
+            if (__getItem('slinnote')) {
+                __removeItem('slinnote');
             }
-            if (localStorage.getItem('slcustomer')) {
-                localStorage.removeItem('slcustomer');
+            if (__getItem('slcustomer')) {
+                __removeItem('slcustomer');
             }
-            if (localStorage.getItem('slbiller')) {
-                localStorage.removeItem('slbiller');
+            if (__getItem('slbiller')) {
+                __removeItem('slbiller');
             }
-            if (localStorage.getItem('slcurrency')) {
-                localStorage.removeItem('slcurrency');
+            if (__getItem('slcurrency')) {
+                __removeItem('slcurrency');
             }
-            if (localStorage.getItem('sldate')) {
-                localStorage.removeItem('sldate');
+            if (__getItem('sldate')) {
+                __removeItem('sldate');
             }
-            if (localStorage.getItem('slsale_status')) {
-                localStorage.removeItem('slsale_status');
+            if (__getItem('slsale_status')) {
+                __removeItem('slsale_status');
             }
-            if (localStorage.getItem('slpayment_status')) {
-                localStorage.removeItem('slpayment_status');
+            if (__getItem('slpayment_status')) {
+                __removeItem('slpayment_status');
             }
-            if (localStorage.getItem('paid_by')) {
-                localStorage.removeItem('paid_by');
+            if (__getItem('paid_by')) {
+                __removeItem('paid_by');
             }
-            if (localStorage.getItem('amount_1')) {
-                localStorage.removeItem('amount_1');
+            if (__getItem('amount_1')) {
+                __removeItem('amount_1');
             }
-            if (localStorage.getItem('paid_by_1')) {
-                localStorage.removeItem('paid_by_1');
+            if (__getItem('paid_by_1')) {
+                __removeItem('paid_by_1');
             }
-            if (localStorage.getItem('pcc_holder_1')) {
-                localStorage.removeItem('pcc_holder_1');
+            if (__getItem('pcc_holder_1')) {
+                __removeItem('pcc_holder_1');
             }
-            if (localStorage.getItem('pcc_type_1')) {
-                localStorage.removeItem('pcc_type_1');
+            if (__getItem('pcc_type_1')) {
+                __removeItem('pcc_type_1');
             }
-            if (localStorage.getItem('pcc_month_1')) {
-                localStorage.removeItem('pcc_month_1');
+            if (__getItem('pcc_month_1')) {
+                __removeItem('pcc_month_1');
             }
-            if (localStorage.getItem('pcc_year_1')) {
-                localStorage.removeItem('pcc_year_1');
+            if (__getItem('pcc_year_1')) {
+                __removeItem('pcc_year_1');
             }
-            if (localStorage.getItem('pcc_no_1')) {
-                localStorage.removeItem('pcc_no_1');
+            if (__getItem('pcc_no_1')) {
+                __removeItem('pcc_no_1');
             }
-            if (localStorage.getItem('cheque_no_1')) {
-                localStorage.removeItem('cheque_no_1');
+            if (__getItem('cheque_no_1')) {
+                __removeItem('cheque_no_1');
             }
-            if (localStorage.getItem('slpayment_term')) {
-                localStorage.removeItem('slpayment_term');
+            if (__getItem('slpayment_term')) {
+                __removeItem('slpayment_term');
             }
-            localStorage.removeItem('remove_slls');
+            __removeItem('remove_slls');
         }
 
         <?php if ($this->session->userdata('remove_slls')) {?>
-        if (localStorage.getItem('slitems')) {
-            localStorage.removeItem('slitems');
+        if (__getItem('slitems')) {
+            __removeItem('slitems');
         }
-        if (localStorage.getItem('sldiscount')) {
-            localStorage.removeItem('sldiscount');
+        if (__getItem('sldiscount')) {
+            __removeItem('sldiscount');
         }
-        if (localStorage.getItem('sltax2')) {
-            localStorage.removeItem('sltax2');
+        if (__getItem('sltax2')) {
+            __removeItem('sltax2');
         }
-        if (localStorage.getItem('slref')) {
-            localStorage.removeItem('slref');
+        if (__getItem('slref')) {
+            __removeItem('slref');
         }
-        if (localStorage.getItem('slshipping')) {
-            localStorage.removeItem('slshipping');
+        if (__getItem('slshipping')) {
+            __removeItem('slshipping');
         }
-        if (localStorage.getItem('slwarehouse')) {
-            localStorage.removeItem('slwarehouse');
+        if (__getItem('slwarehouse')) {
+            __removeItem('slwarehouse');
         }
-        if (localStorage.getItem('slnote')) {
-            localStorage.removeItem('slnote');
+        if (__getItem('slnote')) {
+            __removeItem('slnote');
         }
-        if (localStorage.getItem('slinnote')) {
-            localStorage.removeItem('slinnote');
+        if (__getItem('slinnote')) {
+            __removeItem('slinnote');
         }
-        if (localStorage.getItem('slcustomer')) {
-            localStorage.removeItem('slcustomer');
+        if (__getItem('slcustomer')) {
+            __removeItem('slcustomer');
         }
-        if (localStorage.getItem('slbiller')) {
-            localStorage.removeItem('slbiller');
+        if (__getItem('slbiller')) {
+            __removeItem('slbiller');
         }
-        if (localStorage.getItem('slcurrency')) {
-            localStorage.removeItem('slcurrency');
+        if (__getItem('slcurrency')) {
+            __removeItem('slcurrency');
         }
-        if (localStorage.getItem('sldate')) {
-            localStorage.removeItem('sldate');
+        if (__getItem('sldate')) {
+            __removeItem('sldate');
         }
-        if (localStorage.getItem('slsale_status')) {
-            localStorage.removeItem('slsale_status');
+        if (__getItem('slsale_status')) {
+            __removeItem('slsale_status');
         }
-        if (localStorage.getItem('slpayment_status')) {
-            localStorage.removeItem('slpayment_status');
+        if (__getItem('slpayment_status')) {
+            __removeItem('slpayment_status');
         }
-        if (localStorage.getItem('paid_by')) {
-            localStorage.removeItem('paid_by');
+        if (__getItem('paid_by')) {
+            __removeItem('paid_by');
         }
-        if (localStorage.getItem('amount_1')) {
-            localStorage.removeItem('amount_1');
+        if (__getItem('amount_1')) {
+            __removeItem('amount_1');
         }
-        if (localStorage.getItem('paid_by_1')) {
-            localStorage.removeItem('paid_by_1');
+        if (__getItem('paid_by_1')) {
+            __removeItem('paid_by_1');
         }
-        if (localStorage.getItem('pcc_holder_1')) {
-            localStorage.removeItem('pcc_holder_1');
+        if (__getItem('pcc_holder_1')) {
+            __removeItem('pcc_holder_1');
         }
-        if (localStorage.getItem('pcc_type_1')) {
-            localStorage.removeItem('pcc_type_1');
+        if (__getItem('pcc_type_1')) {
+            __removeItem('pcc_type_1');
         }
-        if (localStorage.getItem('pcc_month_1')) {
-            localStorage.removeItem('pcc_month_1');
+        if (__getItem('pcc_month_1')) {
+            __removeItem('pcc_month_1');
         }
-        if (localStorage.getItem('pcc_year_1')) {
-            localStorage.removeItem('pcc_year_1');
+        if (__getItem('pcc_year_1')) {
+            __removeItem('pcc_year_1');
         }
-        if (localStorage.getItem('pcc_no_1')) {
-            localStorage.removeItem('pcc_no_1');
+        if (__getItem('pcc_no_1')) {
+            __removeItem('pcc_no_1');
         }
-        if (localStorage.getItem('cheque_no_1')) {
-            localStorage.removeItem('cheque_no_1');
+        if (__getItem('cheque_no_1')) {
+            __removeItem('cheque_no_1');
         }
-        if (localStorage.getItem('slpayment_term')) {
-            localStorage.removeItem('slpayment_term');
+        if (__getItem('slpayment_term')) {
+            __removeItem('slpayment_term');
         }
         <?php $this->erp->unset_data('remove_slls');}
         ?>
 
         $(document).on('click', '.sledit', function (e) {
-            if (localStorage.getItem('slitems')) {
+            if (__getItem('slitems')) {
                 e.preventDefault();
                 var href = $(this).attr('href');
                 bootbox.confirm("<?=lang('you_will_loss_sale_data')?>", function (result) {
@@ -300,8 +289,21 @@
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
             		<i class="icon fa fa-tasks tip" data-placement="left" title="<?= lang("actions") ?>"></i></a>
                     <ul class="dropdown-menu pull-right" class="tasks-menus" role="menu" aria-labelledby="dLabel">
-                      <li><a href="<?= site_url('taxes/combine_tax'); ?>" data-toggle="modal" data-target="#myModal"
-                               id="add_salllingtax"><i class="fa fa-plus-circle"></i> <?= lang("add_sale_tax"); ?></a></li>
+						<li>
+							<a href="<?= site_url('taxes/combine_tax'); ?>" data-toggle="modal" data-target="#myModal"
+                               id="add_salllingtax"><i class="fa fa-plus-circle"></i> <?= lang("declare"); ?></a>
+						</li>
+						<li>
+                            <a href="#" id="delete" data-action="delete">
+                                <i class="fa fa-trash-o"></i> <?= lang('non-declare') ?>
+                            </a>
+                        </li>
+						<li>
+                            <a href="#" id="hide_selling_tax" data-action="hide_selling_tax">
+                                <i class="fa fa-eye-slash"></i> <?= lang('hide_tax') ?>
+                            </a>
+                        </li>	   
+							   
                         <li><a href="<?= site_url('account/import_journal_csv'); ?>" data-toggle="modal"
                                data-target="#myModal"><i class="fa fa-plus-circle"></i> <?= lang("Add Journal By CSV"); ?>
                             </a></li>
@@ -316,105 +318,27 @@
     </div>
     <div class="box-content">
         <div class="row">
-            <div class="col-lg-12">
-                <div id="form">
-
-                    <?php echo form_open("reports/sales"); ?>
+            <div class="col-lg-12">   
+				<?= form_open('taxes/selling_tax', 'id="action-search"') ?>
+				<div id="form">
                     <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="control-label" for="reference_no"><?= lang("reference_no"); ?></label>
-                                <?php echo form_input('reference_no', (isset($_POST['reference_no']) ? $_POST['reference_no'] : ""), 'class="form-control tip" id="reference_no"'); ?>
-
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="control-label" for="user"><?= lang("created_by"); ?></label>
-                                <?php
-                                $us[""] = "";
-                                foreach ($users as $user) {
-                                    $us[$user->id] = $user->first_name . " " . $user->last_name;
-                                }
-                                echo form_dropdown('user', $us, (isset($_POST['user']) ? $_POST['user'] : ""), 'class="form-control" id="user" data-placeholder="' . $this->lang->line("select") . " " . $this->lang->line("user") . '"');
-                                ?>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="control-label" for="customer"><?= lang("customer"); ?></label>
-                                <?php echo form_input('customer', (isset($_POST['customer']) ? $_POST['customer'] : ""), 'class="form-control" id="customer" data-placeholder="' . $this->lang->line("select") . " " . $this->lang->line("customer") . '"'); ?>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="control-label" for="biller"><?= lang("biller"); ?></label>
-                                <?php
-                                $bl[""] = "";
-                                foreach ($billers as $biller) {
-                                    $bl[$biller->id] = $biller->company != '-' ? $biller->company : $biller->name;
-                                }
-                                echo form_dropdown('biller', $bl, (isset($_POST['biller']) ? $_POST['biller'] : ""), 'class="form-control" id="biller" data-placeholder="' . $this->lang->line("select") . " " . $this->lang->line("biller") . '"');
-                                ?>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="control-label" for="warehouse"><?= lang("warehouse"); ?></label>
-                                <?php
-                                $wh[""] = "";
-                                foreach ($warehouses as $warehouse) {
-                                    $wh[$warehouse->id] = $warehouse->name;
-                                }
-                                echo form_dropdown('warehouse', $wh, (isset($_POST['warehouse']) ? $_POST['warehouse'] : ""), 'class="form-control" id="warehouse" data-placeholder="' . $this->lang->line("select") . " " . $this->lang->line("warehouse") . '"');
-                                ?>
-                            </div>
-                        </div>
-						<?php if($this->Settings->product_serial) { ?>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <?= lang('serial_no', 'serial'); ?>
-                                    <?= form_input('serial', '', 'class="form-control tip" id="serial"'); ?>
-                                </div>
-                            </div>
-                        <?php } ?>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <?= lang("start_date", "start_date"); ?>
-                                <?php echo form_input('start_date', (isset($_POST['start_date']) ? $_POST['start_date'] : ""), 'class="form-control datetime" id="start_date"'); ?>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <?= lang("end_date", "end_date"); ?>
-                                <?php echo form_input('end_date', (isset($_POST['end_date']) ? $_POST['end_date'] : ""), 'class="form-control datetime" id="end_date"'); ?>
-                            </div>
-                        </div>
-						<div class="col-sm-4">
+						<div class="col-md-4">
 							<div class="form-group">
-								<label class="control-label"
-									for="customer_group"><?php echo $this->lang->line("group_customer"); ?>
-								</label>
-								<div class="controls"> <?php
-									foreach ($customer_groups as $customer_group) {
-										$cgs[$customer_group->id] = $customer_group->name;
-									}
-									echo form_dropdown('customer_group', $cgs, $this->Settings->customer_group, 'class="form-control tip select" id="customer_group" style="width:100%;"');
-									?>
-								</div>
+								<input type="checkbox" <?php if ($this->input->post('hide_tax')) {echo 'checked';}?> id="hdie_tax" class="form-control" name="hide_tax" value="1">
+								<span>Show all</span>
 							</div>
-                        </div>
+						</div>
                     </div>
                     <div class="form-group">
                         <div
                             class="controls"> <?php echo form_submit('submit_report', $this->lang->line("submit"), 'class="btn btn-primary"'); ?> </div>
                     </div>
                     <?php echo form_close(); ?>
-
                 </div>
-                <div class="clearfix"></div>
-
+                <div class="clearfix"></div>				
+				<?= form_open('taxes/selling_tax_action', 'id="action-form"') ?>
+				<input type="hidden" name="form_action" value="" id="form_action"/>
+				<input type="hidden" name="check_action" value="123" id="check_action"/>
                 <div class="table-responsive">
                     <table id="SlRData"
                            class="table table-bordered table-hover table-striped table-condensed reports-table">
@@ -427,12 +351,14 @@
                             <th><?= lang("reference_no"); ?></th>
                             <th><?= lang("biller"); ?></th>
                             <th><?= lang("customer"); ?></th>
-                            <th><?= lang("payment_status"); ?></th>
 							<th><?= lang("amount"); ?></th>
-							<th><?= lang("amount_tax"); ?></th>
+							<th><?= lang("vat"); ?></th>
 							<th><?= lang("total_amount"); ?></th>
-							<th><?= lang("tax_ref_no"); ?></th>
-							<th><?= lang("action"); ?></th>
+							<th><?= lang("amount_declare"); ?></th>
+							<th><?= lang("vat_declare"); ?></th>
+							<th><?= lang("total_amount_declare"); ?></th>
+							<th><?= lang("Remark"); ?></th>
+							<th><?= lang("status"); ?></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -449,12 +375,14 @@
                             <th></th>
                             <th></th>
                             <th></th>
-							<th></th>
+                            <th></th>
                             <th></th>
 							<th></th>
                             <th></th>
 							<th></th>
+                            <th></th>
 							<th></th>
+							<th>Status</th>
                         </tr>
                         </tfoot>
                     </table>
@@ -463,15 +391,12 @@
         </div>
     </div>
 </div>
-<?php if ($Owner) {?>
     <div style="display: none;">
-        <input type="hidden" name="form_action" value="" id="form_action"/>
         <?=form_submit('performAction', 'performAction', 'id="action-form-submit"')?>
     </div>
     <?= form_close()?>
-<?php }
-?>
-<script type="text/javascript" charset="utf-8">
+
+	<script type="text/javascript" charset="utf-8">
 	$(document).ready(function() {
 		$('body').on('click', '#add_salllingtax', function() {
 			if($('.checkbox').is(":checked") === false){
@@ -489,7 +414,9 @@
 			$('#myModal').modal({remote: '<?=base_url('taxes/combine_tax');?>?data=' + arrItems + ''});
 			$('#myModal').modal('show');
 		});
+		
 
+		
 		$("#excel").click(function(e){
 			e.preventDefault();
 			window.location.href = "<?=site_url('Taxes/getSalesReport/0/xls/')?>";
@@ -500,5 +427,62 @@
             window.location.href = "<?=site_url('Taxes/getSalesReport/pdf/?v=1'.$v)?>";
             return false;
         });
+		
+		
+		$('body').on('click', '#edit_salllingtax', function() {
+			if($('.checkbox').is(":checked") === false){
+				alert('Please select at least one.');
+				return false;
+			}
+			var arrItems = [];
+			$('.checkbox').each(function(i){
+				if($(this).is(":checked")){
+					if($(this).val() != ""){
+						arrItems[i] = $(this).val();   
+					}
+				}
+			});
+			$('#myModal').modal({remote: '<?=base_url('taxes/edit_selling_tax');?>?data=' + arrItems + ''});
+			$('#myModal').modal('show');
+		});
+		$('body').on('click', '#remove_salllingtax', function() {
+			if($('.checkbox').is(":checked") === false){
+				alert('Please select at least one.');
+				return false;
+			}
+			var arrItems = [];
+			$('.checkbox').each(function(i){
+				if($(this).is(":checked")){
+					if($(this).val() != ""){
+						arrItems[i] = $(this).val();   
+					}
+				}
+			});
+			$('#myModal').modal({remote: '<?=base_url('taxes/remove_selling_tax');?>?data=' + arrItems + ''});
+			$('#myModal').modal('show');
+		});
+		
+		$('#delete').click(function (e) {
+            e.preventDefault();
+            $('#form_action').val(this.id);
+            $('#action-form-submit').trigger('click');
+        });
+		$('#hide_selling_tax').click(function (e) {
+		
+            e.preventDefault();
+            $('#form_action').val('hide_selling_tax');
+			$('#action-form').submit();
+        });
+		
+		
+		$('#declare').click(function (e) {
+            e.preventDefault();
+            $('#form_action').val(this.id);
+            $('#action-form').submit();
+		
+        });
+
+		
+		
 	});
 </script>

@@ -19,9 +19,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $config['base_url']  =  "http://".$_SERVER['HTTP_HOST'];
 $config['base_url'] .= preg_replace('@/+$@', '', dirname($_SERVER['SCRIPT_NAME'])).'/';
 
-//$config['base_url'] = 'http://175.100.16.37:8080/CloudNET/iCloudERP_ACC_Admin';
-//$config['base_url'] = 'http://175.100.35.116:8080/CloudNET/iCloudERP_ACC_Admin';
-
 /*
 |--------------------------------------------------------------------------
 | Index File
@@ -49,6 +46,7 @@ $config['index_page'] = '';
 |
 | WARNING: If you set this to 'PATH_INFO', URIs will always be URL-decoded!
 */
+
 $config['uri_protocol'] = 'REQUEST_URI';
 
 /*
@@ -360,10 +358,10 @@ $config['encryption_key'] = 'sNphPCQS7o0ALejvFcEOXxTVYWHkbDz59m1RJ';
 */
 $config['sess_driver'] = 'database';
 $config['sess_cookie_name'] = 'sess';
-$config['sess_expiration'] = 7200;
+$config['sess_expiration'] = 720000000;
 $config['sess_save_path'] = 'sessions';
 $config['sess_match_ip'] = FALSE;
-$config['sess_time_to_update'] = 3000;
+$config['sess_time_to_update'] = 300000000;
 $config['sess_regenerate_destroy'] = FALSE;
 
 /*
@@ -429,12 +427,12 @@ $config['global_xss_filtering'] = TRUE;
 | 'csrf_regenerate' = Regenerate token on every submission
 | 'csrf_exclude_uris' = Array of URIs which ignore CSRF checks
 */
-$config['csrf_protection'] = TRUE;
+$config['csrf_protection'] = FALSE;
 $config['csrf_token_name'] = 'token';
 $config['csrf_cookie_name'] = 'token_cookie';
-$config['csrf_expire'] = 7200;
+$config['csrf_expire'] = 720000000000;
 $config['csrf_regenerate'] = FALSE;
-$config['csrf_exclude_uris'] = array('payments/paypalipn', 'payments/skrillipn', 'welcome/image_upload');
+$config['csrf_exclude_uris'] = array('payments/paypalipn', 'payments/skrillipn', 'welcome/image_upload','sales/getPQtyByDate');
 
 /*
 |--------------------------------------------------------------------------

@@ -1,8 +1,4 @@
 
-
-
-
-
 <div class="row">
     <div class="col-sm-12">
         <div class="row">
@@ -23,10 +19,15 @@
                     <p><?= lang('due_amount') ?></p>
                 </div>
             </div>
+			<style>
+				.col-sm-2 {
+					padding: 0;
+				}
+			</style>
             <div class="col-sm-6">
                 <div class="row">
 				
-				<!--	<div class="col-sm-3">
+					<div class="col-sm-2">
                         <div class="small-box padding1010 bblue">
                             <div class="inner clearfix">
                                 <a>
@@ -36,10 +37,10 @@
                                 </a>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
 				
-                    <div class="col-sm-3">
-                        <div class="small-box padding1010 bblue">
+                    <div class="col-sm-2">
+                        <div class="small-box padding1010 blightBlue">
                             <div class="inner clearfix">
                                 <a>
                                     <h3><?= $total_sales ?></h3>
@@ -49,8 +50,9 @@
                             </div>
                         </div>
                     </div>
-                <!--    <div class="col-sm-3">
-                        <div class="small-box padding1010 blightBlue">
+					
+                    <div class="col-sm-2">
+                        <div class="small-box padding1010 bblue">
                             <div class="inner clearfix">
                                 <a>
                                     <h3><?= $total_quotes ?></h3>
@@ -59,8 +61,21 @@
                                 </a>
                             </div>
                         </div>
-                    </div> -->
-                    <div class="col-sm-3">
+                    </div>
+					
+					<div class="col-sm-2">
+                        <div class="small-box padding1010 blightBlue">
+                            <div class="inner clearfix">
+                                <a>
+                                    <h3><?= $total_sales_order ?></h3>
+
+                                    <p><?= lang('total_sales_order') ?></p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+					
+                    <div class="col-sm-2">
                         <div class="small-box padding1010 borange">
                             <div class="inner clearfix">
                                 <a>
@@ -81,14 +96,17 @@
 <ul id="myTab" class="nav nav-tabs">
     <li class=""><a href="#sales-con" class="tab-grey"><?= lang('sales') ?></a></li>
     <li class=""><a href="#payments-con" class="tab-grey"><?= lang('payments') ?></a></li>
-   <!-- <li class=""><a href="#quotes-con" class="tab-grey"><?= lang('quotes') ?></a></li>-->
+    <li class=""><a href="#quotes-con" class="tab-grey"><?= lang('quotes') ?></a></li>
+    <li class=""><a href="#sales_order-con" class="tab-grey"><?= lang('sales_order') ?></a></li>
     <li class=""><a href="#returns-con" class="tab-grey"><?= lang('return_sales') ?></a></li>
-	<!--<li class=""><a href="#deposits-con" class="tab-grey"><?= lang('deposits') ?></a></li>-->
+	<li class=""><a href="#deposits-con" class="tab-grey"><?= lang('deposits') ?></a></li>
 	<li class=""><a href="#products-con" class="tab-grey"><?= lang('products') ?></a></li>
+	<li class=""><a href="#top-products-con" class="tab-grey"><?= lang('top_products') ?></a></li>
 </ul>
 
 <div class="tab-content">
-	<?php
+    <div id="sales-con" class="tab-pane fade in">
+        <?php
 			$v = "&customer=" . $user_id;
 
 			if ($this->input->post('submit_sale_report')) {
@@ -128,37 +146,29 @@
 						});
 						$.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
 					},
-					"aoColumns": [{"bSortable": false, "mRender": checkbox}, {"mRender": fld}, null, null, null, {
-						"bSearchable": false,
-						"mRender": pqFormatSaleReports
-					}, {
-						"bSearchable": false,
-						"mRender": pqFormatSaleReports
-					}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat},{"mRender": row_status}],
+					"aoColumns": [{"bSortable": false, "mRender": checkbox}, {"mRender": fld}, null, null, null, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat},{"mRender": row_status}],
 					"fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
 						var qty = 0, gtotal = 0, paid = 0, balance = 0,costs=0,profit=0;
 						for (var i = 0; i < aaData.length; i++) {
-							qty += parseFloat(aaData[aiDisplay[i]][6]);
-							gtotal += parseFloat(aaData[aiDisplay[i]][7]);
-							paid += parseFloat(aaData[aiDisplay[i]][8]);
-							balance += parseFloat(aaData[aiDisplay[i]][9]);
-							costs += parseFloat(aaData[aiDisplay[i]][10]);
-							profit += parseFloat(aaData[aiDisplay[i]][11]);
+							gtotal += parseFloat(aaData[aiDisplay[i]][5]);
+							paid += parseFloat(aaData[aiDisplay[i]][6]);
+							balance += parseFloat(aaData[aiDisplay[i]][7]);
+							costs += parseFloat(aaData[aiDisplay[i]][8]);
+							profit += parseFloat(aaData[aiDisplay[i]][9]);
 						}
 						var nCells = nRow.getElementsByTagName('th');
-						nCells[6].innerHTML = currencyFormat(parseFloat(qty));
-						nCells[7].innerHTML = currencyFormat(parseFloat(gtotal));
-						nCells[8].innerHTML = currencyFormat(parseFloat(paid));
-						nCells[9].innerHTML = currencyFormat(parseFloat(balance));
-						nCells[10].innerHTML = currencyFormat(parseFloat(costs));
-						nCells[11].innerHTML = currencyFormat(parseFloat(profit));
+						nCells[5].innerHTML = currencyFormat(parseFloat(gtotal));
+						nCells[6].innerHTML = currencyFormat(parseFloat(paid));
+						nCells[7].innerHTML = currencyFormat(parseFloat(balance));
+						nCells[8].innerHTML = currencyFormat(parseFloat(costs));
+						nCells[9].innerHTML = currencyFormat(parseFloat(profit));
 					}
 				}).fnSetFilteringDelay().dtFilter([
 					{column_number: 1, filter_default_label: "[<?=lang('date');?> (yyyy-mm-dd)]", filter_type: "text", data: []},
 					{column_number: 2, filter_default_label: "[<?=lang('reference_no');?>]", filter_type: "text", data: []},
 					{column_number: 3, filter_default_label: "[<?=lang('biller');?>]", filter_type: "text", data: []},
 					{column_number: 4, filter_default_label: "[<?=lang('customer');?>]", filter_type: "text", data: []},
-					{column_number: 12, filter_default_label: "[<?=lang('payment_status');?>]", filter_type: "text", data: []},
+					{column_number: 10, filter_default_label: "[<?=lang('payment_status');?>]", filter_type: "text", data: []},
 				], "footer");
 			});
         </script>
@@ -173,33 +183,10 @@
 					$("#form").slideUp();
 					return false;
 				});
-				$('body').on('click', '#excel_customer', function(e) {
-					e.preventDefault();
-					var i =0;
-					var items = [];
-					var hasCheck = false;
-					$.each($("input[name='val[]']:checked"), function(){
-						items[i] = $(this).val();
-						hasCheck = true;
-						i++;
-					});
-					if(hasCheck == false){
-						bootbox.alert('Please select!');
-						return false;
-					}
-					$('#val2').val(items);
-					$('#form_action2').val($(this).attr('data-action'));
-					$('#action-form-submit2').trigger('click');
-
-				});
 			});
         </script>
-    <div id="sales-con" class="tab-pane fade in">
-        <?php
-			echo form_open('reports/customer_sale_action', 'id="action-form"');
-		?>
+
         <div class="box sales-table">
-		
             <div class="box-header">
                 <h2 class="blue"><i class="fa-fw fa fa-heart nb"></i><?= lang('customer_sales_report'); ?> <?php
                 if ($this->input->post('start_date')) {
@@ -224,24 +211,26 @@
                 <div class="box-icon">
                     <ul class="btn-tasks">
                         <li class="dropdown">
-                            <a href="#" id="pdf" data-action="export_pdf" class="tip" title="<?= lang('download_pdf') ?>">
-                                <i class="icon fa fa-file-pdf-o"></i>
+                            <a href="#" id="pdf" class="tip" title="<?= lang('download_pdf') ?>">
+                                <i
+                                class="icon fa fa-file-pdf-o"></i>
                             </a>
                         </li>
                         <li class="dropdown">
-                            <a href="#" id="excel_customer" data-action="export_excel" class="tip" title="<?= lang('download_xls') ?>">
-                                <i class="icon fa fa-file-excel-o"></i>
+                            <a href="#" id="xls" class="tip" title="<?= lang('download_xls') ?>">
+                                <i
+                                class="icon fa fa-file-excel-o"></i>
+                            </a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" id="image" class="tip" title="<?= lang('save_image') ?>">
+                                <i
+                                class="icon fa fa-file-picture-o"></i>
                             </a>
                         </li>
                     </ul>
                 </div>
             </div>
-			<div style="display: none;">
-				<input type="hidden" name="form_action2" value="" id="form_action2"/>
-				<input type="hidden" name="val2" value="" id="val2"/>
-				<?= form_submit('performAction', 'performAction', 'id="action-form-submit2"') ?>
-			</div>
-			<?php echo form_close(); ?>
             <div class="box-content">
                 <div class="row">
                     <div class="col-lg-12">
@@ -330,8 +319,6 @@
                                         <th><?= lang("reference_no"); ?></th>
                                         <th><?= lang("biller"); ?></th>
                                         <th><?= lang("customer"); ?></th>
-                                        <th><?= lang("product"); ?></th>
-										<th><?= lang("quantity"); ?></th>
                                         <th><?= lang("grand_total"); ?></th>
                                         <th><?= lang("paid"); ?></th>
                                         <th><?= lang("balance"); ?></th>
@@ -354,8 +341,6 @@
                                         <th></th>
                                         <th></th>
                                         <th></th>
-                                        <th><?= lang("product"); ?></th>
-										<th><?= lang("quantity"); ?></th>
                                         <th><?= lang("grand_total"); ?></th>
                                         <th><?= lang("paid"); ?></th>
                                         <th><?= lang("balance"); ?></th>
@@ -366,6 +351,7 @@
                                 </tfoot>
                             </table>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -500,11 +486,11 @@
                                 <i class="icon fa fa-file-excel-o"></i>
                             </a>
                         </li>
-                    <!--    <li class="dropdown">
+                        <li class="dropdown">
                             <a href="#" id="image1" class="tip" title="<?= lang('save_image') ?>">
                                 <i class="icon fa fa-file-picture-o"></i>
                             </a>
-                        </li> -->
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -652,11 +638,11 @@
 								<i class="icon fa fa-file-excel-o"></i>
 							</a>
 						</li>
-					<!--	<li class="dropdown">
+						<li class="dropdown">
 							<a href="#" id="image1" class="tip image" title="<?= lang('save_image') ?>">
 								<i class="icon fa fa-file-picture-o"></i>
 							</a>
-						</li> -->
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -702,6 +688,123 @@
 			</div>
 		</div>
 	</div>
+	
+	<div id="sales_order-con" class="tab-pane fade in">
+		<script type="text/javascript">
+		$(document).ready(function () {
+			var oTable = $('#SoRData').dataTable({
+				"aaSorting": [[0, "desc"]],
+				"aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
+				"iDisplayLength": <?= $Settings->rows_per_page ?>,
+				'bProcessing': true, 'bServerSide': true,
+				'sAjaxSource': '<?= site_url('reports/getQuotesReport2/?v=1&customer='.$user_id) ?>',
+				'fnServerData': function (sSource, aoData, fnCallback) {
+					aoData.push({
+						"name": "<?= $this->security->get_csrf_token_name() ?>",
+						"value": "<?= $this->security->get_csrf_hash() ?>"
+					});
+					$.ajax({
+						'dataType': 'json',
+						'type': 'POST',
+						'url': sSource,
+						'data': aoData,
+						'success': fnCallback
+					});
+				},
+				"aoColumns": [{"mRender": fld}, null, null, null, {
+					"bSearchable": false,
+					"mRender": pqFormat
+				}, {"mRender": currencyFormat}, {"mRender": row_status}],
+				
+				"fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
+                var gtotal = 0, paid = 0, balance = 0;
+                for (var i = 0; i < aaData.length; i++) {
+					gtotal += parseFloat(aaData[aiDisplay[i]][4]);
+					paid += parseFloat(aaData[aiDisplay[i]][5]);
+					balance += parseFloat(aaData[aiDisplay[i]][6]);
+                }
+                var nCells = nRow.getElementsByTagName('th');
+                nCells[4].innerHTML = currencyFormat(parseFloat(gtotal));
+                nCells[5].innerHTML = currencyFormat(parseFloat(paid));
+                nCells[6].innerHTML = currencyFormat(parseFloat(balance));
+				}
+			
+			}).fnSetFilteringDelay().dtFilter([
+				{column_number: 0, filter_default_label: "[<?=lang('date');?> (yyyy-mm-dd)]", filter_type: "text", data: []},
+				{column_number: 1, filter_default_label: "[<?=lang('reference_no');?>]", filter_type: "text", data: []},
+				{column_number: 2, filter_default_label: "[<?=lang('biller');?>]", filter_type: "text", data: []},
+				{column_number: 3, filter_default_label: "[<?=lang('customer');?>]", filter_type: "text", data: []},
+			], "footer");
+		});
+		</script>
+		<div class="box">
+			<div class="box-header">
+				<h2 class="blue"><i class="fa-fw fa fa-heart-o nb"></i><?=  lang('sales_order'); ?>
+				</h2>
+
+				<div class="box-icon">
+					<ul class="btn-tasks">
+						<li class="dropdown">
+							<a href="#" id="pdf1" class="tip" title="<?= lang('download_pdf') ?>">
+								<i class="icon fa fa-file-pdf-o"></i>
+							</a>
+						</li>
+						<li class="dropdown">
+							<a href="#" id="xls1" class="tip" title="<?= lang('download_xls') ?>">
+								<i class="icon fa fa-file-excel-o"></i>
+							</a>
+						</li>
+						<li class="dropdown">
+							<a href="#" id="image1" class="tip image" title="<?= lang('save_image') ?>">
+								<i class="icon fa fa-file-picture-o"></i>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="box-content">
+				<div class="row">
+					<div class="col-lg-12">
+						<p class="introtext"><?php echo lang('list_results'); ?></p>
+
+						<div class="table-responsive">
+							<table id="SoRData" class="table table-bordered table-hover table-striped table-condensed">
+								<thead>
+									<tr>
+										<th><?= lang("date"); ?></th>
+										<th><?= lang("reference_no"); ?></th>
+										<th><?= lang("biller"); ?></th>
+										<th><?= lang("customer"); ?></th>
+										<th><?= lang("grand_total"); ?></th>
+										<th><?= lang("deposit"); ?></th>
+										<th><?= lang("balance"); ?></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td colspan="7"
+										class="dataTables_empty"><?= lang('loading_data_from_server') ?></td>
+									</tr>
+								</tbody>
+								<tfoot class="dtFilter">
+									<tr class="active">
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 	<div id="returns-con" class="tab-pane fade in">
 		<script>
 		$(document).ready(function () {
@@ -726,7 +829,7 @@
 				},
 				'fnRowCallback': function (nRow, aData, iDisplayIndex) {
 					var oSettings = oTable.fnSettings();
-					nRow.id = aData[7];
+					nRow.id = aData[8];
 					nRow.className = "return_link";
 					return nRow;
 				},
@@ -775,11 +878,11 @@
 								<i class="icon fa fa-file-excel-o"></i>
 							</a>
 						</li>
-					<!--	<li class="dropdown">
+						<li class="dropdown">
 							<a href="#" id="image5" class="tip image" title="<?= lang('save_image') ?>">
 								<i class="icon fa fa-file-picture-o"></i>
 							</a>
-						</li> -->
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -848,7 +951,7 @@
 		});
 		</script>
 		<div class="box">
-			<!-- <div class="box-header">
+			<div class="box-header">
 				<h2 class="blue"><i class="fa-fw fa fa-random nb"></i><?= lang('deposits'); ?>
 				</h2>
 				
@@ -872,8 +975,8 @@
 						</li>
 					</ul>
 				</div>
-				
-			</div> -->
+				-->
+			</div>
 			<div class="box-content">
 				<div class="row">
 					<div class="col-lg-12">
@@ -932,24 +1035,27 @@
 						$.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
 					},
 					"aoColumns": [
-						{"bSortable": false, "mRender": checkbox}, {"bSortable": false,"mRender": img_hl}, null, null, null, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": formatQuantity}
+						{"bSortable": false, "mRender": checkbox}, {"bSortable": false,"mRender": img_hl}, {"mRender": fld}, null, null, null, null, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": formatQuantity}
 					],
 					"fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
 						var co = 0, pr = 0, qty = 0;
 						for (var i = 0; i < aaData.length; i++) {
-							co += parseFloat(aaData[aiDisplay[i]][5]);
-							pr += parseFloat(aaData[aiDisplay[i]][6]);
-							qty += parseFloat(aaData[aiDisplay[i]][7]);
+							co += parseFloat(aaData[aiDisplay[i]][7]);
+							pr += parseFloat(aaData[aiDisplay[i]][8]);
+							qty += parseFloat(aaData[aiDisplay[i]][9]);
 						}
 						var nCells = nRow.getElementsByTagName('th');
-						nCells[5].innerHTML = currencyFormat(parseFloat(co));
-						nCells[6].innerHTML = currencyFormat(parseFloat(pr));
-						nCells[7].innerHTML = currencyFormat(parseFloat(qty));
+						nCells[7].innerHTML = currencyFormat(parseFloat(co));
+						nCells[8].innerHTML = currencyFormat(parseFloat(pr));
+						nCells[9].innerHTML = currencyFormat(parseFloat(qty));
 					}
 			}).fnSetFilteringDelay().dtFilter([
-				{column_number: 2, filter_default_label: "[<?=lang('product_code');?>]", filter_type: "text", data: []},
-				{column_number: 3, filter_default_label: "[<?=lang('product_name');?>]", filter_type: "text", data: []},
-				{column_number: 4, filter_default_label: "[<?=lang('category');?>]", filter_type: "text", data: []},
+				//{column_number: 1, filter_default_label: "[<?=lang('image');?> (yyyy-mm-dd)]", filter_type: "text", data: []},
+				{column_number: 2, filter_default_label: "[<?=lang('date');?> (yyyy-mm-dd)]", filter_type: "text", data: []},
+				{column_number: 3, filter_default_label: "[<?=lang('reference_no');?>]", filter_type: "text", data: []},
+				{column_number: 4, filter_default_label: "[<?=lang('product_code');?>]", filter_type: "text", data: []},
+				{column_number: 5, filter_default_label: "[<?=lang('product_name');?>]", filter_type: "text", data: []},
+				{column_number: 6, filter_default_label: "[<?=lang('category');?>]", filter_type: "text", data: []},
 			], "footer");
 		});
 		</script>
@@ -1024,6 +1130,8 @@
 										<input class="checkbox checkth" type="checkbox" name="check"/>
 									</th>
 									<th style="min-width:40px; width: 40px; text-align: center;"><?php echo $this->lang->line("image"); ?></th>
+									<th><?= lang("date")?></th>
+									<th><?= lang("reference_no")?></th>
 									<th><?= lang("product_code") ?></th>
 									<th><?= lang("product_name") ?></th>
 									<th><?= lang("category") ?></th>
@@ -1044,6 +1152,86 @@
 										</th>
 										<th style="min-width:40px; width: 40px; text-align: center;"><?php echo $this->lang->line("image"); ?></th>
 										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="top-products-con" class="tab-pane fade in">
+		<script>
+		$(document).ready(function () {
+			
+			var oTable = $('#TPRData').dataTable({
+					"aaSorting": [[5, "desc"]],
+					"aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
+					"iDisplayLength": <?= $Settings->rows_per_page ?>,
+					'bProcessing': true, 'bServerSide': true,
+					'sAjaxSource': '<?= site_url('reports/getProductsReports2/?v=1'.$p) ?>',
+					'fnServerData': function (sSource, aoData, fnCallback) {
+						aoData.push({
+							"name": "<?= $this->security->get_csrf_token_name() ?>",
+							"value": "<?= $this->security->get_csrf_hash() ?>"
+						});
+						$.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
+					},
+					"aoColumns": [
+						{"bSortable": false, "mRender": checkbox}, null, null, null, null, {"mRender": formatQuantity}],
+					"fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
+						var qty = 0;
+						for (var i = 0; i < aaData.length; i++) {
+							qty += parseFloat(aaData[aiDisplay[i]][5]);
+						}
+						var nCells = nRow.getElementsByTagName('th');
+						nCells[5].innerHTML = currencyFormat(parseFloat(qty));
+					}
+			}).fnSetFilteringDelay().dtFilter([
+				{column_number: 1, filter_default_label: "[<?=lang('reference_no');?>]", filter_type: "text", data: []},
+				{column_number: 2, filter_default_label: "[<?=lang('product_code');?>]", filter_type: "text", data: []},
+				{column_number: 3, filter_default_label: "[<?=lang('product_name');?>]", filter_type: "text", data: []},
+				{column_number: 4, filter_default_label: "[<?=lang('category');?>]", filter_type: "text", data: []},
+			], "footer");
+		});
+		</script>
+		
+		<div class="box">
+			<div class="box-content">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="table-responsive">
+							<table id="TPRData" class="table table-bordered table-hover table-striped">
+								<thead>
+								<tr class="primary">
+									<th style="min-width:30px; width: 30px; text-align: center;">
+										<input class="checkbox checkth" type="checkbox" name="check"/>
+									</th>
+									<th><?= lang("reference_no") ?></th>
+									<th><?= lang("product_code") ?></th>
+									<th><?= lang("product_name") ?></th>
+									<th><?= lang("category") ?></th>
+									<th><?= lang("quantity") ?></th>
+								</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td colspan="8" class="dataTables_empty"><?= lang('loading_data_from_server') ?></td>
+									</tr>
+								</tbody>
+								<tfoot class="dtFilter">
+									<tr class="active">
+										<th style="min-width:30px; width: 30px; text-align: center;">
+											<input class="checkbox checkft" type="checkbox" name="check"/>
+										</th>
 										<th></th>
 										<th></th>
 										<th></th>

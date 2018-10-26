@@ -8,19 +8,20 @@ class Transfers_model extends CI_Model
         parent::__construct();
     }
 
-    public function getProductNames($term, $warehouse_id, $limit = 10)
+    public function getProductNames($term, $warehouse_id, $limit = 20)
     {
-        $this->db->select('products.id, image, code, name, product_details, warehouses_products.quantity, cost, tax_rate, type, tax_method')
+        $this->db->select('products.id, image, products.code, products.name, product_details, warehouses_products.quantity, products.cost, tax_rate, type, tax_method, unit,warehouses_products_variants.option_id')
             ->join('warehouses_products', 'warehouses_products.product_id=products.id', 'left')
+            ->join('warehouses_products_variants', 'warehouses_products_variants.product_id=products.id', 'left')
             ->group_by('products.id');
         if ($this->Settings->overselling) {
-            $this->db->where("type = 'standard' AND (name LIKE '%" . $term . "%' OR code LIKE '%" . $term . "%' OR  concat(name, ' (', code, ')') LIKE '%" . $term . "%')");
+            $this->db->where("type = 'standard' AND (erp_products.name LIKE '%" . $term . "%' OR erp_products.code LIKE '%" . $term . "%' OR  concat(erp_products.name, ' (', erp_products.code, ')') LIKE '%" . $term . "%')");
         } else {
             $this->db->where("type = 'standard' AND warehouses_products.warehouse_id = '" . $warehouse_id . "' AND warehouses_products.quantity > 0 AND "
-                . "(name LIKE '%" . $term . "%' OR code LIKE '%" . $term . "%' OR  concat(name, ' (', code, ')') LIKE '%" . $term . "%')");
+                . "(erp_products.name LIKE '%" . $term . "%' OR erp_products.code LIKE '%" . $term . "%' OR  concat(name, ' (', erp_products.code, ')') LIKE '%" . $term . "%')");
         }
         $this->db->limit($limit);
-        $q = $this->db->get('products');
+        $q = $this->db->get('erp_products');
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
                 $data[] = $row;
@@ -44,85 +45,88 @@ class Transfers_model extends CI_Model
 
     public function addTransfer($data = array(), $items = array())
     {
-		$status = $data['status'];
+        $status = $data['status'];
         if ($this->db->insert('transfers', $data)) {
             $transfer_id = $this->db->insert_id();
-            if ($this->site->getReference('to') == $data['transfer_no']) {
-                $this->site->updateReference('to');
+            if ($this->site->getReference('to',$data['biller_id']) == $data['transfer_no']) {
+                $this->site->updateReference('to',$data['biller_id']);
             }
+
             foreach ($items as $item) {
-                $item['transfer_id'] = $transfer_id;
-				$option_id = $item['option_id'];
-				
-				if($option_id){
-					$option = $this->transfers_model->getProductOptionByID($option_id);
-					$item['quantity_balance'] = $item['quantity'] * $option->qty_unit;
-				}
-				
-                if ($status == 'completed') {                    
-					$item['date'] = date('Y-m-d');
-                    $item['warehouse_id'] = $data['from_warehouse_id'];
-					$item['status'] = 'received';
-					$item['quantity'] = $item['quantity'] * (-1) ;
-					$item['quantity_balance'] = $item['quantity_balance'] * (-1) ;
-                    $this->db->insert('purchase_items', $item);
-					
-					$item['date'] = date('Y-m-d');
-                    $item['warehouse_id'] = $data['to_warehouse_id'];
-                    $item['status'] = 'received';
-					$item['quantity'] = $item['quantity'] * (-1) ;
-					$item['quantity_balance'] = $item['quantity_balance']  * (-1);
-                    $this->db->insert('purchase_items', $item);
-                }else{
-					$this->db->insert('transfer_items', $item);
-				}
-				$this->site->syncQuantity(NULL, NULL, NULL, $item['product_id']);
+                $item['transfer_id'] 		= $transfer_id;
+				$option_id 					= $item['option_id'];
+				$this->db->insert('transfer_items', $item);
+				$transfer_item_id = $this->db->insert_id();
+
+                if ($status == 'completed') {
+                    $item['status'] 			= 'received';
+                    $item['transaction_type'] 	= 'TRANSFER';
+                    $item['transaction_id'] 	= $transfer_item_id;
+
+                    $this->syncTransderdItem($data['to_warehouse_id'], $data['from_warehouse_id'], $item, $transfer_item_id);
+
+                }
             }
+            optimizeTransferStock($data['date']);
+
             return true;
         }
         return false;
     }
 
-    public function updateTransfer($id, $data = array(), $items = array())
+    public function updateTransfer($id, $data = array(), $items = array(), $tran_items_id)
     {
-        $otransfer = $this->transfers_model->getTransferByID($id);
-        $oitems = $this->transfers_model->getAllTransferItems($id, $otransfer->status);
-        $ostatus = $otransfer->status;
-		$status = $data['status'];
-		
-		if ($this->db->update('transfers', $data, array('id' => $id)) && $this->db->delete('purchase_items', array('transfer_id' => $id))) {
+		$this->resetTransferActionsSync($id);
+        $status = $data['status'];
+        if ($this->db->update('transfers', $data, array('id' => $id))) {
+            $this->db->delete('transfer_items', array('transfer_id' => $id));
 			
 			foreach ($items as $item) {
-				$item['transfer_id'] = $id;
-				$option_id = $item['option_id'];
-				if($option_id){
-					$option = $this->transfers_model->getProductOptionByID($option_id);
-					$item['quantity_balance'] = $item['quantity'] * $option->qty_unit;
-				}
-				if ($status == 'completed') {
-					$item['date'] = date('Y-m-d');
-                    $item['warehouse_id'] = $data['from_warehouse_id'];
-					$item['status'] = 'received';
-					$item['quantity'] = $item['quantity'] * (-1) ;
-					$item['quantity_balance'] = $item['quantity_balance'] * (-1) ;					
-                    $this->db->insert('purchase_items', $item);
-					
-					$item['date'] = date('Y-m-d');
-                    $item['warehouse_id'] = $data['to_warehouse_id'];
-                    $item['status'] = 'received';
-					$item['quantity'] = $item['quantity'] * (-1) ;
-					$item['quantity_balance'] = $item['quantity_balance']  * (-1);
-                    $this->db->insert('purchase_items', $item);
-				}else{
-					$this->db->update('transfer_items', $item, array('id', $id));
-				}
-				$this->site->syncQuantity(NULL, NULL, NULL, $item['product_id']);
-			}
-			return true;
-		}
-		return false;
+                $item['transfer_id'] = $id;
+
+				$this->db->insert('transfer_items', $item);
+				$transfer_item_id = $this->db->insert_id();
+				
+                if ($status == 'completed') {
+                    $item['status'] 			= 'received';
+					$item['transaction_type'] 	= 'TRANSFER';
+					$item['transaction_id'] 	= $transfer_item_id;
+                    $this->syncTransderdItem($data['to_warehouse_id'], $data['from_warehouse_id'], $item);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+	
+	public function getProductWarehouseOptionQtyByUnitOne($id,$warehouse_id)
+	{
+        $this->db->select('COALESCE(SUM(quantity),0) AS qty');
+			$this->db->from('erp_warehouses_products');
+			$this->db->where('erp_warehouses_products.warehouse_id',$warehouse_id);
+	        $this->db->where('erp_warehouses_products.product_id',$id);
+	    $q = $this->db->get();
+		if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
 	}
 	
+	
+	public function getProductWarehouseOptionQtyByUnit($id,$warehouse_id,$option_id)
+	{
+		$this->db->select('quantity AS qty');
+		$this->db->from('erp_warehouses_products_variants');
+		$this->db->where('erp_warehouses_products_variants.warehouse_id',$warehouse_id);
+		$this->db->where('erp_warehouses_products_variants.product_id',$id);
+		$this->db->where('erp_warehouses_products_variants.option_id',$option_id);
+	    $q = $this->db->get();
+		if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+	}
+
     public function getProductWarehouseOptionQty($option_id, $warehouse_id)
     {
         $q = $this->db->get_where('warehouses_products_variants', array('option_id' => $option_id, 'warehouse_id' => $warehouse_id), 1);
@@ -192,10 +196,38 @@ class Transfers_model extends CI_Model
         return FALSE;
     }
 
-    public function getTransferByID($id)
+	public function getTransferByID($id=null, $wh=null)
     {
+        $ltrans = "(SELECT
+                        erp_transfer_items.product_id,
+                        erp_transfer_items.transfer_id,
+						
+                        IFNULL(
+                            SUM(
+                                erp_transfer_items.quantity * erp_product_variants.qty_unit
+                            ),
+                            erp_transfer_items.quantity
+                        ) AS qty
+                    FROM
+                        erp_transfer_items
+                    LEFT JOIN erp_product_variants ON erp_product_variants.id = erp_transfer_items.option_id
+                    GROUP BY
+                        
+                        erp_transfer_items.transfer_id
+                    ) AS erp_tran";
 
-        $q = $this->db->get_where('transfers', array('id' => $id), 1);
+        
+        $this->db->select("transfers.id as id,transfers.from_warehouse_id,erp_transfers.to_warehouse_id,transfers.date, transfer_no, from_warehouse_name as fname, from_warehouse_code as fcode, to_warehouse_name as tname,to_warehouse_code as tcode, erp_tran.qty, transfers.status, transfers.created_by, transfers.shipping, transfers.total_tax, transfers.note, transfers.attachment, transfers.total, transfers.grand_total, transfers.from_warehouse_name")
+            ->join('transfer_items', 'transfers.id = transfer_items.transfer_id', 'left')
+            ->join($ltrans,'erp_tran.product_id = transfer_items.product_id AND erp_tran.transfer_id = transfer_items.transfer_id','left')
+            ->group_by('transfers.transfer_no');
+            if($wh){
+                $this->db->where_in('erp_transfers.from_warehouse_id',$wh);
+            }
+
+        // $this->db->select($this->db->dbprefix('transfers') . '.id, ' . $this->db->dbprefix('transfers') . '.date, ' . $this->db->dbprefix('transfers') . '.transfer_no, ' . $this->db->dbprefix('transfers') . '.from_warehouse_name as fname, ' . $this->db->dbprefix('transfers') . '.from_warehouse_code as fcode, '.$this->db->dbprefix('transfers') . '.to_warehouse_name as tname,'.$this->db->dbprefix('transfers') . '.to_warehouse_code as tcode,'.$this->db->dbprefix('transfer_items') . '.quantity, '.$this->db->dbprefix('transfers') . '.status, from_warehouse_id, to_warehouse_id')  
+            // ->join('transfer_items', 'transfers.id=transfer_items.transfer_id', 'left');
+            $q = $this->db->get_where('transfers', array('transfers.id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
         }
@@ -206,17 +238,20 @@ class Transfers_model extends CI_Model
     public function getAllTransferItems($transfer_id, $status)
     {
         if ($status == 'completed') {
-            $this->db->select('purchase_items.*, product_variants.name as variant, products.unit')
-                ->from('purchase_items')
-                ->join('products', 'products.id=purchase_items.product_id', 'left')
-                ->join('product_variants', 'product_variants.id=purchase_items.option_id', 'left')
-                ->where('transfer_id', $transfer_id)
-				->where('purchase_items.quantity >', 0);
-        } else {
-            $this->db->select('transfer_items.*, product_variants.name as variant, products.unit')
+            $this->db->select('transfer_items.*, product_variants.name as variant, products.unit, IFNULL(SUM(erp_transfer_items.quantity * erp_product_variants.qty_unit),erp_transfer_items.quantity) as TQty,units.name')
                 ->from('transfer_items')
-                ->join('products', 'products.id=transfer_items.product_id', 'left')
-                ->join('product_variants', 'product_variants.id=transfer_items.option_id', 'left')
+                ->join('products', 'products.id = transfer_items.product_id', 'left')
+                ->join('product_variants', 'product_variants.id = transfer_items.option_id', 'left')
+                ->join('units', 'products.unit = units.id', 'left')
+                ->group_by('transfer_items.id')
+                ->where('transfer_id', $transfer_id);
+        } else {
+            $this->db->select('transfer_items.*, product_variants.name as variant, products.unit, IFNULL(SUM(erp_transfer_items.quantity * erp_product_variants.qty_unit),erp_transfer_items.quantity) as TQty,units.name')
+                ->from('transfer_items')
+                ->join('products', 'products.id = transfer_items.product_id', 'left')
+                ->join('product_variants', 'product_variants.id = transfer_items.option_id', 'left')
+				->join('units', 'products.unit = units.id', 'left')
+                ->group_by('transfer_items.id')
                 ->where('transfer_id', $transfer_id);
         }
         $q = $this->db->get();
@@ -230,6 +265,7 @@ class Transfers_model extends CI_Model
 
     public function getWarehouseProduct($warehouse_id, $product_id, $variant_id)
     {
+
         if ($variant_id) {
             $data = $this->getProductWarehouseOptionQty($variant_id, $warehouse_id);
             return $data;
@@ -237,8 +273,10 @@ class Transfers_model extends CI_Model
             $data = $this->getWarehouseProductQuantity($warehouse_id, $product_id);
             return $data;
         }
+
         return FALSE;
     }
+
 
     public function getWarehouseProductQuantity($warehouse_id, $product_id)
     {
@@ -248,44 +286,45 @@ class Transfers_model extends CI_Model
         }
         return FALSE;
     }
+	
+	
+	public function resetTransferActionsSync($id)
+	{
+		$otransfer = $this->transfers_model->getTransferByID($id);
+        $ostatus = $otransfer->status;
+		
+        if ($ostatus == 'sent' ||$ostatus == 'completed') {
+            $this->db->delete('purchase_items', array('transfer_id' => $id));
+        }
+	
+        $oitems = $this->transfers_model->getAllTransferItems($id, $ostatus);
+		if($oitems) {
+			foreach ($oitems as $item) {
+				$this->db->delete("inventory_valuation_details", array('field_id'=>$item->id, 'type' => 'TRANSFER'));
+				
+                $this->site->syncQuantitys(NULL, NULL, NULL, $item->product_id);
+            }
+			return true;
+		}
+		
+        return FALSE;
+	}
 
     public function resetTransferActions($id)
     {
+		
         $otransfer = $this->transfers_model->getTransferByID($id);
-        $oitems = $this->transfers_model->getAllTransferItems($id, $otransfer->status);
         $ostatus = $otransfer->status;
+		
+		
         if ($ostatus == 'sent' ||$ostatus == 'completed') {
-            // $this->db->update('purchase_items', array('warehouse_id' => $otransfer->from_warehouse_id, 'transfer_id' => NULL), array('transfer_id' => $otransfer->id));
-            foreach ($oitems as $item) {
-                $option_id = (isset($item->option_id) && ! empty($item->option_id)) ? $item->option_id : NULL;
-				$qty_balance = 0;
-				if($option_id){
-					$option = $this->getProductOptionByID($option_id);
-					$qty_balance = $item->quantity * $option->qty_unit;
-				}
-				
-                $clause = array('purchase_id' => NULL, 'transfer_id' => NULL, 'product_id' => $item->product_id, 'warehouse_id' => $otransfer->from_warehouse_id, 'option_id' => $option_id);
-                $pi = $this->site->getPurchasedItem(array('id' => $item->id));
-                if ($ppi = $this->site->getPurchasedItem($clause)) {
-					if($option_id){
-						$quantity_balance = $ppi->quantity_balance + $qty_balance;
-					}else{
-						$quantity_balance = $ppi->quantity_balance + $item->quantity;
-					}                    
-                    $this->db->update('purchase_items', array('quantity_balance' => $quantity_balance), $clause);
-                } else {
-                    $clause['quantity'] = $item->quantity;
-                    $clause['item_tax'] = 0;
-					if($option_id){
-						$clause['quantity_balance'] = $qty_balance;
-					}else{
-						$clause['quantity_balance'] = $item->quantity;
-					}
-                    
-                    $this->db->insert('purchase_items', $clause);
-                }
-            }
+            $this->db->delete('purchase_items', array('transfer_id' => $id));
+			
         }
+		
+		$this->site->syncQuantitys(NULL, NULL, NULL, $item['product_id']);
+		
+		
         return $ostatus;
     }
 
@@ -293,10 +332,9 @@ class Transfers_model extends CI_Model
     {
         $ostatus = $this->resetTransferActions($id);
         $oitems = $this->transfers_model->getAllTransferItems($id, $ostatus);
-        $tbl = $ostatus == 'completed' ? 'purchase_items' : 'transfer_items';
-        if ($this->db->delete('transfers', array('id' => $id)) && $this->db->delete($tbl, array('transfer_id' => $id))) {
-            foreach ($oitems as $item) {
-                $this->site->syncQuantity(NULL, NULL, NULL, $item->product_id);
+        if ($this->db->delete('transfers', array('id' => $id)) && $this->db->delete('transfer_items', array('transfer_id' => $id))) {
+			foreach ($oitems as $item) {
+                $this->site->syncQuantitys(NULL, NULL, NULL, $item->product_id);
             }
             return true;
         }
@@ -305,10 +343,10 @@ class Transfers_model extends CI_Model
 
     public function getProductOptions($product_id, $warehouse_id, $zero_check = TRUE)
     {
-        $this->db->select('product_variants.id as id, product_variants.name as name, product_variants.cost as cost, product_variants.quantity as total_quantity, warehouses_products_variants.quantity as quantity')
+        $this->db->select('product_variants.id as id, product_variants.name as name, products.cost as cost, product_variants.quantity as total_quantity, warehouses_products_variants.quantity as quantity,product_variants.qty_unit')
             ->join('warehouses_products_variants', 'warehouses_products_variants.option_id=product_variants.id', 'left')
+			->join('products','products.id = product_variants.product_id','left')
             ->where('product_variants.product_id', $product_id)
-            ->where('warehouses_products_variants.warehouse_id', $warehouse_id)
             ->group_by('product_variants.id');
         if ($zero_check) {
             $this->db->where('warehouses_products_variants.quantity >', 0);
@@ -322,7 +360,40 @@ class Transfers_model extends CI_Model
         }
         return FALSE;
     }
-
+	public function getUnitById($product_id,$warehouse_id)
+    {
+		$this->db->select('product_variants.id as id, product_variants.name as name, product_variants.cost as cost, product_variants.quantity as total_quantity, warehouses_products.quantity as quantity')
+            ->join('erp_warehouses_products', 'erp_warehouses_products.product_id=product_variants.product_id', 'left');
+            if ($this->Settings->overselling) {
+				$this->db->where('product_variants.product_id', $product_id);
+			} else {
+				$this->db->where('warehouses_products.warehouse_id', $warehouse_id);
+				$this->db->where('erp_warehouses_products.quantity >', 0);
+			}
+			$this->db->group_by('product_variants.id');
+        $q = $this->db->get('product_variants');
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return FALSE;
+    }
+	
+	public function  getTransferItemsByTransferId($transfer_id)
+    {
+		$this->db->select('transfer_items.id');
+		$q = $this->db->get_where('transfer_items', array('transfer_id' => $transfer_id));
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return FALSE;
+    }
+	
     public function getProductComboItems($pid, $warehouse_id)
     {
         $this->db->select('products.id as id, combo_items.item_code as code, combo_items.quantity as qty, products.name as name, warehouses_products.quantity as quantity')
@@ -341,9 +412,16 @@ class Transfers_model extends CI_Model
         return FALSE;
     }
 
-    public function getProductVariantByName($name, $product_id)
+    public function getProductVariantByName($variant_name, $product_id)
     {
-        $q = $this->db->get_where('product_variants', array('name' => $name, 'product_id' => $product_id), 1);
+        $q = $this->db->get_where('product_variants', array('name' => $variant_name, 'product_id' => $product_id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+    public function getVariantName($variant){
+        $q = $this->db->get_where('variants', array('id' => $variant), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
         }
@@ -370,46 +448,32 @@ class Transfers_model extends CI_Model
         return FALSE;
     }
 	
-	public function syncTransderdItem($product_id, $warehouse_id, $quantity, $option_id = NULL)
-    {		
-		if($option_id){
-			$option = $this->getProductOptionByID($option_id);
-			$quantity = $quantity * $option->qty_unit;
-		}
-        if ($pis = $this->getPurchasedItems($product_id, $warehouse_id, $option_id)) {
-            $balance_qty = $quantity;
-            foreach ($pis as $pi) {
-                if ($balance_qty <= $quantity && $quantity > 0) {
-                    if ($pi->quantity_balance >= $quantity) {
-                        $balance_qty = $pi->quantity_balance - $quantity;
-                        $this->db->update('purchase_items', array('quantity_balance' => $balance_qty), array('id' => $pi->id));
-                        $quantity = 0;
-                    } elseif ($quantity > 0) {
-                        $quantity = $quantity - $pi->quantity_balance;
-                        $balance_qty = $quantity;
-                        $this->db->update('purchase_items', array('quantity_balance' => 0), array('id' => $pi->id));
-                    }
-                }
-                if ($quantity == 0) { break; }
-            }
-        } else {
-            $clause = array('purchase_id' => NULL, 'transfer_id' => NULL, 'product_id' => $product_id, 'warehouse_id' => $warehouse_id, 'option_id' => $option_id);
-            if ($pi = $this->site->getPurchasedItem($clause)) {
-                $quantity_balance = $pi->quantity_balance - $quantity;
-                $this->db->update('purchase_items', array('quantity_balance' => $quantity_balance), $clause);
-            } else {
-                $clause['quantity'] = 0;
-                $clause['item_tax'] = 0;
-                $clause['quantity_balance'] = (0 - $quantity);
-                $this->db->insert('purchase_items', $clause);
-            }
-        }
-		//Please don't delete this commend i keep to know the flow
-		//Return worng when transfer many time 
-        //$this->site->syncQuantity(NULL, NULL, NULL, $product_id);
+	public function syncTransderdItem($to_warehouse_id = NULL, $from_warehouse_id = NULL, $item )
+    {
+
+		$item['warehouse_id'] 		= $to_warehouse_id;
+		$this->db->insert('purchase_items', $item);
+		$item['warehouse_id'] 		= $from_warehouse_id;
+		$item['quantity'] 			= (-1) * $item['quantity'];
+		$item['quantity_balance'] 	= (-1) * $item['quantity_balance'];
+		$this->db->insert('purchase_items', $item);
+        $this->site->syncQuantitys(NULL, NULL, NULL, $item['product_id']);
     }
 
-    public function getProductOptionByID($id)
+    public function getProductOptionByIDUnits($id)
+    {
+		$this->db->select('SUM(unit) as qty_unit')
+				 ->from('products')
+				 ->where('products.id', $id);
+		$q = $this->db->get();
+     
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+	
+	public function getProductOptionByID($id)
     {
         $q = $this->db->get_where('product_variants', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
@@ -452,4 +516,57 @@ class Transfers_model extends CI_Model
 		}
 		return false;
 	}
+
+   public function getTransfersInvoiceByID($id)
+    {
+        $this->db->select('erp_transfers.*, erp_users.username')
+                 ->from('transfers')
+                 ->join('erp_users','erp_transfers.created_by = erp_users.id','left')
+                 ->where('erp_transfers.id',$id);        
+        $q = $this->db->get();
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
+   public function getAllTransfersInvoice($transfer_id)
+    {
+        $this->db->select('erp_transfer_items.option_id,erp_transfers.*,erp_transfer_items.product_name,erp_transfer_items.product_code, erp_transfer_items.quantity, erp_units.name as unit');
+        $this->db->from('erp_transfers');
+        //$this->db->join('erp_companies','erp_transfers.delivery_by = erp_companies.id','left');
+        $this->db->join('erp_transfer_items','erp_transfer_items.transfer_id = erp_transfers.id', 'left');
+        $this->db->join('erp_products','erp_transfer_items.product_id = erp_products.id', 'left');
+        $this->db->join('erp_units','erp_products.unit = erp_units.id', 'left');
+        $this->db->group_by('erp_transfer_items.id');
+        
+        $this->db->where('erp_transfers.id',$transfer_id);
+        $q = $this->db->get();
+        if($q->num_rows()>0){
+            foreach($q->result() as $result){
+                $data[] = $result;
+            }
+            return $data;
+        }
+        return NULL;
+        
+    }
+
+    public function getVar($id){
+        $q = $this->db->get_where('erp_product_variants', array('id' => $id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
+    public function getUsingStockById($id)
+    {
+        $this->db->where('id',$id);
+        $q=$this->db->get('transfers');
+        if($q){
+            return $q->row();
+        }else{return false;}
+    }
+
 }

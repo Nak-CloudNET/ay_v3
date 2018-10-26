@@ -4,33 +4,33 @@
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-2x">&times;</i>
             </button>
-            <h4 class="modal-title" id="myModalLabel"><?php echo lang('add_deposit') . " (" . $company->name . ")"; ?></h4>
+            <h4 class="modal-title" id="myModalLabel"><?php echo lang('add_deposit') . " (" . $supplier->name . ")"; ?></h4>
         </div>
         <?php $attrib = array('data-toggle' => 'validator', 'role' => 'form');
         echo form_open("suppliers/add_deposit", $attrib); ?>
         <div class="modal-body">
             <p><?= lang('enter_info'); ?></p>
-			<input type="hidden" name="supplier_id" value="<?= $company->id;?>"/>
+			<input type="hidden" name="supplier_id" value="<?= $supplier->id;?>"/>
             <div class="row">
                 <div class="col-sm-12">
-					<!--<div class="form-group">
+					<div class="form-group">
 						<?= lang('reference_no', 'reference_no'); ?>
-						<div class="input-group">  
+						<!--<div class="input-group">  -->
 						<?= form_input('reference_no',$reference, 'class="form-control tip"  required  id="reference_no"'); ?>
 						<input type="hidden"  name="temp_reference_no"  id="temp_reference_no" value="<?= $reference ?>" />
-						<div class="input-group-addon no-print" style="padding: 2px 5px;background-color:white;">
+						<!--<div class="input-group-addon no-print">
 								<input type="checkbox" name="ref_status" id="ref_st" value="1" style="margin-top:3px;">
 							</div>
-						</div>
-					</div>-->
+						</div>-->
+					</div>
 					<?php if ($Owner || $Admin) { ?>
 						<div class="form-group">
-							<?= lang("biller", "biller"); ?>
+							<?= lang("project", "biller"); ?>
 							<?php
 							foreach ($billers as $biller) {
 								$bl[$biller->id] = $biller->company != '-' ? $biller->company : $biller->name;
 							}
-							echo form_dropdown('biller', $bl, (isset($_POST['biller']) ? $_POST['biller'] : $pos_settings->default_biller), 'class="form-control" id="posbiller" required="required"');
+							echo form_dropdown('biller', $bl, (isset($_POST['biller']) ? $_POST['biller'] : $Settings->default_biller), 'class="form-control" id="posbiller" required="required"');
 							?>
 						</div>
 					<?php } else {
@@ -84,6 +84,25 @@
 						</select>
 					</div>
 					
+					<div class="form-group">
+						<?= lang("bank_account", "bank_account_1"); ?>
+						<?php
+							$bank = array('0' => '-- Select Bank Account --');
+							if ($Owner || $Admin) {
+	                            foreach($bankAccounts as $bankAcc) {
+	                                $bank[$bankAcc->accountcode] = $bankAcc->accountcode . ' | '. $bankAcc->accountname;
+	                            }
+	                            echo form_dropdown('bank_account', $bank, '', 'id="bank_account_1" class="ba form-control kb-pad bank_account" required="true"');
+	                        } else {
+	                        	$ubank = array('0' => '-- Select Bank Account --');
+	                            foreach($userBankAccounts as $userBankAccount) {
+	                                $ubank[$userBankAccount->accountcode] = $userBankAccount->accountcode . ' | '. $userBankAccount->accountname;
+	                            }
+	                            echo form_dropdown('bank_account', $ubank, '', 'id="bank_account_1" class="ba form-control kb-pad bank_account" required="true"');
+	                        }
+						?>
+					</div>
+                         
 					<div class="form-group gc" style="display: none;">
 						<?= lang("gift_card_no", "gift_card_no"); ?>
 						<input name="gift_card_no" type="text" id="gift_card_no" class="pa form-control kb-pad"/>
@@ -246,7 +265,7 @@
         });
         $('#pcc_no_1').change(function (e) {
             var pcc_no = $(this).val();
-            localStorage.setItem('pcc_no_1', pcc_no);
+            __setItem('pcc_no_1', pcc_no);
             var CardType = null;
             var ccn1 = pcc_no.charAt(0);
             if (ccn1 == 4)

@@ -13,6 +13,14 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="col-md-5">
+
+							<div class="form-group">
+                                <?php echo lang('employee_code', 'employee_code'); ?>
+                                <div class="controls">
+                                    <?php echo form_input('emp_code', '', 'class="form-control" id="emp_code" '); ?>
+                                </div>
+                            </div>
+							
                             <div class="form-group">
                                 <?php echo lang('first_name', 'first_name'); ?>
                                 <div class="controls">
@@ -33,6 +41,20 @@
                                 echo form_dropdown('gender', $ge, (isset($_POST['gender']) ? $_POST['gender'] : ''), 'class="tip form-control" id="gender" data-placeholder="' . lang("select") . ' ' . lang("gender") . '" required="required"');
                                 ?>
                             </div>
+							
+							<div class="form-group">
+								<?= lang("date_of_birth", "date_of_birth"); ?>
+								<?php echo form_input('date_of_birth', '', 'class="form-control date" id="datepicker date_of_birth"'); ?>
+							</div>
+							
+							<div class="form-group">
+								<?= lang("nationality", "nationality"); ?>
+								<?php
+								$nationality[""] = "Select Nationality";
+								$nationality['Khmer'] = "Khmer";
+								echo form_dropdown('nationality', $nationality, '', 'class="form-control select" id="nationality" placeholder="' . lang("select") . ' ' . lang("nationality") . '" style="width:100%"')
+								?>
+							</div>
 
                             <div class="form-group">
                                 <?php echo lang('company', 'company'); ?>
@@ -56,6 +78,92 @@
                                     <?php /* echo form_input('email', '', 'class="form-control" id="email" required="required"'); */ ?>
                                 </div>
                             </div>
+							
+							<div class="form-group">
+                                <?php echo lang('position', 'position'); ?>
+                                <div class="controls">
+                                    <?php echo form_input('position', '', 'class="form-control" id="position"'); ?>
+                                </div>
+                            </div>
+							
+							<div class="form-group">
+                                <?php echo lang('salary', 'salary'); ?>
+                                <div class="controls">
+                                    <?php echo form_input('salary', '', 'class="form-control" id="salary"'); ?>
+                                </div>
+                            </div>
+							
+							<div class="form-group">
+                                <?php echo lang('allowance_', 'allowance_'); ?>
+                                <div class="controls">
+                                    <?php echo form_input('allowance_', '', 'class="form-control" id="allowance_"'); ?>
+                                </div>
+                            </div>
+							
+							<div class="form-group">
+                                <?php echo lang('spouse', 'spouse'); ?>
+                                <div class="controls">
+                                    <?php echo form_input('spouse', '', 'class="form-control" id="spouse"'); ?>
+                                </div>
+                            </div>
+							
+							<div class="form-group">
+                                <?php echo lang('number_of_child', 'number_of_child'); ?>
+                                <div class="controls">
+                                    <?php echo form_input('number_of_child', '', 'class="form-control" id="number_of_child"'); ?>
+                                </div>
+                            </div>
+							
+							<div class="form-group">
+								<?= lang("address", "address"); ?>
+								<div class="controls">
+									<?php echo form_textarea('address', (isset($_POST['address']) ? $_POST['address'] : ""), 'class="form-control" id="address" style="margin-top: 10px; height: 100px;"'); ?>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<?= lang("employeed_date", "employeed_date"); ?>
+								<div class="controls">
+									<?php echo form_input('employeed_date', '', 'class="form-control date" id="datepicker employeed_date"'); ?>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<?= lang("last_paid", "last_paid"); ?>
+								<div class="controls">
+									<?php echo form_input('last_paid', '', 'class="form-control date" id="datepicker last_paid"'); ?>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<?= lang("annual_leave", "annual_leave"); ?>
+								<div class="controls">
+									<?php echo form_input('annual_leave', '', 'class="form-control" id="annual_leave"'); ?>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<?= lang("annual_sick_days", "annual_sick_days"); ?>
+								<div class="controls">
+									<?php echo form_input('annual_sick_days', '', 'class="form-control" id="annual_sick_days"'); ?>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<?= lang("note", "note"); ?>
+								<div class="controls">
+									<?php echo form_textarea('note', (isset($_POST['note']) ? $_POST['note'] : ""), 'class="form-control" id="slinnote" style="margin-top: 10px; height: 100px;"'); ?>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<?= lang("emergency_contact", "emergency_contact"); ?>
+								<div class="controls">
+									<?php echo form_input('emergency_contact', '', 'class="form-control" id="emergency_contact"'); ?>
+								</div>
+							</div>
+							
+							
                             <div class="form-group">
                                 <?php echo lang('username', 'username'); ?>
                                 <div class="controls">
@@ -80,14 +188,18 @@
 
                         </div>
                         <div class="col-md-5 col-md-offset-1">
-
-                            <div class="form-group">
+							
+							<div class="form-group">
                                 <?= lang('status', 'status'); ?>
                                 <?php
                                 $opt = array(1 => lang('active'), 0 => lang('inactive'));
                                 echo form_dropdown('status', $opt, (isset($_POST['status']) ? $_POST['status'] : ''), 'id="status" required="required" class="form-control select" style="width:100%;"');
                                 ?>
                             </div>
+							
+							
+							
+							
                             <div class="form-group">
                                 <?= lang("group", "group"); ?>
                                 <?php
@@ -153,6 +265,35 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
+							<br>
+							<p><?= lang('taxation_type_of_employee') ?></p>
+                            <div class="row_checkedbox">
+                                <div class="col-md-20">
+                                    <label for="resident">
+                                        <input type="radio" name="empType" value="res" />
+                                        <?= lang('tax_on_salary_on_resedent_employees') ?>
+                                    </label>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="row_checkedbox">
+                                <div class="col-md-20">
+                                    <label for="non_resident">
+                                        <input type="radio" name="empType" value="nres" />
+                                        <?= lang('tax_on_salary_on_non_resedent_employees') ?>
+                                    </label>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="row_checkedbox">
+                                <div class="col-md-20">
+                                    <label class="checkbox" for="fringe_benefit">
+                                        <input type="checkbox" name="fringe_benefit" value="fb" id="fringe_benefit" />
+                                        <?= lang('tax_on_salary_on_fringe_benefit') ?>
+                                    </label>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
 
                         </div>
                     </div>
@@ -166,6 +307,7 @@
     </div>
 </div>
 <script type="text/javascript" charset="utf-8">
+	
 	var $biller = $("#biller");
 	$(window).load(function(){
 		billerChange();
@@ -196,8 +338,10 @@
 				success: function(result){
 					if(result){
 						$.each(result, function(i,val){
-							var id = val.id;
-							var name = val.name;
+							if(val!=null){
+							    var id = val.id;
+                                var name = val.name;
+                            }
 							var opt = '<option value="' + id + '">' + name + '</option>';
 							$("#warehouse").append(opt);
 							$("#warehouse").prop("selectedIndex", 0)

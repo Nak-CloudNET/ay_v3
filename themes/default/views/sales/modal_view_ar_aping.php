@@ -1,9 +1,21 @@
-<style>
-	hr{
-     border-color:#333;
-
- }
+<style type="text/css">
+	#SLData { white-space: nowrap;}
 </style>
+<?php
+function row_status($x){
+	if($x == 'completed' || $x == 'paid' || $x == 'sent' || $x == 'received' || $x == 'deposit') {
+		return '<div class="text-center"><span class="label label-success">'.lang($x).'</span></div>';
+	}elseif($x == 'pending' || $x == 'book' || $x == 'free'){
+		return '<div class="text-center"><span class="label label-warning">'.lang($x).'</span></div>';
+	}elseif($x == 'partial' || $x == 'transferring' || $x == 'ordered'  || $x == 'busy'  || $x == 'processing'){
+		return '<div class="text-center"><span class="label label-info">'.lang($x).'</span></div>';
+	}elseif($x == 'due' || $x == 'returned' || $x == 'regular'){
+		return '<div class="text-center"><span class="label label-danger">'.lang($x).'</span></div>';
+	}else{
+		return '<div class="text-center"><span class="label label-default">'.lang($x).'</span></div>';
+	}
+}
+?>
 <div class="modal-dialog modal-lg no-modal-header">
     <div class="modal-content">
         <div class="modal-body">
@@ -13,15 +25,21 @@
             <button type="button" class="btn btn-xs btn-default no-print pull-right" style="margin-right:15px;" onclick="window.print();">
                 <i class="fa fa-print"></i> <?= lang('print'); ?>
             </button>
-			<!--<div class="text-center">
-				<h1><?=lang('invoice')?></h1>
-			</div>-->
-            <?php if ($logo) { ?>
-                <div class="text-center" style="margin-bottom:20px;">
-                    <img src="<?= base_url() . 'assets/uploads/logos/' . $biller->logo; ?>"
-                    alt="<?= $biller->company != '-' ? $biller->company : $biller->name; ?>">
-                </div>
-                <?php } ?>
+
+            <?php
+                if ($Settings->system_management == 'project') { ?>
+                    <div class="text-center" style="margin-bottom:20px;">
+                        <img src="<?= base_url() . 'assets/uploads/logos/' . $Settings->logo2; ?>"
+                             alt="<?= $Settings->site_name; ?>">
+                    </div>
+            <?php } else { ?>
+                    <?php if ($logo) { ?>
+                        <div class="text-center" style="margin-bottom:20px;">
+                            <img src="<?= base_url() . 'assets/uploads/logos/' . $biller->logo; ?>"
+                                 alt="<?= $biller->company != '-' ? $biller->company : $biller->name; ?>">
+                        </div>
+                    <?php } ?>
+            <?php } ?>
                 <div class="well well-sm">
                     <div class="row bold" style="font-size:12px;">
                         <div class="col-xs-5">
@@ -49,34 +67,16 @@
               <div class="row" style="margin-bottom:15px;">
                 <div class="col-xs-6">
                     <?php echo $this->lang->line("from"); ?>:
-                    <h2 style="margin-top:10px;"><?= $biller->company != '-' ? $biller->company : $biller->name; ?></h2>
+                    <?php if ($Settings->system_management == 'project') { ?>
+                        <h2 style="margin-top:10px;"><?= $Settings->site_name; ?></h2>
+                    <?php } else { ?>
+                        <h2 style="margin-top:10px;"><?= $biller->company != '-' ? $biller->company : $biller->name; ?></h2>
+                    <?php } ?>
                     <?= $biller->company ? "" : "Attn: " . $biller->name ?>
 
                     <?php
                     echo $biller->address . "<br>" . $biller->city . " " . $biller->postal_code . " " . $biller->state . "<br>" . $biller->country;
 
-                    /* echo "<p>";
-
-                    if ($biller->cf1 != "-" && $biller->cf1 != "") {
-                        echo "<br>" . lang("bcf1") . ": " . $biller->cf1;
-                    }
-                    if ($biller->cf2 != "-" && $biller->cf2 != "") {
-                        echo "<br>" . lang("bcf2") . ": " . $biller->cf2;
-                    }
-                    if ($biller->cf3 != "-" && $biller->cf3 != "") {
-                        echo "<br>" . lang("bcf3") . ": " . $biller->cf3;
-                    }
-                    if ($biller->cf4 != "-" && $biller->cf4 != "") {
-                        echo "<br>" . lang("bcf4") . ": " . $biller->cf4;
-                    }
-                    if ($biller->cf5 != "-" && $biller->cf5 != "") {
-                        echo "<br>" . lang("bcf5") . ": " . $biller->cf5;
-                    }
-                    if ($biller->cf6 != "-" && $biller->cf6 != "") {
-                        echo "<br>" . lang("bcf6") . ": " . $biller->cf6;
-                    }
-
-                    echo "</p>"; */
                     echo lang("tel") . ": " . $biller->phone . "<br>" . lang("email") . ": " . $biller->email;
                     ?>
                 </div>
@@ -116,12 +116,11 @@
             </div>
 
             <div class="table-responsive">
-                <table id="SLData" class="table table-bordered table-hover table-striped">
+                <table id="SLData" class="table table-bordered table-condensed table-hover table-striped">
                     <thead>
                         <tr>
                             <th><?php echo $this->lang->line("date"); ?></th>
                             <th><?php echo $this->lang->line("reference_no"); ?></th>
-                            <th><?php echo $this->lang->line("shop"); ?></th>
                             <th><?php echo $this->lang->line("customer"); ?></th>
                             <th><?php echo $this->lang->line("sale_status"); ?></th>
                             <th><?php echo $this->lang->line("grand_total"); ?></th>
@@ -166,13 +165,12 @@
                                 echo '<tr class="link_ar_to" id="' . $rws->id . '">';
                                 echo '<td>' . $rws->date . '</td>';
                                 echo '<td>' . $rws->reference_no . '</td>';
-                                echo '<td>' . $rws->biller . '</td>';
                                 echo '<td>' . $rws->customer . '</td>';
-                                echo '<td>' . $rws->sale_status . '</td>';
-                                echo '<td>' . $rws->grand_total . '</td>';
-                                echo '<td>' . $rws->paid . '</td>';
-                                echo '<td>' . $rws->balance . '</td>';
-                                echo '<td>' . $rws->payment_status . '</td>';
+                                echo '<td>' . row_status($rws->sale_status) . '</td>';
+                                echo '<td>' . $this->erp->formatMoney($rws->grand_total) . '</td>';
+                                echo '<td>' . $this->erp->formatMoney($rws->paid) . '</td>';
+                                echo '<td>' . $this->erp->formatMoney($rws->balance) . '</td>';
+                                echo '<td>' . row_status($rws->payment_status) . '</td>';
                                 echo '</tr>';
                                 $grandTotal += $rws->grand_total;
                                 $paidTotal += $rws->paid;
@@ -189,8 +187,7 @@
                     <tfoot class="dtFilter">
                     <tr class="active">
                             <th><?php echo $this->lang->line("date"); ?></th>
-                            <th><?php echo $this->lang->line("reference_no"); ?></th>
-                            <th><?php echo $this->lang->line("shop"); ?></th>
+                            <th><?php echo $this->lang->line("reference_no"); ?></th>                            
                             <th><?php echo $this->lang->line("customer"); ?></th>
                             <th><?php echo $this->lang->line("sale_status"); ?></th>
                             <th><?php echo $grandTotal; ?></th>
@@ -273,25 +270,27 @@
                             <span class="hidden-sm hidden-xs"><?= lang('print_tax_invoice') ?></span>
                         </a>
                     </div>
-
+					<!--
                     <div class="btn-group">
                         <a href="<?= site_url('sales/print_hch/' . $inv->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('Print_HCH_Invoice') ?>">
                             <i class="fa fa-print"></i>
                             <span class="hidden-sm hidden-xs"><?= lang('Print_HCH_Invoice') ?></span>
                         </a>
                     </div>
-
+					-->
                     <div class="btn-group">
                         <a href="<?= site_url('sales/invoice/' . $inv->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('invoice') ?>">
                             <i class="fa fa-print"></i>
                             <span class="hidden-sm hidden-xs"><?= lang('invoice') ?></span>
                         </a>
                     </div>
+                    <!--
                     <div class="btn-group">
                        <a href="<?=base_url()?>sales/cabon_print/<?=$inv->id?>" target="_blank" class="tip btn btn-primary" title="<?= lang('print_cabon') ?>">
                         <i class="fa fa-print"></i>
                         <span class="hidden-sm hidden-xs"><?= lang('print_cabon') ?></span>
                     </a>
+                    -->
                 </div>
 
                 <div class="btn-group">
@@ -343,10 +342,8 @@
 <script type="text/javascript">
     $(document).ready( function() {
         $('.tip').tooltip();
-
         $('.link_ar_to').on('click', function(){
             var id = $(this).attr('id');
-
             window.open('<?=base_url()?>account/list_ac_recevable?id=' + id, '_blank');
         });
     });

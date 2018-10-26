@@ -749,57 +749,31 @@ class Site extends CI_Model
 
     public function calculateAVCost($product_id, $warehouse_id, $net_unit_price, $unit_price, $quantity, $product_name, $option_id, $item_quantity) {
         $real_item_qty = $quantity;
-        if ($pis = $this->getPurchasedItems($product_id, $warehouse_id, $option_id)) {
-            $cost_row = array();
-            $quantity = $item_quantity;
-            $balance_qty = $quantity;
-            $total_net_unit_cost = 0;
-            $total_unit_cost = 0;
-            foreach ($pis as $pi) {
-                $total_net_unit_cost += $pi->net_unit_cost;
-                $total_unit_cost += ($pi->unit_cost ? $pi->unit_cost : $pi->net_unit_cost + ($pi->item_tax / $pi->quantity));
-            }
-            $as = sizeof($pis);
-            $avg_net_unit_cost = $total_net_unit_cost / $as;
-            $avg_unit_cost = $total_unit_cost / $as;
-
-            foreach ($pis as $pi) {
-                if (!empty($pi) && $pi->quantity > 0 && (($balance_qty <= $quantity && $quantity > 0) || $quantity < 0 ) ) {
-                    if ( ($pi->quantity_balance >= $quantity && $quantity > 0 ) || $quantity < 0 ) {
-                        $q = $this->db->query("SELECT qty_unit FROM erp_product_variants WHERE id = ? ", array($option_id));
-                        $balance_qty = $pi->quantity_balance - $quantity;
-                        if ($q->num_rows() > 0)
-                        {
-                            $unit_qty = '';
-                            foreach ($q->result() as $val) {
-                                $unit_qty = $val->qty_unit;
-                            }
-                            $balance_qty = $pi->quantity_balance - ( $quantity * ($unit_qty != 1 ? $unit_qty : 1) ) ;
-                        }
-                        $cost_row = array('date' => date('Y-m-d'), 'product_id' => $product_id, 'sale_item_id' => 'sale_items.id', 'purchase_item_id' => $pi->id, 'quantity' => $real_item_qty, 'purchase_net_unit_cost' => $avg_net_unit_cost, 'purchase_unit_cost' => $avg_unit_cost, 'sale_net_unit_price' => $net_unit_price, 'sale_unit_price' => $unit_price, 'quantity_balance' => $balance_qty, 'inventory' => 1, 'option_id' => $option_id);
-
-                        $quantity = 0;
-                    } elseif ($quantity > 0) {
-                        $quantity = $quantity - $pi->quantity_balance;
-                        $balance_qty = $quantity;
-                        $cost_row = array('date' => date('Y-m-d'), 'product_id' => $product_id, 'sale_item_id' => 'sale_items.id', 'purchase_item_id' => $pi->id, 'quantity' => $pi->quantity_balance, 'purchase_net_unit_cost' => $avg_net_unit_cost, 'purchase_unit_cost' => $avg_unit_cost, 'sale_net_unit_price' => $net_unit_price, 'sale_unit_price' => $unit_price, 'quantity_balance' => 0, 'inventory' => 1, 'option_id' => $option_id);
-                    }
-                }
-                if (empty($cost_row)) {
-                    break;
-                }
-                $cost[] = $cost_row;
-                if ($quantity == 0) {
-                    break;
-                }
-            }
-        }
         if ($quantity > 0 && !$this->Settings->overselling) {
             $this->session->set_flashdata('error', sprintf(lang("quantity_out_of_stock_for_%s"), ($pi->product_name ? $pi->product_name : $product_name)));
             redirect($_SERVER["HTTP_REFERER"]);
         } elseif ($quantity > 0) {
-            $cost[] = array('date' => date('Y-m-d'), 'product_id' => $product_id, 'sale_item_id' => 'sale_items.id', 'purchase_item_id' => NULL, 'quantity' => $real_item_qty, 'purchase_net_unit_cost' => NULL, 'purchase_unit_cost' => NULL, 'sale_net_unit_price' => $net_unit_price, 'sale_unit_price' => $unit_price, 'quantity_balance' => NULL, 'overselling' => 1, 'inventory' => 1);
-            $cost[] = array('pi_overselling' => 1, 'product_id' => $product_id, 'quantity_balance' => (0 - $quantity), 'warehouse_id' => $warehouse_id, 'option_id' => $option_id);
+            $cost[] = array(
+				'date' 						=> date('Y-m-d'), 
+				'product_id' 				=> $product_id, 
+				'sale_item_id' 				=> 'sale_items.id', 
+				'purchase_item_id' 			=> NULL, 
+				'quantity' 					=> $real_item_qty, 
+				'purchase_net_unit_cost' 	=> NULL, 
+				'purchase_unit_cost' 		=> NULL, 
+				'sale_net_unit_price' 		=> $net_unit_price, 
+				'sale_unit_price' 			=> $unit_price, 
+				'quantity_balance' 			=> NULL, 
+				'overselling' 				=> 1, 
+				'inventory' 				=> 1
+			);
+            $cost[] = array(
+				'pi_overselling' 	=> 1, 
+				'product_id' 		=> $product_id, 
+				'quantity_balance' 	=> (0 - $quantity), 
+				'warehouse_id' 		=> $warehouse_id, 
+				'option_id' 		=> $option_id
+			);
         }
         return $cost;
     }
@@ -1177,6 +1151,7 @@ class Site extends CI_Model
     }
 
     public function syncPurchaseItems($data = array()) {
+		
         if (!empty($data)) {
             foreach ($data as $items) {
                 foreach ($items as $item) {

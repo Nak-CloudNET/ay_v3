@@ -1,4 +1,4 @@
-<div class="modal-dialog modal-lg">
+<div class="modal-dialog modal-lg" style="width: 1200px;">
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-2x">&times;</i>
@@ -16,11 +16,12 @@
                     <tr>
                         <th style="width:10%;"><?= $this->lang->line("product_code"); ?></th>
                         <th style="width:25%;"><?= $this->lang->line("product_name"); ?></th>
-						<th style="width:10%;"><?= $this->lang->line("date"); ?></th>
+						<th style="width:20%;"><?= $this->lang->line("date"); ?></th>
                         <th style="width:10%;"><?= $this->lang->line("product_type"); ?></th>
-                        <th style="width:15%;"><?= $this->lang->line("unit_price"); ?></th>
-						<th style="width:15%;"><?= $this->lang->line("quantity"); ?></th>
-						<th style="width:15%;"><?= $this->lang->line("total_price"); ?></th>
+    					<th style="width:10%;"><?= $this->lang->line("discount"); ?></th>
+                        <th style="width:10%;"><?= $this->lang->line("unit_price"); ?></th>
+						<th style="width:10%;"><?= $this->lang->line("quantity"); ?></th>
+						<th style="width:25%;"><?= $this->lang->line("total"); ?></th>
                         
                     </tr>
                     </thead>
@@ -32,13 +33,14 @@
 								<td><?= $sale_detail->product_name; ?></td>
 								<td><?= $sale_detail->date; ?></td>
 								<td><?= $sale_detail->product_type; ?></td>
+								<td><?= $sale_detail->discount; ?></td>
                                 <td><?= $this->erp->formatDecimal($sale_detail->unit_price); ?></td>
                                 <td><?= $this->erp->formatQuantity($sale_detail->quantity); ?></td>
 								<td><?= $this->erp->formatMoney($sale_detail->unit_price*$sale_detail->quantity); ?></td>
                             </tr>
                         <?php }
                     } else {
-                        echo "<tr><td colspan='5'>" . lang('no_data_available') . "</td></tr>";
+                        echo "<tr><td colspan='8'>" . lang('no_data_available') . "</td></tr>";
                     } ?>
                     </tbody>
                 </table>

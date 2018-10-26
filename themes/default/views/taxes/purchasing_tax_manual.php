@@ -42,8 +42,8 @@
 						<center>
 							<h4><b style="font-family:'Khmer OS Muol';">ទិន្នានុប្បវត្តិទិញ</b></h4>
 							<h6><b>PURCHASE JOURNAL</b></h6>
-							<h6><b style="font-family:'Khmer OS Muol';">សំរាប់ខែ ឆ្នាំ</b></h6>
-							<h6><b>For May 2016</b></h6>
+							<h6><b style="font-family:'Khmer OS Muol';">សំរាប់ខែ <?php $month= date('m'); echo $this->erp->KhmerMonth($month);?> ឆ្នាំ <?php echo date('Y');?></b></h6>
+							<h6><b>For <?=date('M');?> <?=date('Y');?></b></h6>
 						</center>
 						<div class="col-md-10 col-xs-10 textz">
 							<table>
@@ -62,6 +62,9 @@
 										</div>	
 									</td></p>
 								</tr>
+								<tr>	
+									<td><p>Company Name 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<td><b></b></p>
+								<tr>
 								<tr>
 									<td><p>លេខអត្តសញ្ញាណកម្មអតប   <span style="padding-left:4px;"> :	</p></td><td><span name="vat_no" id="vat_no" class="vat_no"></span></td>
 								</tr>
@@ -71,12 +74,13 @@
 							</table>
 						</div>
 						<div class="col-md-2 col-xs-2 text">
-							<p style="float:right;">អត្រា : &nbsp;<b><?=$this->erp->formatMoney($exchange_rate->rate);?><input type="hidden" name="exc_rate" value="<?=$exchange_rate->rate;?>" /></b></p>
+							<p style="float:right;">អត្រា : &nbsp;<b><?=number_format($exchange_rate->rate,0);?><input type="hidden" name="exc_rate" value="<?=$exchange_rate->rate;?>" /></b></p>
 						</div>
 					</div>
 					</div>
 					<table class="table table-bordered">
-						<tr>
+	<tr>
+		<td style="vertical-align: middle !important" rowspan="6">N<sup>o</sup></td>
         <td style="text-align:center !important"   colspan="6">វិក័យប័ត្រ<br>Invoice    </td>
         <td style="text-align:center !important"   colspan="6">ការផ្គត់ផ្គង់<br>Supplies    </td>
         <td style="text-align:center !important"   colspan="6"></td>
@@ -135,6 +139,8 @@
     </tr>
 	<tbody class="sale_tax">
 			<tr class="none-padding">
+								
+								<td><p style="padding:5px !important; padding-left:10px !important;" class="no">1</p></td>
 								<td><input type="text"  name="s1[]" id="s1" class="form-control datetime s1" value="" style="width:100px;"></td>
 								<td><input type="text"  name="s2[]" id="s2" class="form-control s2" value=""></td>
 								<td><?=$suppliers;?></td>
@@ -218,9 +224,13 @@
 				}
 			});
 		});
+		var i_for_add_row=2;
 		$('#btn-add').click(function() {
+			 
+			 
 			var my_i = ($(".sale_tax tr").size())-0+1;
 			var row = '<tr class="none-padding">'+
+							'<td><p style="padding:5px !important; padding-left:10px !important;" class="no">'+i_for_add_row+'</p></td>'+
 							'<td><input type="text"  name="s1[]" id="s1" class="form-control datetime s1" value="" style="width:100px;"></td>'+
 							'<td><input type="text"  name="s2[]" id="s2" class="form-control s2" value=""></td>'+
 							'<td><?=$suppliers;?></td>'+
@@ -235,7 +245,7 @@
 							'<td><input type="text"  name="s13[]" id="s13" class="form-control text-right s13" style="font-weight:bold;" value="" readonly ></td>'+
 							'<td style="text-align:center;"><span style="cursor:pointer;" class="btn_delete"><i style="font-size: 15px; color:#2A79B9;" class="fa fa-trash-o"></i></span></td>'+
 						'</tr>';
-			$('.sale_tax').append(row);
+			$('.sale_tax').append(row);i_for_add_row++;
 		});
 		$(document).on("click",".btn_delete",function() {
 			var row = $(this).closest('tr').focus();

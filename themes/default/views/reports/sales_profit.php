@@ -1,9 +1,7 @@
 <?php
 
 $v = "";
-/* if($this->input->post('name')){
-  $v .= "&product=".$this->input->post('product');
-  } */
+
 if ($this->input->post('reference_no')) {
     $v .= "&reference_no=" . $this->input->post('reference_no');
 }
@@ -28,8 +26,13 @@ if ($this->input->post('start_date')) {
 if ($this->input->post('end_date')) {
     $v .= "&end_date=" . $this->input->post('end_date');
 }
+
+if ($this->input->post('types')) {
+		$v .= "&types=" . $this->input->post('types');
+	}
+	
 if (isset($biller_id)) {
-    $v .= "&biller_id=" . $biller_id;
+    $v .= "&biller_id=" . json_decode($biller_id);
 }
 
 ?>
@@ -52,21 +55,19 @@ if (isset($biller_id)) {
 			"bAutoWidth": false,
 			'fnRowCallback': function (nRow, aData, iDisplayIndex) {
                 var oSettings = oTable.fnSettings();
-                //$("td:first", nRow).html(oSettings._iDisplayStart+iDisplayIndex +1);
-                
 				nRow.id = aData[0];
 				nRow.className = "invoice_link";
                 return nRow;
             },
-            "aoColumns": [{"bSortable": false, "mRender": checkbox}, {"mRender": fld}, null, null, null, {"mRender": sale_statusLink}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat},{"mRender": row_status}],
+            "aoColumns": [{"bSortable": false, "mRender": checkbox}, {"mRender": fld}, null, null, null, {"sWidth": "15%"}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat},{"mRender": currencyFormat},{"mRender": currencyFormat}, {"mRender": currencyFormat},{"mRender": row_status}],
             "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
-                var gtotal = 0, paid = 0, balance = 0, profit = 0, costs = 0, qtotal = 0, refund = 0; 
+                var gtotal = 0, paid = 0, balance = 0, profit = 0, costs = 0, qtotal = 0, over_head = 0;
                 for (var i = 0; i < aaData.length; i++) {
                     gtotal += parseFloat(aaData[aiDisplay[i]][6]);
                     paid += parseFloat(aaData[aiDisplay[i]][7]);
                     balance += parseFloat(aaData[aiDisplay[i]][8]);
-					refund += parseFloat(aaData[aiDisplay[i]][9]);
-                    costs += parseFloat(aaData[aiDisplay[i]][10]);
+                    costs += parseFloat(aaData[aiDisplay[i]][9]);
+                    over_head += parseFloat(aaData[aiDisplay[i]][10]);
 					if(aaData[aiDisplay[i]][11] == 'return'){
 						profit -= parseFloat(aaData[aiDisplay[i]][11]);
 					}else{
@@ -77,16 +78,16 @@ if (isset($biller_id)) {
                 nCells[6].innerHTML = currencyFormat(parseFloat(gtotal));
                 nCells[7].innerHTML = currencyFormat(parseFloat(paid));
                 nCells[8].innerHTML = currencyFormat(parseFloat(balance));
-                nCells[9].innerHTML = currencyFormat(parseFloat(refund));
-                nCells[10].innerHTML = currencyFormat(parseFloat(costs));
+                nCells[9].innerHTML = currencyFormat(parseFloat(costs));
+                nCells[10].innerHTML = currencyFormat(parseFloat(over_head));
                 nCells[11].innerHTML = currencyFormat(parseFloat(profit));
             }
         }).fnSetFilteringDelay().dtFilter([
             {column_number: 1, filter_default_label: "[<?=lang('date');?> (yyyy-mm-dd)]", filter_type: "text", data: []},
             {column_number: 2, filter_default_label: "[<?=lang('reference_no');?>]", filter_type: "text", data: []},
-			{column_number: 3, filter_default_label: "[<?=lang('biller');?>]", filter_type: "text", data: []},
-            {column_number: 4, filter_default_label: "[<?=lang('customer');?>]", filter_type: "text", data: []},
-            {column_number: 5, filter_default_label: "[<?=lang('sale_status');?>]", filter_type: "text", data: []},
+            {column_number: 3, filter_default_label: "[<?=lang('suspend');?>]", filter_type: "text", data: []},
+			{column_number: 4, filter_default_label: "[<?=lang('biller');?>]", filter_type: "text", data: []},
+            {column_number: 5, filter_default_label: "[<?=lang('customer');?>]", filter_type: "text", data: []},
             {column_number: 12, filter_default_label: "[<?=lang('payment_status');?>]", filter_type: "text", data: []},
         ], "footer");
     });
@@ -140,9 +141,9 @@ if (isset($biller_id)) {
         });
     });
 </script>
-<?php if ($Owner) {
+<?php
     echo form_open('reports/profit_actions', 'id="action-form"');
-} ?>
+?>
 <div class="box">
     <div class="box-header">
         <h2 class="blue"><i class="fa-fw fa fa-heart"></i><?= lang('sales_profit_report'); ?> <?php
@@ -165,8 +166,8 @@ if (isset($biller_id)) {
                             class="icon fa fa-file-pdf-o"></i></a></li>
                 <li class="dropdown"><a href="#" id="excel" data-action="export_excel"  class="tip" title="<?= lang('download_xls') ?>"><i
                             class="icon fa fa-file-excel-o"></i></a></li>
-            <!--    <li class="dropdown"><a href="#" id="image" class="tip" title="<?= lang('save_image') ?>"><i
-                            class="icon fa fa-file-picture-o"></i></a></li> -->
+                <li class="dropdown"><a href="#" id="image" class="tip" title="<?= lang('save_image') ?>"><i
+                            class="icon fa fa-file-picture-o"></i></a></li>
             </ul>
         </div>
 		
@@ -192,15 +193,13 @@ if (isset($biller_id)) {
 		</div>
 		
     </div>
-<?php if ($Owner) { ?>
+
     <div style="display: none;">
         <input type="hidden" name="form_action" value="" id="form_action"/>
         <?= form_submit('performAction', 'performAction', 'id="action-form-submit"') ?>
     </div>
     <?php echo form_close(); ?>
-<?php } ?>
-<?php 
-?> 
+
 	<div class="box-content">
         <div class="row">
             <div class="col-lg-12">
@@ -249,18 +248,6 @@ if (isset($biller_id)) {
                                 ?>
                             </div>
                         </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="control-label" for="warehouse"><?= lang("warehouse"); ?></label>
-                                <?php
-                                $wh[""] = "";
-                                foreach ($warehouses as $warehouse) {
-                                    $wh[$warehouse->id] = $warehouse->name;
-                                }
-                                echo form_dropdown('warehouse', $wh, (isset($_POST['warehouse']) ? $_POST['warehouse'] : ""), 'class="form-control" id="warehouse" data-placeholder="' . $this->lang->line("select") . " " . $this->lang->line("warehouse") . '"');
-                                ?>
-                            </div>
-                        </div>
 						<?php if($this->Settings->product_serial) { ?>
                             <div class="col-sm-4">
                                 <div class="form-group">
@@ -272,13 +259,13 @@ if (isset($biller_id)) {
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <?= lang("start_date", "start_date"); ?>
-                                <?php echo form_input('start_date', (isset($_POST['start_date']) ? $_POST['start_date'] : ""), 'class="form-control datetime" id="start_date"'); ?>
+                                <?php echo form_input('start_date', (isset($_POST['start_date']) ? $_POST['start_date'] : $this->erp->hrsd($start_date)), 'class="form-control datetime" id="start_date"'); ?>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <?= lang("end_date", "end_date"); ?>
-                                <?php echo form_input('end_date', (isset($_POST['end_date']) ? $_POST['end_date'] : ""), 'class="form-control datetime" id="end_date"'); ?>
+                                <?php echo form_input('end_date', (isset($_POST['end_date']) ? $_POST['end_date'] :  $this->erp->hrsd($end_date)), 'class="form-control datetime" id="end_date"'); ?>
                             </div>
                         </div>
 						<div class="col-sm-4">
@@ -295,6 +282,17 @@ if (isset($biller_id)) {
 								</div>
 							</div>
                         </div>
+						
+						<div class="col-sm-4">
+							<div class="form-group">
+								<?= lang("type", "type"); ?>
+								<?php
+								$types = array('' => '...', 0 => 'SALE', 1 => 'POS');
+								echo form_dropdown('types', $types, (isset($_POST['types']) ? $_POST['types'] : ""), 'id="types" class="form-control select" placeholder="Please select Type" style="width:100%;"');
+								?>
+							</div>
+						</div>
+						
                     </div>
                     <div class="form-group">
                         <div
@@ -315,16 +313,16 @@ if (isset($biller_id)) {
                             </th>
                             <th><?= lang("date"); ?></th>
                             <th><?= lang("reference_no"); ?></th>
+							<th><?= lang("suspend"); ?></th>
                             <th><?= lang("biller"); ?></th>
                             <th><?= lang("customer"); ?></th>
-                            <th><?= lang("sale_status"); ?></th>
                             <th><?= lang("grand_total"); ?></th>
                             <th><?= lang("paid"); ?></th>
                             <th><?= lang("balance"); ?></th>
-                            <th><?= lang("refund"); ?></th>
                             <th><?= lang("costs"); ?></th>
-                            <th><?= lang("profits"); ?></th>
-                            <th><?= lang("payment_status"); ?></th>
+							<th><?= lang("over_head"); ?></th>
+                            <th><?= lang("profit"); ?></th>
+                            <th><?= lang("status"); ?></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -339,15 +337,15 @@ if (isset($biller_id)) {
                             </th>
                             <th></th>
                             <th></th>
-							<th></th>
                             <th></th>
+							<th></th>
                             <th></th>
                             <th><?= lang("grand_total"); ?></th>
                             <th><?= lang("paid"); ?></th>
                             <th><?= lang("balance"); ?></th>
-                            <th><?= lang("refund"); ?></th>
                             <th><?= lang("costs"); ?></th>
-                            <th><?= lang("profits"); ?></th>
+							<th></th>
+                            <th><?= lang("profit"); ?></th>
                             <th></th>
                         </tr>
                         </tfoot>
@@ -357,26 +355,17 @@ if (isset($biller_id)) {
         </div>
     </div>
 </div>
+<style type="text/css">
+	table { white-space: nowrap; }
+</style>
 <script type="text/javascript" src="<?= $assets ?>js/html2canvas.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-		/*
-        $('#pdf').click(function (event) {
-            event.preventDefault();
-            window.location.href = "<?=site_url('reports/getSalesProfitReport/pdf/?v=1'.$v)?>";
-            return false;
-        });
-        $('#xls').click(function (event) {
-            event.preventDefault();
-            window.location.href = "<?=site_url('reports/getSalesProfitReport/0/xls/?v=1'.$v)?>";
-            return false;
-        });
-		*/
         $('#image').click(function (event) {
             event.preventDefault();
             html2canvas($('.box'), {
                 onrendered: function (canvas) {
-                    var img = canvas.toDataURL()
+                    var img = canvas.toDataURL();
                     window.open(img);
                 }
             });

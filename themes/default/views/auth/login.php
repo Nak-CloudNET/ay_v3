@@ -70,7 +70,7 @@
                             <ul class="list-group"><?= $message; ?></ul>
                         </div>
                     <?php } ?>
-                    <?php echo form_open("auth/login", 'class="login" data-toggle="validator"'); ?> 					
+                    <?php echo form_open("auth/login", 'class="login" data-toggle="validator"'); ?>                    
                     <fieldset class="col-sm-12">
                         <div class="form-group">
                             <div class="controls row">
@@ -124,7 +124,7 @@
                         </div>
 
                     </fieldset>
-				
+
                     <?php echo form_close(); ?>
                     <div class="clearfix" style="height: 10px;"></div>
                     <a href="forgot_password"

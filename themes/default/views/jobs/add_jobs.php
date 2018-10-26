@@ -53,7 +53,7 @@
 				</div>
 				<div class="col-sm-6">
 					<div class="form-group">
-						<label class="control-label col-sm-5" style="text-align:left;"> <?= lang("ចំនួនផ្តិតបានការ"); ?></label>
+						<label class="control-label col-sm-5" style="text-align:left;"> <?= lang("ចំនួនផ្តិតបានការ"); ?>*</label>
 						<div class="col-sm-7">
 							<input name="developed_quantity" type="text" id="developed_quantity" value="" class="pa form-control kb-pad developed_quantity"
 							   required="required"/>

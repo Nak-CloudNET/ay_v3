@@ -8,7 +8,7 @@
         <?php $attrib = array('data-toggle' => 'validator', 'role' => 'form');
         echo form_open_multipart("account/import_journal_csv", $attrib); ?>
         <div class="modal-body">
-            <p><?= lang('enter_info'); ?></p>
+            <p><?= lang('enter_info'); ?> </p>
 
             <div class="well well-small">
                 <a href="<?php echo base_url(); ?>assets/csv/sample_journal.csv" class="btn btn-primary pull-right"><i

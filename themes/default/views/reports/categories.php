@@ -4,6 +4,9 @@ $v = "";
 if ($this->input->post('category')) {
     $v .= "&category=" . $this->input->post('category');
 }
+if ($this->input->post('warehouse')) {
+    $v .= "&warehouse=" . $this->input->post('warehouse');
+}
 if ($this->input->post('start_date')) {
     $v .= "&start_date=" . $this->input->post('start_date');
 }
@@ -14,7 +17,7 @@ if ($this->input->post('end_date')) {
 ?>
 <script>
     $(document).ready(function () {
-        var oTable = $('#PrRData').dataTable({
+        var oTable = $('#PrRData1').dataTable({
             "aaSorting": [[3, "desc"], [2, "desc"]],
             "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
             "iDisplayLength": <?= $Settings->rows_per_page ?>,
@@ -85,13 +88,19 @@ if ($this->input->post('end_date')) {
         </div>
         <div class="box-icon">
             <ul class="btn-tasks">
-                <li class="dropdown"><a href="#" id="pdf" data-action="export_pdf"  class="tip" title="<?= lang('download_pdf') ?>"><i
-                            class="icon fa fa-file-pdf-o"></i></a></li>
-                <li class="dropdown"><a href="#" id="excel" data-action="export_excel"  class="tip" title="<?= lang('download_xls') ?>"><i
-                            class="icon fa fa-file-excel-o"></i></a></li>
-            <!--    <li class="dropdown"><a href="#" id="image" class="tip" title="<?= lang('save_image') ?>"><i
+                <li class="dropdown">
+					<a href="#" id="excel" data-action="export_pdf" title="<?= lang('download_pdf') ?>">
+						<i class="icon fa fa-file-pdf-o"></i>
+					</a>
+				</li>         
+				<li class="dropdown">
+					<a href="#" id="excel" data-action="export_excel" title="<?= lang('download_xls') ?>">
+						<i class="icon fa fa-file-excel-o"></i>
+					</a>
+				</li>
+                <li class="dropdown"><a href="#" id="image" class="tip" title="<?= lang('save_image') ?>"><i
                             class="icon fa fa-file-picture-o"></i></a></li>
-				
+				<!--
 				<li class="dropdown">
 					<a data-toggle="dropdown" class="dropdown-toggle" href="#"><i
 							class="icon fa fa-building-o tip" data-placement="left"
@@ -144,17 +153,45 @@ if ($this->input->post('end_date')) {
                                 ?>
                             </div>
                         </div>
+							<?php if(isset($biller_idd)){?>
+						<div class="col-sm-4">
+						 <div class="form-group">
+                                    <?= lang("biller", "biller"); ?>
+                                    <?php 
+									$str = "";
+									$q = $this->db->get_where("companies",array("id"=>$biller_idd),1);
+									 if ($q->num_rows() > 0) {
+										 $str = $q->row()->name.' / '.$q->row()->company;
+										echo form_input('biller',$str , 'class="form-control" id="biller"');
+									 }
+									?>
+                                </div>
+						 </div>
+						<?php } ?>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <?= lang("warehouse", "warehouse") ?>
+                                <?php
+                                $waee[''] = "ALL";
+                                foreach ($warefull as $wa) {
+                                    $waee[$wa->id] = $wa->code.' / '.$wa->name;
+                                }
+                                echo form_dropdown('warehouse', $waee, (isset($_POST['warehouse']) ? $_POST['warehouse'] : ''), 'class="form-control select" id="warehouse" placeholder="' . lang("select") . " " . lang("warehouse") . '" style="width:100%"')
+                                ?>
 
+                            </div>
+                        </div>
+						
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <?= lang("start_date", "start_date"); ?>
-                                <?php echo form_input('start_date', (isset($_POST['start_date']) ? $_POST['start_date'] : ""), 'class="form-control datetime" id="start_date"'); ?>
+                                <?php echo form_input('start_date', (isset($_POST['start_date']) ? $_POST['start_date'] : ''), 'class="form-control date" id="start_date"'); ?>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <?= lang("end_date", "end_date"); ?>
-                                <?php echo form_input('end_date', (isset($_POST['end_date']) ? $_POST['end_date'] : ""), 'class="form-control datetime" id="end_date"'); ?>
+                                <?php echo form_input('end_date', (isset($_POST['end_date']) ? $_POST['end_date'] : ''), 'class="form-control date" id="end_date"'); ?>
                             </div>
                         </div>
                     </div>
@@ -169,7 +206,7 @@ if ($this->input->post('end_date')) {
                 <div class="clearfix"></div>
 
                 <div class="table-responsive">
-                    <table id="PrRData"
+                    <table id="PrRData1"
                            class="table table-striped table-bordered table-condensed table-hover dfTable reports-table"
                            style="margin-bottom:5px;">
                         <thead>
@@ -177,13 +214,13 @@ if ($this->input->post('end_date')) {
 							<th style="min-width:30px; width: 30px; text-align: center;">
                                 <input class="checkbox checkth" type="checkbox" name="check"/>
                             </th>
-                            <th><?= lang("category_code"); ?></th>
-                            <th><?= lang("category_name"); ?></th>
-                            <th><?= lang("purchased"); ?></th>
-                            <th><?= lang("sold"); ?></th>
-                            <th><?= lang("purchased_amount"); ?></th>
-                            <th><?= lang("sold_amount"); ?></th>
-                            <th><?= lang("profit_loss"); ?></th>
+                            <th style="width:150px;"><?= lang("category_code"); ?></th>
+                            <th style="width:250px;"><?= lang("category_name"); ?></th>
+                            <th style="width:150px;"><?= lang("purchased"); ?></th>
+                            <th style="width:150px;"><?= lang("sold"); ?></th>
+                            <th style="width:150px;"><?= lang("purchased_amount"); ?></th>
+                            <th style="width:150px;"><?= lang("sold_amount"); ?></th>
+                            <th style="width:150px;"><?= lang("profit_loss"); ?></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -217,17 +254,17 @@ if ($this->input->post('end_date')) {
 <script type="text/javascript">
     $(document).ready(function () {
 
-        /*$('#pdf').click(function (event) {
-            event.preventDefault();
-            window.location.href = "<?=site_url('reports/getCategoriesReport/pdf/?v=1'.$v)?>";
-            return false;
-        });
-        $('#xls').click(function (event) {
-            event.preventDefault();
-            window.location.href = "<?=site_url('reports/getCategoriesReport/0/xls/?v=1'.$v)?>";
-            return false;
-        });
-         */
+        // $('#pdf').click(function (event) {
+            // event.preventDefault();
+            // window.location.href = "<?=site_url('reports/getCategoriesReport/pdf/?v=1'.$v)?>";
+            // return false;
+        // });
+        // $('#xls').click(function (event) {
+            // event.preventDefault();
+            // window.location.href = "<?=site_url('reports/getCategoriesReport/0/xls/?v=1'.$v)?>";
+            // return false;
+        // });
+
         $('#image').click(function (event) {
             event.preventDefault();
             html2canvas($('.box'), {

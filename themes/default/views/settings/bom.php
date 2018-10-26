@@ -2,81 +2,79 @@
     var count = 1, an = 1, product_variant = 0, DT = <?= $Settings->default_tax_rate ?>,
         product_tax = 0, invoice_tax = 0, total_discount = 0, total = 0,
         tax_rates = <?php echo json_encode($tax_rates); ?>;
-    //var audio_success = new Audio('<?=$assets?>sounds/sound2.mp3');
-    //var audio_error = new Audio('<?=$assets?>sounds/sound3.mp3');
     $(document).ready(function () {
-        if (localStorage.getItem('remove_slls')) {
-            if (localStorage.getItem('slitems')) {
-                localStorage.removeItem('slitems');
+        if (__getItem('remove_slls')) {
+            if (__getItem('slitems')) {
+                __removeItem('slitems');
             }
-            if (localStorage.getItem('sldiscount')) {
-                localStorage.removeItem('sldiscount');
+            if (__getItem('sldiscount')) {
+                __removeItem('sldiscount');
             }
-            if (localStorage.getItem('sltax2')) {
-                localStorage.removeItem('sltax2');
+            if (__getItem('sltax2')) {
+                __removeItem('sltax2');
             }
-            if (localStorage.getItem('slshipping')) {
-                localStorage.removeItem('slshipping');
+            if (__getItem('slshipping')) {
+                __removeItem('slshipping');
             }
-            if (localStorage.getItem('slwarehouse')) {
-                localStorage.removeItem('slwarehouse');
+            if (__getItem('slwarehouse')) {
+                __removeItem('slwarehouse');
             }
-            if (localStorage.getItem('slnote')) {
-                localStorage.removeItem('slnote');
+            if (__getItem('slnote')) {
+                __removeItem('slnote');
             }
-            if (localStorage.getItem('slinnote')) {
-                localStorage.removeItem('slinnote');
+            if (__getItem('slinnote')) {
+                __removeItem('slinnote');
             }
-            if (localStorage.getItem('slcurrency')) {
-                localStorage.removeItem('slcurrency');
+            if (__getItem('slcurrency')) {
+                __removeItem('slcurrency');
             }
-            if (localStorage.getItem('sldate')) {
-                localStorage.removeItem('sldate');
+            if (__getItem('sldate')) {
+                __removeItem('sldate');
             }
-            if (localStorage.getItem('slsale_status')) {
-                localStorage.removeItem('slsale_status');
+            if (__getItem('slsale_status')) {
+                __removeItem('slsale_status');
             }
-            if (localStorage.getItem('slpayment_status')) {
-                localStorage.removeItem('slpayment_status');
+            if (__getItem('slpayment_status')) {
+                __removeItem('slpayment_status');
             }
-            if (localStorage.getItem('paid_by')) {
-                localStorage.removeItem('paid_by');
+            if (__getItem('paid_by')) {
+                __removeItem('paid_by');
             }
-            if (localStorage.getItem('amount_1')) {
-                localStorage.removeItem('amount_1');
+            if (__getItem('amount_1')) {
+                __removeItem('amount_1');
             }
-            if (localStorage.getItem('paid_by_1')) {
-                localStorage.removeItem('paid_by_1');
+            if (__getItem('paid_by_1')) {
+                __removeItem('paid_by_1');
             }
-            if (localStorage.getItem('pcc_holder_1')) {
-                localStorage.removeItem('pcc_holder_1');
+            if (__getItem('pcc_holder_1')) {
+                __removeItem('pcc_holder_1');
             }
-            if (localStorage.getItem('pcc_type_1')) {
-                localStorage.removeItem('pcc_type_1');
+            if (__getItem('pcc_type_1')) {
+                __removeItem('pcc_type_1');
             }
-            if (localStorage.getItem('pcc_month_1')) {
-                localStorage.removeItem('pcc_month_1');
+            if (__getItem('pcc_month_1')) {
+                __removeItem('pcc_month_1');
             }
-            if (localStorage.getItem('pcc_year_1')) {
-                localStorage.removeItem('pcc_year_1');
+            if (__getItem('pcc_year_1')) {
+                __removeItem('pcc_year_1');
             }
-            if (localStorage.getItem('pcc_no_1')) {
-                localStorage.removeItem('pcc_no_1');
+            if (__getItem('pcc_no_1')) {
+                __removeItem('pcc_no_1');
             }
-            if (localStorage.getItem('cheque_no_1')) {
-                localStorage.removeItem('cheque_no_1');
+            if (__getItem('cheque_no_1')) {
+                __removeItem('cheque_no_1');
             }
-            if (localStorage.getItem('payment_note_1')) {
-                localStorage.removeItem('payment_note_1');
+            if (__getItem('payment_note_1')) {
+                __removeItem('payment_note_1');
             }
-            if (localStorage.getItem('slpayment_term')) {
-                localStorage.removeItem('slpayment_term');
+            if (__getItem('slpayment_term')) {
+                __removeItem('slpayment_term');
             }
-            localStorage.removeItem('remove_slls');
+            __removeItem('remove_slls');
         }
         
         <?php if ($Owner || $Admin) { ?>
-        if (!localStorage.getItem('sldate')) {
+        if (!__getItem('sldate')) {
             $("#sldate").datetimepicker({
                 format: site.dateFormats.js_ldate,
                 fontAwesome: true,
@@ -90,9 +88,9 @@
             }).datetimepicker('update', new Date());
         }
         $(document).on('change', '#sldate', function (e) {
-            localStorage.setItem('sldate', $(this).val());
+            __setItem('sldate', $(this).val());
         });
-        if (sldate = localStorage.getItem('sldate')) {
+        if (sldate = __getItem('sldate')) {
             $('#sldate').val(sldate);
         }
         <?php } ?>
@@ -101,6 +99,14 @@
         $('.bootbox').on('hidden.bs.modal', function (e) {
             $('#bom_from_items').focus();
             $('#convert_to_item').focus();
+        });
+        $("#bom_from_items").keyup(function () {
+            var sref=$('#slref').val();
+           if(sref==""){
+               bootbox.alert('<?= lang('select_above') ?>', function () {
+                   $('#slref').focus();
+               });
+           }
         });
         $("#bom_from_items").autocomplete({
             source: function (request, response) {
@@ -113,7 +119,6 @@
                         warehouse_id: $("#slwarehouse").val()
                     },
                     success: function (data) {
-
                         response(data);
                     }
                 });
@@ -150,24 +155,39 @@
                 event.preventDefault();
                 if (ui.item.id !== 0) {
                 	var rows        = "";
-                    var array       = ui.item.uom.split("#");
-                    var option      = "";
-                    $.each(array,function(i){
-                       option += "<option value='" + array[i] + "'>" + array[i] + "</option>";
-                    });
-                	rows = "<tr>"
+                    var data        = ui.item.uom;
+					
+					var opt = $("<select id=\"bom_from_option\" name=\"bom_from_items_uom\[\]\" class=\"form-control select rvariant\" />");
+					if(ui.item.options !== false) {
+						$.each(ui.item.options, function () {
+							$("<option />", {value: this.id, text: this.name, qty: this.qty_unit}).appendTo(opt);
+						});
+					} else {
+						$("<option />", {value: 0, text: 'n/a'}).appendTo(opt);
+						opt = opt.hide();
+					}
+					rows = "<tr>"
 	        				+ "<td>	<input type='hidden' value='"+ui.item.id+"' name='bom_from_items_id[]' />"
 	        				+ " <input type='hidden' value='"+ui.item.code+"' name='bom_from_items_code[]' />"
 	        				+ " <input type='hidden' value='"+ui.item.name+"' name='bom_from_items_name[]' />"
-	        				+ ui.item.name+"</td>"
-                            + "<td><select name='bom_from_items_uom[]' class='form-control'>" + option + "</select></td>"
+	        				+ ui.item.label+"</td>"
+                            + "<td>" + (opt.get(0).outerHTML) + "</td>"
 	        				+ "<td><input type='text' required='required' class='quantity form-control input-tip' value='' name='bom_from_items_qty[]' /></td>"
 	        				+ '<td><i style="cursor:pointer;" title="Remove" id="1449892339552" class="fa fa-times tip pointer sldel"></i></td>'
 						+ "</tr>";
+						
                 	$('#tbody-convert-from-items').append(rows);
+					
                 	$(this).val('');
+					$('.quantity').change(function(){
+						var tr 	 = $(this).parent().parent();
+						var qty  = $(this).val();
+						var cost = tr.find('.unit_cost_raw').html();
+						var total = formatMoney(cost * qty);
+						tr.find('.total_cost_raw').html(total);
+					});
+                    $('#slref').attr('readonly', true);
                 } else {
-                    //audio_error.play();
                     bootbox.alert('<?= lang('no_match_found') ?>');
                 }
             }
@@ -220,29 +240,73 @@
                 event.preventDefault();
                 if (ui.item.id !== 0) {
                 	var rows       = "";
-                    var array      = ui.item.uom.split("#");
+                    var data       = ui.item.uom;
+					var cost 	   = (ui.item.cost > 0 ? ui.item.cost : ui.item.price);
                     var option     = "";
-                    $.each(array,function(i){
-                       option += "<option value='" + array[i] + "'>" + array[i] + "</option>";
-                    });
+                    var opt = $("<select id=\"poption\" name=\"convert_to_items_uom\[\]\" class=\"form-control select rvariant\" />");
+					if(ui.item.options !== false) {
+						$.each(ui.item.options, function () {
+							$("<option />", {value: this.id, text: this.name}).appendTo(opt);
+						});
+					} else {
+						$("<option />", {value: 0, text: 'n/a'}).appendTo(opt);
+						opt = opt.hide();
+					}
                 	rows = "<tr>"
 	        				+ "<td>	<input type='hidden' value='"+ui.item.id+"' name='convert_to_items_id[]' />"
 	        				+ " <input type='hidden' value='"+ui.item.code+"' name='convert_to_items_code[]' />"
 	        				+ " <input type='hidden' value='"+ui.item.name+"' name='convert_to_items_name[]' />"
-	        				+ ui.item.name+"</td>"
-                            + "<td><select name='convert_to_items_uom[]' class='form-control'>" + option + "</select></td>"
-	        				+ "<td><input type='text' required='required' class='quantity form-control input-tip' value='' name='convert_to_items_qty[]' /></td>"
+	        				+ ui.item.label+"</td>"
+                            + "<td>" + (opt.get(0).outerHTML) + "</td>"
+	        				+ "<td><input type='text' required='required' class='quantity form-control qty_count input-tip' value='' name='convert_to_items_qty[]' /></td>"
 	        				+ '<td><i style="cursor:pointer;" title="Remove" id="1449892339552" class="fa fa-times tip pointer sldel"></i></td>'
 						+ "</tr>";
                 	$('#tbody-convert-to-items').append(rows);
                 	$(this).val('');
+					
+					$('.quantity').change(function(){
+						var shipping = 0;
+						var avg_cost = 0;
+						var tr 	 	= $(this).parent().parent();
+						var qty  	= $(this).val();
+						var f_cost 	= tr.find('.real_cost').val();
+						var total_f	= parseFloat(f_cost) * parseFloat(qty);
+						
+						//============== Get Total Raw Cost ================//
+						var total_raw_cost = 0;
+						$('.total_cost_raw').each(function(){
+							var t_c_r 		= $(this).html().replace(/,/g, '');
+							total_raw_cost += parseFloat(t_c_r);
+						});
+						//====================== End =======================//
+						
+						//============== Get Total Raw Cost ================//
+						var real_cost = 0;
+						$('.real_cost').each(function(){
+							real_cost += parseFloat($(this).val());
+						});
+						//====================== End =======================//
+						
+						//================== Get All Qty ===================//
+						var count = $('.qty_count').length;
+						//====================== End =======================//
+						
+						shipping = (total_f / real_cost);
+						avg_cost = (total_raw_cost * (shipping > 0? shipping:1) )/(shipping > 0? qty:count);
+						
+						total_cost = parseFloat(avg_cost) * parseFloat(qty);
+						//console.log(f_cost +'=='+ total_f +'=='+ real_cost +'=='+ shipping +'=='+ total_raw_cost);
+						tr.find('.unit_cost').html(formatMoney(avg_cost));
+						tr.find('.total_cost').html(formatMoney(total_cost));
+					});
                 } else {
                     //audio_error.play();
                     bootbox.alert('<?= lang('no_match_found') ?>');
                 }
             }
         });
-        $(document).on('change', '#gift_card_no', function () {
+        
+		$(document).on('change', '#gift_card_no', function () {
             var cn = $(this).val() ? $(this).val() : '';
             if (cn != '') {
                 $.ajax({
@@ -273,11 +337,19 @@
                 $(this).autocomplete("search");
             }
         });
-    });
+
+		$(document).on('change', '#bom_from_option',function(){
+			var qty_unit = $("option:selected", this).attr("qty");
+			var cost 	 = $(this).parent().parent().find('.from_cost').val();
+			var var_cost = parseFloat(qty_unit) * parseFloat(cost);
+			$(this).parent().parent().find('.unit_cost_raw').html(var_cost);
+			$('.quantity').trigger('change');
+		});
+	});
 </script>
 <div class="box">
     <div class="box-header">
-        <h2 class="blue"><i class="fa-fw fa fa-plus"></i><?= lang('Bom'); ?></h2>
+        <h2 class="blue"><i class="fa-fw fa fa-plus"></i><?= lang('boms'); ?></h2>
     </div>
     <div class="box-content">
         <div class="row">
@@ -305,29 +377,6 @@
                                 <?php echo form_input('name', '', 'class="form-control input-tip" id="slref"'); ?>
                             </div>
                         </div>
-						<div class="col-md-4">
-                            <div class="form-group">
-                                <?php if (!$Settings->restrict_user || $Owner || $Admin) { ?>
-                                        
-                                                <?= lang("warehouse", "slwarehouse"); ?>
-                                                <?php
-                                                $wh[''] = '';
-                                                foreach ($warehouses as $warehouse) {
-                                                    $wh[$warehouse->id] = $warehouse->name;
-                                                }
-                                                echo form_dropdown('warehouse', $wh, (isset($_POST['warehouse']) ? $_POST['warehouse'] : $Settings->default_warehouse), 'id="slwarehouse" class="form-control input-tip select" data-placeholder="' . lang("select") . ' ' . lang("warehouse") . '" required="required" style="width:100%;" ');
-                                                } else {
-                                        $warehouse_input = array(
-                                            'type' => 'hidden',
-                                            'name' => 'warehouse',
-                                            'id' => 'slwarehouse',
-                                            'value' => $this->session->userdata('warehouse_id'),
-                                        );
-
-                                        echo form_input($warehouse_input);
-                                    } ?>
-                            </div>
-                        </div>  
 						<div class="col-md-12">
                             <div class="form-group">
                                 <?= lang("Note", "Note"); ?>
@@ -335,93 +384,88 @@
                             </div>
                         </div> 
 
-                        </div>
-                        <!-- convert from items -->
-                        <div class="col-md-12" id="sticker">
-                            <div class="well well-sm">
-                                <div class="form-group" style="margin-bottom:0;">
-                                    <div class="input-group wide-tip">
-                                        <div class="input-group-addon" style="padding-left: 10px; padding-right: 10px;">
-                                            <i class="fa fa-2x fa-barcode addIcon"></i></a></div>
-                                        <?php echo form_input('bom_from_items', '', 'class="form-control input-lg" id="bom_from_items" placeholder="' . lang("add_product_to_order") . '"'); ?>                                        
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                        </div>
-                        <!-- table show convert from items -->
-                        <div class="col-md-12">
-                            <div class="control-group table-group">
-                                <label class="table-label"><?= lang("bom_items_from"); ?> *</label>
+                    </div>
+					<!-- convert from items -->
+					<div class="col-md-12" id="sticker">
+						<div class="well well-sm">
+							<div class="form-group" style="margin-bottom:0;">
+								<div class="input-group wide-tip">
+									<div class="input-group-addon" style="padding-left: 10px; padding-right: 10px;">
+										<i class="fa fa-2x fa-barcode addIcon"></i></div>
+									<?php echo form_input('bom_from_items', '', 'class="form-control input-lg" id="bom_from_items" placeholder="' . lang("add_product_to_order") . '"'); ?>                                        
+								</div>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+					<!-- table show convert from items -->
+					<div class="col-md-12">
+						<div class="control-group table-group">
+							<label class="table-label"><?= lang("bom_items_from"); ?> *</label>
 
-                                <div class="controls table-controls">
-                                    <table id="slTable_"
-                                           class="table items table-striped table-bordered table-condensed table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th class="col-md-4"><?= lang("product_name") . " (" . lang("product_code") . ")"; ?></th>
-                                            <th class="col-md-7"  style="width: 250px;"><?= lang("Type"); ?></th>
-                                            <th class="col-md-7"><?= lang("quantity"); ?></th>
-                                            <th style="width: 30px !important; text-align: center;"><i
-                                                    class="fa fa-trash-o"
-                                                    style="opacity:0.5; filter:alpha(opacity=50);"></i></th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="tbody-convert-from-items"></tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                       
-						<!-- Select Convert to Items -->
-                        <div class="col-md-12" id="sticker">
-                            <div class="well well-sm">
-                                <div class="form-group" style="margin-bottom:0;">
-                                    <div class="input-group wide-tip">
-                                        <div class="input-group-addon" style="padding-left: 10px; padding-right: 10px;">
-                                            <i class="fa fa-2x fa-barcode addIcon"></i></a></div>
-                                        <?php echo form_input('bom_to_item', '', 'class="form-control input-lg" id="convert_to_item" placeholder="' . lang("add_product_to_order") . '"'); ?>                                     
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                        </div>
-                        <!-- table convert to items -->
-                        <div class="col-md-12">
-                            <div class="control-group table-group">
-                                <label class="table-label"><?= lang("bom_items_to"); ?> *</label>
+							<div class="controls table-controls">
+								<table id="slTable_" class="table items table-striped table-bordered table-condensed table-hover table-raw">
+									<thead>
+										<tr>
+											<th class="col-md-5"><?= lang("product_name") . " (" . lang("product_code") . ")"; ?></th>
+											<th class="col-md-2"><?= lang("unit"); ?></th>
+											<th class="col-md-5"><?= lang("quantity"); ?></th>
+											<th class="col-md-1" style="width:30px !important;text-align: center;">
+												<i class="fa fa-trash-o" style="opacity:0.5; filter:alpha(opacity=50);"></i>
+											</th>
+										</tr>
+									</thead>
+									<tbody id="tbody-convert-from-items"></tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<!-- Select Convert to Items -->
+					<div class="col-md-12" id="sticker">
+						<div class="well well-sm">
+							<div class="form-group" style="margin-bottom:0;">
+								<div class="input-group wide-tip">
+									<div class="input-group-addon" style="padding-left: 10px; padding-right: 10px;">
+										<i class="fa fa-2x fa-barcode addIcon"></i></div>
+									<?php echo form_input('bom_to_item', '', 'class="form-control input-lg" id="convert_to_item" placeholder="' . lang("add_product_to_order") . '"'); ?>                                     
+								</div>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+					<!-- table convert to items -->
+					<div class="col-md-12">
+						<div class="control-group table-group">
+							<label class="table-label"><?= lang("bom_items_to"); ?> *</label>
 
-                                <div class="controls table-controls">
-                                    <table id="slTable_ "
-                                        class="table items table-striped table-bordered table-condensed table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th class="col-md-4"><?= lang("product_name") . " (" . lang("product_code") . ")"; ?></th>
-                                            <th class="col-md-7" style="width: 250px;"><?= lang("type"); ?></th>
-                                            <th class="col-md-7"><?= lang("quantity"); ?></th>
-                                            <th style="width: 30px !important; text-align: center;"><i
-                                                    class="fa fa-trash-o"
-                                                    style="opacity:0.5; filter:alpha(opacity=50);"></i></th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="tbody-convert-to-items"></tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Button Submit -->
-                        <div class="col-md-12">
-                            <div class="fprom-group"><?php echo form_submit('add_sale', lang("submit"), 'id="bth_convert_items" class="btn btn-primary" style="padding: 6px 15px; margin:15px 0;"'); ?>
-                                <button type="button" name="convert_items" class="btn btn-danger" id="reset"><?= lang('reset') ?></div>
-                        </div>
+							<div class="controls table-controls">
+								<table id="slTable_ " class="table items table-striped table-bordered table-condensed table-hover table-fin">
+									<thead>
+										<tr>
+											<th class="col-md-5"><?= lang("product_name") . " (" . lang("product_code") . ")"; ?></th>
+											<th class="col-md-2"><?= lang("unit"); ?></th>
+											<th class="col-md-5"><?= lang("quantity"); ?></th>
+											<th class="col-md-1" style="width:30px !important;text-align: center;">
+												<i class="fa fa-trash-o" style="opacity:0.5; filter:alpha(opacity=50);"></i>
+											</th>
+										</tr>
+									</thead>
+									<tbody id="tbody-convert-to-items"></tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<!-- Button Submit -->
+					<div class="col-md-12">
+						<div class="fprom-group"><?php echo form_submit('add_sale', lang("submit"), 'id="bth_convert_items" class="btn btn-primary" style="padding: 6px 15px; margin:15px 0;"'); ?>
+							<button type="button" name="convert_items" class="btn btn-danger" id="reset"><?= lang('reset') ?></button>
+						</div>
                     </div>
                 </div>
-                <?php echo form_close(); ?>
-
             </div>
-
-        </div>
-    </div>
+                <?php echo form_close(); ?>
+		</div>
+	</div>
 </div>
 
 <div class="modal" id="prModal" tabindex="-1" role="dialog" aria-labelledby="prModalLabel" aria-hidden="true">
@@ -640,7 +684,7 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="<?=base_url('themes/default/assets/js/sales.js')?>"></script>
+
 <script type="text/javascript">
     $(document).ready(function () {
         function requireQty(){
@@ -697,11 +741,23 @@
             $(this).parent().parent('.input-group').children('input').val(no);
             return false;
         });
+        $('#reset').click(function (e) {
+            bootbox.confirm(lang.r_u_sure, function (result) {
+                if (result) {
+                    if (__getItem('poitems')) {
+                        __removeItem('poitems');
+                    }
+                    $('#modal-loading').show();
+                    location.reload();
+                }
+            });
+        });
     });
 	
 /***** Sikeat Remove Convert Item *****/
 $(document).on('click', '.sldel', function () {
     var row = $(this).closest('tr');
     row.remove();
+	$('.quantity').trigger('change');
 });
 </script>

@@ -1,5 +1,6 @@
 <?php
 	$v = "";
+	
 	/* if($this->input->post('name')){
 	  $v .= "&product=".$this->input->post('product');
 	  } */
@@ -48,10 +49,10 @@
             'bProcessing': true, 'bServerSide': true,
 			"bStateSave": true,
 			"fnStateSave": function (oSettings, oData) {
-				localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+				__setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
 			},
 			"fnStateLoad": function (oSettings) {
-				var data = localStorage.getItem('DataTables_' + window.location.pathname);
+				var data = __getItem('DataTables_' + window.location.pathname);
 				return JSON.parse(data);
 			},
             'sAjaxSource': '<?=site_url('sales/getSales' . ($warehouse_id ? '/' . $warehouse_id : '')).'/?v=1'.$v?>',
@@ -110,160 +111,160 @@
             {column_number: 12, filter_default_label: "[<?=lang('payment_status');?>]", filter_type: "text", data: []},
         ], "footer");
 
-        if (localStorage.getItem('remove_slls')) {
-            if (localStorage.getItem('slitems')) {
-                localStorage.removeItem('slitems');
+        if (__getItem('remove_slls')) {
+            if (__getItem('slitems')) {
+                __removeItem('slitems');
             }
-            if (localStorage.getItem('sldiscount')) {
-                localStorage.removeItem('sldiscount');
+            if (__getItem('sldiscount')) {
+                __removeItem('sldiscount');
             }
-            if (localStorage.getItem('sltax2')) {
-                localStorage.removeItem('sltax2');
+            if (__getItem('sltax2')) {
+                __removeItem('sltax2');
             }
-            if (localStorage.getItem('slref')) {
-                localStorage.removeItem('slref');
+            if (__getItem('slref')) {
+                __removeItem('slref');
             }
-            if (localStorage.getItem('slshipping')) {
-                localStorage.removeItem('slshipping');
+            if (__getItem('slshipping')) {
+                __removeItem('slshipping');
             }
-            if (localStorage.getItem('slwarehouse')) {
-                localStorage.removeItem('slwarehouse');
+            if (__getItem('slwarehouse')) {
+                __removeItem('slwarehouse');
             }
-            if (localStorage.getItem('slnote')) {
-                localStorage.removeItem('slnote');
+            if (__getItem('slnote')) {
+                __removeItem('slnote');
             }
-            if (localStorage.getItem('slinnote')) {
-                localStorage.removeItem('slinnote');
+            if (__getItem('slinnote')) {
+                __removeItem('slinnote');
             }
-            if (localStorage.getItem('slcustomer')) {
-                localStorage.removeItem('slcustomer');
+            if (__getItem('slcustomer')) {
+                __removeItem('slcustomer');
             }
-            if (localStorage.getItem('slbiller')) {
-                localStorage.removeItem('slbiller');
+            if (__getItem('slbiller')) {
+                __removeItem('slbiller');
             }
-            if (localStorage.getItem('slcurrency')) {
-                localStorage.removeItem('slcurrency');
+            if (__getItem('slcurrency')) {
+                __removeItem('slcurrency');
             }
-            if (localStorage.getItem('sldate')) {
-                localStorage.removeItem('sldate');
+            if (__getItem('sldate')) {
+                __removeItem('sldate');
             }
-            if (localStorage.getItem('slsale_status')) {
-                localStorage.removeItem('slsale_status');
+            if (__getItem('slsale_status')) {
+                __removeItem('slsale_status');
             }
-            if (localStorage.getItem('slpayment_status')) {
-                localStorage.removeItem('slpayment_status');
+            if (__getItem('slpayment_status')) {
+                __removeItem('slpayment_status');
             }
-            if (localStorage.getItem('paid_by')) {
-                localStorage.removeItem('paid_by');
+            if (__getItem('paid_by')) {
+                __removeItem('paid_by');
             }
-            if (localStorage.getItem('amount_1')) {
-                localStorage.removeItem('amount_1');
+            if (__getItem('amount_1')) {
+                __removeItem('amount_1');
             }
-            if (localStorage.getItem('paid_by_1')) {
-                localStorage.removeItem('paid_by_1');
+            if (__getItem('paid_by_1')) {
+                __removeItem('paid_by_1');
             }
-            if (localStorage.getItem('pcc_holder_1')) {
-                localStorage.removeItem('pcc_holder_1');
+            if (__getItem('pcc_holder_1')) {
+                __removeItem('pcc_holder_1');
             }
-            if (localStorage.getItem('pcc_type_1')) {
-                localStorage.removeItem('pcc_type_1');
+            if (__getItem('pcc_type_1')) {
+                __removeItem('pcc_type_1');
             }
-            if (localStorage.getItem('pcc_month_1')) {
-                localStorage.removeItem('pcc_month_1');
+            if (__getItem('pcc_month_1')) {
+                __removeItem('pcc_month_1');
             }
-            if (localStorage.getItem('pcc_year_1')) {
-                localStorage.removeItem('pcc_year_1');
+            if (__getItem('pcc_year_1')) {
+                __removeItem('pcc_year_1');
             }
-            if (localStorage.getItem('pcc_no_1')) {
-                localStorage.removeItem('pcc_no_1');
+            if (__getItem('pcc_no_1')) {
+                __removeItem('pcc_no_1');
             }
-            if (localStorage.getItem('cheque_no_1')) {
-                localStorage.removeItem('cheque_no_1');
+            if (__getItem('cheque_no_1')) {
+                __removeItem('cheque_no_1');
             }
-            if (localStorage.getItem('slpayment_term')) {
-                localStorage.removeItem('slpayment_term');
+            if (__getItem('slpayment_term')) {
+                __removeItem('slpayment_term');
             }
-            localStorage.removeItem('remove_slls');
+            __removeItem('remove_slls');
         }
 
         <?php if ($this->session->userdata('remove_slls')) {?>
-        if (localStorage.getItem('slitems')) {
-            localStorage.removeItem('slitems');
+        if (__getItem('slitems')) {
+            __removeItem('slitems');
         }
-        if (localStorage.getItem('sldiscount')) {
-            localStorage.removeItem('sldiscount');
+        if (__getItem('sldiscount')) {
+            __removeItem('sldiscount');
         }
-        if (localStorage.getItem('sltax2')) {
-            localStorage.removeItem('sltax2');
+        if (__getItem('sltax2')) {
+            __removeItem('sltax2');
         }
-        if (localStorage.getItem('slref')) {
-            localStorage.removeItem('slref');
+        if (__getItem('slref')) {
+            __removeItem('slref');
         }
-        if (localStorage.getItem('slshipping')) {
-            localStorage.removeItem('slshipping');
+        if (__getItem('slshipping')) {
+            __removeItem('slshipping');
         }
-        if (localStorage.getItem('slwarehouse')) {
-            localStorage.removeItem('slwarehouse');
+        if (__getItem('slwarehouse')) {
+            __removeItem('slwarehouse');
         }
-        if (localStorage.getItem('slnote')) {
-            localStorage.removeItem('slnote');
+        if (__getItem('slnote')) {
+            __removeItem('slnote');
         }
-        if (localStorage.getItem('slinnote')) {
-            localStorage.removeItem('slinnote');
+        if (__getItem('slinnote')) {
+            __removeItem('slinnote');
         }
-        if (localStorage.getItem('slcustomer')) {
-            localStorage.removeItem('slcustomer');
+        if (__getItem('slcustomer')) {
+            __removeItem('slcustomer');
         }
-        if (localStorage.getItem('slbiller')) {
-            localStorage.removeItem('slbiller');
+        if (__getItem('slbiller')) {
+            __removeItem('slbiller');
         }
-        if (localStorage.getItem('slcurrency')) {
-            localStorage.removeItem('slcurrency');
+        if (__getItem('slcurrency')) {
+            __removeItem('slcurrency');
         }
-        if (localStorage.getItem('sldate')) {
-            localStorage.removeItem('sldate');
+        if (__getItem('sldate')) {
+            __removeItem('sldate');
         }
-        if (localStorage.getItem('slsale_status')) {
-            localStorage.removeItem('slsale_status');
+        if (__getItem('slsale_status')) {
+            __removeItem('slsale_status');
         }
-        if (localStorage.getItem('slpayment_status')) {
-            localStorage.removeItem('slpayment_status');
+        if (__getItem('slpayment_status')) {
+            __removeItem('slpayment_status');
         }
-        if (localStorage.getItem('paid_by')) {
-            localStorage.removeItem('paid_by');
+        if (__getItem('paid_by')) {
+            __removeItem('paid_by');
         }
-        if (localStorage.getItem('amount_1')) {
-            localStorage.removeItem('amount_1');
+        if (__getItem('amount_1')) {
+            __removeItem('amount_1');
         }
-        if (localStorage.getItem('paid_by_1')) {
-            localStorage.removeItem('paid_by_1');
+        if (__getItem('paid_by_1')) {
+            __removeItem('paid_by_1');
         }
-        if (localStorage.getItem('pcc_holder_1')) {
-            localStorage.removeItem('pcc_holder_1');
+        if (__getItem('pcc_holder_1')) {
+            __removeItem('pcc_holder_1');
         }
-        if (localStorage.getItem('pcc_type_1')) {
-            localStorage.removeItem('pcc_type_1');
+        if (__getItem('pcc_type_1')) {
+            __removeItem('pcc_type_1');
         }
-        if (localStorage.getItem('pcc_month_1')) {
-            localStorage.removeItem('pcc_month_1');
+        if (__getItem('pcc_month_1')) {
+            __removeItem('pcc_month_1');
         }
-        if (localStorage.getItem('pcc_year_1')) {
-            localStorage.removeItem('pcc_year_1');
+        if (__getItem('pcc_year_1')) {
+            __removeItem('pcc_year_1');
         }
-        if (localStorage.getItem('pcc_no_1')) {
-            localStorage.removeItem('pcc_no_1');
+        if (__getItem('pcc_no_1')) {
+            __removeItem('pcc_no_1');
         }
-        if (localStorage.getItem('cheque_no_1')) {
-            localStorage.removeItem('cheque_no_1');
+        if (__getItem('cheque_no_1')) {
+            __removeItem('cheque_no_1');
         }
-        if (localStorage.getItem('slpayment_term')) {
-            localStorage.removeItem('slpayment_term');
+        if (__getItem('slpayment_term')) {
+            __removeItem('slpayment_term');
         }
         <?php $this->erp->unset_data('remove_slls');}
         ?>
 
         $(document).on('click', '.sledit', function (e) {
-            if (localStorage.getItem('slitems')) {
+            if (__getItem('slitems')) {
                 e.preventDefault();
                 var href = $(this).attr('href');
                 bootbox.confirm("<?=lang('you_will_loss_sale_data')?>", function (result) {
@@ -307,7 +308,7 @@
 <div class="box">
     <div class="box-header">
         <h2 class="blue"><i
-                class="fa-fw fa fa-heart"></i><?=lang('list_sales') . ' (' . ($warehouse_id ? $warehouse->name : lang('all_warehouses')) . ')';?>
+               class="fa-fw fa fa-heart"></i><?=lang('Sale_Order') . ' (' . ($warehouse_id ? $warehouse->name : lang('all_warehouses')) . ')';?>
         </h2>
 		<div class="box-icon">
             <ul class="btn-tasks">
@@ -397,11 +398,11 @@
                     <li class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon fa fa-building-o tip" data-placement="left" title="<?=lang("warehouses")?>"></i></a>
                         <ul class="dropdown-menu pull-right" class="tasks-menus" role="menu" aria-labelledby="dLabel">
-                            <li><a href="<?=site_url('sales')?>"><i class="fa fa-building-o"></i> <?=lang('all_warehouses')?></a></li>
+                            <li><a href="<?=site_url('Sale_Order')?>"><i class="fa fa-building-o"></i> <?=lang('all_warehouses')?></a></li>
                             <li class="divider"></li>
                             <?php
                             	foreach ($warehouses as $warehouse) {
-                            	        echo '<li><a href="' . site_url('sales/' . $warehouse->id) . '"><i class="fa fa-building"></i>' . $warehouse->name . '</a></li>';
+                            	        echo '<li><a href="'.site_url('sale_order/index/'.$warehouse->id).'"><i class="fa fa-building"></i>' . $warehouse->name . '</a></li>';
                             	    }
                                 ?>
                         </ul>

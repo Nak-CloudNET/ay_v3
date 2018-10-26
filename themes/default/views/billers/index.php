@@ -1,5 +1,8 @@
 <script>
     $(document).ready(function () {
+		function center(x){
+            return '<div style="text-align:center">' + x +'</div>';
+        }
         var oTable = $('#SupData').dataTable({
             "aaSorting": [[1, "asc"]],
             "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
@@ -15,19 +18,50 @@
             },
             "aoColumns": [{
                 "bSortable": false,
-                "mRender": checkbox
-            }, null, null, null, null, null, null, null, null, {"bSortable": false}]
+                "mRender": checkbox},
+                {"mRender": center},
+                ((site.settings.show_company_code== 1)? null:{"bVisible": false}),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                {"bSortable": false}
+                ]
         }).dtFilter([
-            {column_number: 1, filter_default_label: "[<?=lang('company');?>]", filter_type: "text", data: []},
-            {column_number: 2, filter_default_label: "[<?=lang('name');?>]", filter_type: "text", data: []},
-            {column_number: 3, filter_default_label: "[<?=lang('vat_no');?>]", filter_type: "text", data: []},
-            {column_number: 4, filter_default_label: "[<?=lang('phone');?>]", filter_type: "text", data: []},
-            {column_number: 5, filter_default_label: "[<?=lang('email_address');?>]", filter_type: "text", data: []},
-            {column_number: 6, filter_default_label: "[<?=lang('city');?>]", filter_type: "text", data: []},
-            {column_number: 7, filter_default_label: "[<?=lang('country');?>]", filter_type: "text", data: []},
+			{column_number: 1, filter_default_label: "[<?=lang('no');?>]", filter_type: "text", data: []},
+            {column_number: 2, filter_default_label: "[<?=lang('code');?>]", filter_type: "text", data: []},
+            {column_number: 3, filter_default_label: "[<?=lang('company');?>]", filter_type: "text", data: []},
+            {column_number: 4, filter_default_label: "[<?=lang('name');?>]", filter_type: "text", data: []},
+            {column_number: 5, filter_default_label: "[<?=lang('vat_no');?>]", filter_type: "text", data: []},
+            {column_number: 6, filter_default_label: "[<?=lang('phone');?>]", filter_type: "text", data: []},
+            {column_number: 7, filter_default_label: "[<?=lang('email_address');?>]", filter_type: "text", data: []},
+            {column_number: 8, filter_default_label: "[<?=lang('city');?>]", filter_type: "text", data: []},
+			//{column_number: 4, filter_default_label: "[<?=lang('start_date');?>]", filter_type: "text", data: []},
+			//{column_number: 5, filter_default_label: "[<?=lang('end_date');?>]", filter_type: "text", data: []},
+			//{column_number: 6, filter_default_label: "[<?=lang('period');?>]", filter_type: "text", data: []},
+			//{column_number: 7, filter_default_label: "[<?=lang('amount');?>]", filter_type: "text", data: []},
+            {column_number: 9, filter_default_label: "[<?=lang('country');?>]", filter_type: "text", data: []},
         ], "footer");
     });
 </script>
+<style>
+	
+	#SupData th:nth-child(2) {
+		width: 5%;
+	}
+	#SupData th:nth-child(3) {
+		width: 5%;
+	}
+	#SupData th:nth-child(4) {
+		width:20%;
+	}
+	#SupData th:nth-child(9) {
+		width:10%;
+	}
+</style>
 <?php if ($Owner || $GP['bulk_actions']) {
     echo form_open('billers/biller_actions', 'id="action-form"');
 } ?>
@@ -72,13 +106,18 @@
                             <th style="min-width:30px; width: 30px; text-align: center;">
                                 <input class="checkbox checkth" type="checkbox" name="check"/>
                             </th>
-							<th><?= lang("no"); ?></th>
+							<th style="min-width:10px; width:10px;"><?= lang("no"); ?></th>
+							<th><?= lang("code"); ?></th>
                             <th><?= lang("company"); ?></th>
                             <th><?= lang("name"); ?></th>
                             <th><?= lang("vat_no"); ?></th>
                             <th><?= lang("phone"); ?></th>
                             <th><?= lang("email_address"); ?></th>
                             <th><?= lang("city"); ?></th>
+							<!--<th><?= lang("start_date"); ?></th>
+							<th><?= lang("end_date"); ?></th>
+							<th><?= lang("period"); ?></th>
+							<th><?= lang("amount");?></th>-->
                             <th><?= lang("country"); ?></th>
                             <th style="width:85px;"><?= lang("actions"); ?></th>
                         </tr>
@@ -93,6 +132,7 @@
                             <th style="min-width:30px; width: 30px; text-align: center;">
                                 <input class="checkbox checkft" type="checkbox" name="check"/>
                             </th>
+                            <th></th>
                             <th></th>
 							<th></th>
                             <th></th>

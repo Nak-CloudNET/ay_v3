@@ -21,10 +21,10 @@
 			//
 			"bStateSave": true,
 			"fnStateSave": function (oSettings, oData) {
-				localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+				__setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
 			},
 			"fnStateLoad": function (oSettings) {
-				var data = localStorage.getItem('DataTables_' + window.location.pathname);
+				var data = __getItem('DataTables_' + window.location.pathname);
 				return JSON.parse(data);
 			},
             'sAjaxSource': '<?= site_url('drivers/getDrivers') ?>',
@@ -67,7 +67,7 @@
     });
 </script>
 <?php if ($Owner || $GP['bulk_actions']) {
-    echo form_open('customers/customer_actions', 'id="action-form"');
+    echo form_open('drivers/driver_action', 'id="action-form"');
 } ?>
 <div class="box">
     <div class="box-header">

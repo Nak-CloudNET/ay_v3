@@ -24,12 +24,14 @@
 					
                 </div>
                 <div class="col-md-6">
-                    
+                    <div class="form-group">
+                        <?= lang("driver_code", "driver_code"); ?>
+                        <?php echo form_input('driver_code', $driver->code, 'class="form-control" id="driver_code" readonly required'); ?>
+                    </div>
 					<div class="form-group">
                         <?= lang("email_address", "email_address"); ?>
                         <input type="email" name="email" class="form-control" value="<?= $driver->email; ?>" id="email_address"/>
                     </div>
-					
                 </div>
             </div>
 

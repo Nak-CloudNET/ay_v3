@@ -1,39 +1,80 @@
 <?php
-$v = "";
-/* if($this->input->post('name')){
-  $v .= "&product=".$this->input->post('product');
-  } */
-if ($this->input->post('reference_no')) {
-    $v .= "&reference_no=" . $this->input->post('reference_no');
-}
-if ($this->input->post('customer')) {
-    $v .= "&customer=" . $this->input->post('customer');
-}
-if ($this->input->post('biller')) {
-    $v .= "&biller=" . $this->input->post('biller');
-}
-if ($this->input->post('warehouse')) {
-    $v .= "&warehouse=" . $this->input->post('warehouse');
-}
-if ($this->input->post('user')) {
-    $v .= "&user=" . $this->input->post('user');
-}
-if ($this->input->post('serial')) {
-    $v .= "&serial=" . $this->input->post('serial');
-}
-if ($this->input->post('start_date')) {
-    $v .= "&start_date=" . $this->input->post('start_date');
-}
-if ($this->input->post('end_date')) {
-    $v .= "&end_date=" . $this->input->post('end_date');
-}
+	$v = "";
+	/* if($this->input->post('name')){
+	  $v .= "&product=".$this->input->post('product');
+	  } */
+
+	if ($this->input->post('reference_no')) {
+		$v .= "&reference_no=" . $this->input->post('reference_no');
+	}
+	if ($this->input->post('customer')) {
+		$v .= "&customer=" . $this->input->post('customer');
+	}
+	if ($this->input->post('biller')) {
+		$v .= "&biller=" . $this->input->post('biller');
+	}
+	if ($this->input->post('warehouse')) {
+		$v .= "&warehouse=" . $this->input->post('warehouse');
+	}
+	if ($this->input->post('user')) {
+		$v .= "&user=" . $this->input->post('user');
+	}
+	if ($this->input->post('serial')) {
+		$v .= "&serial=" . $this->input->post('serial');
+	}
+	if ($this->input->post('start_date')) {
+		$v .= "&start_date=" . $this->input->post('start_date');
+	}
+	if ($this->input->post('end_date')) {
+		$v .= "&end_date=" . $this->input->post('end_date');
+	}
 
 ?>
 
 <script>
     $(document).ready(function () {
-		
+		$( "#description" ).live( "change", function() {
+            var v = $(this).val();
+			var row = $(this).parent().parent();
+            $('#modal-loading').show();
+            if (v) {
+                $.ajax({
+                    type: "get",
+                    async: false,
+                    url: "<?= site_url('products/getReasons') ?>/" + v,
+                    dataType: "json",
+                    success: function (scdata) {
+                        if (scdata != null) {
+                            row.find("#reason").select2("destroy").empty().attr("placeholder", "<?= lang('select_reason') ?>").select2({
+                                placeholder: "<?= lang('select_position_to_load') ?>",
+								data: scdata
+                            });
+                        }else{
+							row.find("#reason").select2("destroy").empty().attr("placeholder", "<?= lang('select_reason') ?>").select2({
+                                placeholder: "<?= lang('select_position_to_load') ?>",
+                                data: 'not found'
+                            });
+						}
+                    },
+                    error: function () {
+                        bootbox.alert('<?= lang('ajax_error') ?>');
+                        $('#modal-loading').hide();
+                    }
+                });
+            } else {
+                $("#reason").select2("destroy").empty().attr("placeholder", "<?= lang('select_position_to_load') ?>").select2({
+                    placeholder: "<?= lang('select_position_to_load') ?>",
+                    data: [{id: '', text: '<?= lang('select_position_to_load') ?>'}]
+                });
+            }
+            $('#modal-loading').hide();
+		});
     });
+	$(window).load(function() {
+		$(".description").each(function(){
+			$(this).trigger("change");
+		});
+	});
 </script>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -103,12 +144,14 @@ if ($this->input->post('end_date')) {
 				<input type="hidden"  name="stock_id"  id="stock_id" value="<?=$stock->id?>" />
                 <div class="clearfix"></div>
 					
-				<div>
+				<div class="row">
 					<div class="col-md-4">
-						<div class="form-group">
-							<?= lang('date', 'date'); ?>
-							<?= form_input('date', $stock->date , 'class="form-control tip date" required id="date"'); ?>
-						</div>
+						<?php if ($Owner || $Admin || $Settings->allow_change_date == 1) { ?>
+							<div class="form-group">
+								<?= lang('date', 'date'); ?>
+								<?= form_input('date', $this->erp->hrld($stock->date) , 'class="form-control tip date" required id="date"'); ?>
+							</div>
+						<?php } ?>
 						<div class="form-group">
 							<?= lang('reference_no', 'reference_no'); ?>
 							 
@@ -126,7 +169,7 @@ if ($this->input->post('end_date')) {
                             <?php
 								$wh[""]="";
                                 foreach ($warehouses as $warehouse) {
-                                    $wh[$warehouse->id] = $warehouse->name;
+                                    $wh[$warehouse->id] = $warehouse->code .'-'.$warehouse->name;
                                 }
                           
                             echo form_dropdown('from_location', $wh,$stock->warehouse_id, 'class="form-control select"   required  id="from_location" placeholder="' . lang("select") . ' ' . lang("location") . '" style="width:100%"')
@@ -162,7 +205,7 @@ if ($this->input->post('end_date')) {
 							<?= lang('shop', 'shop'); ?>
 							 <?php
 							 foreach ($biller as $bl) {
-                                    $billers[$bl->id] = $bl->company;
+                                    $billers[$bl->id] = $bl->code .'-'.$bl->company;
                                 }
                             echo form_dropdown('shop', $billers,$stock->shop, 'class="form-control select"   required  id="shop" placeholder="' . lang("select") . ' ' . lang("shop") . '" style="width:100%"')
                             ?>
@@ -187,10 +230,7 @@ if ($this->input->post('end_date')) {
 					</div>
 				</div>	
 			
-					
-					
-					
-                <div class="table-responsive">
+				<div class="table-responsive">
                     <table id="PrRData"
                            class="table table-bordered table-hover table-striped table-condensed reports-table">
                         <thead>
@@ -202,6 +242,7 @@ if ($this->input->post('end_date')) {
 							<!--
 							<th style="width:25% !important;"><?= lang("enterprise"); ?></th>
 							-->
+							<th style="width:25% !important;"><?= lang("category_expense"); ?></th>
                             <th style="width:7% !important;"><?= lang("description"); ?></th>
                             <th style="width:7% !important;"><?= lang("reason"); ?></th>
                             <th style="width:10% !important;"><?= lang("QOH"); ?></th>
@@ -233,9 +274,34 @@ if ($this->input->post('end_date')) {
 								<input type="hidden"  name="total_cost[]" id="total_cost" class=" form-control total_cost" value="">
 								<input type="hidden"  name="wh_id[]" id="wh_id" class=" form-control wh_id" value="<?=$row->wh_id?>">
 								</td>
-								<td><input type="text"  name="description[]" id="description" class="checknb form-control description" value="<?=$row->description?>"></td>
-								<td><input type="text"  name="reason[]" id="s4" class="checknb form-control reason" value="<?=$row->reason?>"></td>
-								<td class="qqh"><?=$product_qqh?></td>
+								<td>
+									<select name="exp_catid[]" id="exp_catid" class="checknb form-control exp_cate_id">
+										<?php foreach($getExpenses as $getExpense) { 
+											if($getExpense->id == $row->exp_cate_id) {
+										?>					    
+											<option id="testing" value="<?= $getExpense->id ?>" selected><?= $getExpense->name ?></option>
+											
+											<?php } else { ?>
+											<option id="testing" value="<?= $getExpense->id ?>"><?= $getExpense->name ?></option>
+											
+										<?php } }?>
+									</select>
+								</td>
+								<td>
+									 <select name="description[]" id="description" class="checknb form-control description">
+										<?php foreach($positions as $position) { 
+											if($position->id == $row->description) {
+										?>					    
+											<option id="testing" value="<?= $position->id ?>" selected><?= $position->name ?></option>
+											
+											<?php } else { ?>
+											<option id="testing" value="<?= $position->id ?>"><?= $position->name ?></option>
+											
+										<?php } }?>
+									</select>
+								</td>
+								<td><input type="text"  name="reason[]" id="reason" class="checknb form-control reason" value="<?= $row->reason; ?>"></td>
+								<td class="qqh"><?= $this->erp->formatQuantity($product_qqh); ?></td>
 								<td><input type="text"  name="qty_use[]" required id="qty_use" class="checknb form-control qty_use" value="<?=$row->qty_by_unit?>"></td>
 								<input type="hidden"  name="last_qty_use[]" id="last_qty_use" class=" form-control" value="<?=$row->qty_use?>">
 								<td>
@@ -252,7 +318,7 @@ if ($this->input->post('end_date')) {
                                     ?>
 								</div>
 								</td>
-								<td style="text-align:center;"><span class="btn_delete sotre_delete_id" id="<?=$row->e_id?>" style="cursor:pointer;"><i class="fa fa-trash-o" style="font-size: 15px; color:#2A79B9;"></i></span></td>
+								<td style="text-align:center;"><span class="btn_delete sotre_delete_id" id="<?= $row->product_id .'_'. $row->e_id; ?>" style="cursor:pointer;"><i class="fa fa-trash-o" style="font-size: 15px; color:#2A79B9;"></i></span></td>
 							</tr>
 						<?php
 						}
@@ -272,12 +338,13 @@ if ($this->input->post('end_date')) {
                     </table>
                 </div>
 				<center>
-				<div class="form-group">
-						<input type="hidden"  name="total_item_cost"  id="total_item_cost" class=" form-control total_item_cost" value="">
-						<input type="hidden"  name="sotre_delete_id"  id="sotre_delete_id" class=" form-control" value="">
-                        <div
-                            class="controls"> <?php echo form_submit('submit_report', $this->lang->line("update"), 'class="btn btn-primary"'); ?> </div>
-                </div>
+					<div class="form-group">
+							<input type="hidden"  name="total_item_cost"  id="total_item_cost" class=" form-control total_item_cost" value="">
+							<input type="hidden"  name="sotre_delete_id"  id="sotre_delete_id" class=" form-control" value="">
+							<input type="hidden"  name="product_id"  id="product_id" class=" form-control" value="">
+							<div
+								class="controls"> <?php echo form_submit('submit_report', $this->lang->line("update"), 'class="btn btn-primary"'); ?> </div>
+					</div>
 				</center>
                     <?php echo form_close(); ?>
 				
@@ -285,12 +352,12 @@ if ($this->input->post('end_date')) {
         </div>
     </div>
 	<?php
-										$units[""] = "";
-										foreach ($all_unit as $getunits) {
-											$units[$getunits->id] = $getunits->name;
-										}
-										$dropdown= form_dropdown("purchase_type", $units, '', 'id="purchase_type"  class="form-control input-tip select" style="width:100%;"');
-										?>
+		$units[""] = "";
+		foreach ($all_unit as $getunits) {
+			$units[$getunits->id] = $getunits->name;
+		}
+		$dropdown= form_dropdown("purchase_type", $units, '', 'id="purchase_type"  class="form-control input-tip select" style="width:100%;"');
+	?>
 </div>
 
 <?php
@@ -314,7 +381,7 @@ $unit_option='';
                 startView: 2,
                 forceParse: 0
             }).datetimepicker('update', new Date());
-		$('.datetime').datetimepicker({format: 'yyyy-mm-dd'});
+		//$('.datetime').datetimepicker({format: 'yyyy-mm-dd'});
 		
         $('#pdf').click(function (event) {
             event.preventDefault();
@@ -394,8 +461,19 @@ $unit_option='';
 								'<input type="hidden"  name="total_cost[]" id="total_cost" class=" form-control total_cost" value="">'+
 								'<input type="hidden"  name="wh_id[]" id="wh_id" class=" form-control wh_id" value="">'+
 								'</td>'+
-								'<td><input type="text"  name="description[]" id="description" class="checknb form-control description" value=""></td>'+
-								'<td><input type="text"  name="reason[]" id="s4" class="checknb form-control reason" value=""></td>'+
+								'<td><select name="exp_catid[]" id="exp_catid" class="form-control">'+
+									'<option value="" disabled selected>Select Categories Expense</option>'+
+									<?php foreach ($getExpenses as $exps) : ?>
+										'<option id="testing" value="<?= $exps->id ?>"><?= $exps->name ?></option>'+
+									<?php endforeach; ?>
+								+'</select></td>'+
+								'<td><select name="description[]" id="description" class="form-control">'+
+									'<option value="" disabled selected>Select Categories Expense</option>'+
+									<?php foreach ($positions as $position) : ?>
+										'<option id="testing" value="<?= $position->id ?>"><?= $position->name ?></option>'+
+									<?php endforeach; ?>
+								+'</select></td>'+
+								'<td><input type="text"  name="reason[]" id="reason" class="checknb form-control reason" value=""></td>'+
 								'<td class="qqh"></td>'+
 								'<td><input type="text"  name="qty_use[]" required id="qty_use" class="checknb form-control qty_use" value=""></td>'+
 								'<td>'
@@ -471,7 +549,7 @@ $unit_option='';
 					var parent=$(this).parent().parent();
 					parent.find("#item_code").val(ui.item.value);
 					var product_code=ui.item.value;
-					parent.find(".qqh").text(ui.item.quantity);
+					parent.find(".qqh").text(formatQuantity2(ui.item.quantity));
 					if(ui.item.qqh<=0){
 						parent.find('.qty_use').attr("disabled", 'disabled');
 					}else{
@@ -541,44 +619,22 @@ $unit_option='';
 		});
 		
 		
-		var delete_id="";
+	var delete_id  = "";
+	var get_value = "";
+	var product_id = "";
 	$(".sotre_delete_id").click(function(){
-		delete_id+=($(this).attr("id"))+"-";
+		//delete_id+=($(this).attr("id"))+"-";
+		var value = ($(this).attr("id"));
+		get_value = value.split("_");
+		product_id += get_value[0]+'-';
+		delete_id += get_value[1]+'-';
 		$('#sotre_delete_id').val(delete_id);
+		$('#product_id').val(product_id);
 	});
-		
-		/*$( "#reference_no" ).live('focusout',function(){
-			var ref_no = $("#reference_no").val();
-			
-			var ref_r=ref_no.replace("/", "-");
-			var ref_r=ref_r.replace("/", "-");
-		
-			if(ref_r){
-				$.ajax({
-                    type: "get",
-                    url: site.base_url + "products/verifyReference/"+ref_r,
-                    dataType: "json",
-					
-                    success: function (data) {
-						if(data){
-							bootbox.alert('<?=lang('reference_no_already_use!');?>');
-							$( "#reference_no" ).val('');
-						}
-                    }
-                });
-			}
-			
-		});*/
-		
-		
-		
+
 	});
 </script>
-
-	
-	
-	
-	<?=$modal_js ?>
+<?=$modal_js ?>
 	
 	
 

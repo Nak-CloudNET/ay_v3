@@ -512,8 +512,8 @@
 	<a href="<?=base_url()?>sales/tax_invoice/<?=$sid?>" target="_blank"><button class="btn btn-primary no-print" ><i class="fa fa-print"></i>&nbsp;<?= lang("print_tax_invoice"); ?></button></a>&nbsp;&nbsp;
 	<a href="<?=base_url()?>sales/invoice/<?=$sid?>" target="_blank"><button class="btn btn-primary no-print" ><i class="fa fa-print"></i>&nbsp;<?= lang("invoice"); ?></button></a>&nbsp;&nbsp;
 	<a href="<?=base_url()?>sales/cabon_print/<?=$sid?>" target="_blank"><button class="btn btn-primary no-print" ><i class="fa fa-print"></i>&nbsp;<?= lang("print_cabon"); ?></button></a>&nbsp;&nbsp;
-	<a href="<?=base_url()?>sales/print_jewwel/<?=$sid?>" target="_blank"><button class="btn btn-primary no-print" ><i class="fa fa-print"></i>&nbsp;<?= lang("print_jewwel_apartment_invoice"); ?></button></a>&nbsp;&nbsp;
-	<a href="<?=base_url()?>sales/print_hch/<?=$sid?>" target="_blank"><button class="btn btn-primary no-print" ><i class="fa fa-print"></i>&nbsp;<?= lang("print_hch_invoice"); ?></button></a>&nbsp;&nbsp;
+<!--	<a href="<?=base_url()?>sales/print_jewwel/<?=$sid?>" target="_blank"><button class="btn btn-primary no-print" ><i class="fa fa-print"></i>&nbsp;<?= lang("print_jewwel_apartment_invoice"); ?></button></a>&nbsp;&nbsp;
+	<a href="<?=base_url()?>sales/print_hch/<?=$sid?>" target="_blank"><button class="btn btn-primary no-print" ><i class="fa fa-print"></i>&nbsp;<?= lang("print_hch_invoice"); ?></button></a>&nbsp;&nbsp;-->
 	<a href="<?= site_url('sales'); ?>"><button class="btn btn-warning no-print" ><i class="fa fa-heart"></i>&nbsp;<?= lang("back_to_sale"); ?></button></a>
   <a href="#"><button id="b-add-sale" class="btn btn-success no-print" ><i class="fa fa-heart"></i>&nbsp; Back To Add Sale</button></a>
 </div>
@@ -530,7 +530,7 @@
 $(document).ready(function(){
   $(document).on('click', '#b-add-sale' ,function(event){
     event.preventDefault();
-    localStorage.removeItem('slitems');
+    __removeItem('slitems');
     window.location.href = "<?= site_url('sales/add'); ?>";
   });
 });

@@ -38,6 +38,7 @@ class Welcome extends MY_Controller
         $bc = array(array('link' => '#', 'page' => lang('dashboard')));
         $meta = array('page_title' => lang('dashboard'), 'bc' => $bc);
         $this->page_construct('dashboard', $meta, $this->data);
+
     }
 
     function promotions()

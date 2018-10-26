@@ -16,13 +16,15 @@
                 </div> -->
             <div class="row">
                 <div class="col-md-6">
-                    <div class="form-group company">
-                        <?= lang("company", "company"); ?>
-                        <?php echo form_input('company', $supplier->company, 'class="form-control tip" id="company" required="required"'); ?>
-                    </div>
+					<?php if($setting->show_company_code == 1) { ?>
 					<div class="form-group company">
                         <?= lang("code", "code"); ?>
-                        <?php echo form_input('code', $supplier->code, 'class="form-control tip" id="code" required="required"'); ?>
+                        <?php echo form_input('code', $supplier->code, 'class="form-control tip" id="code"'); ?>
+                    </div>
+					<?php } ?>
+                    <div class="form-group company">
+                        <?= lang("company", "company"); ?>
+                        <?php echo form_input('company', $supplier->company, 'class="form-control tip" id="company"'); ?>
                     </div>
                     <div class="form-group person">
                         <?= lang("name", "name"); ?>
@@ -38,12 +40,12 @@
                 </div> -->
                     <div class="form-group">
                         <?= lang("email_address", "email_address"); ?>
-                        <input type="email" name="email" class="form-control" required="required" id="email_address"
+                        <input type="email" name="email" class="form-control" id="email_address"
                                value="<?= $supplier->email ?>"/>
                     </div>
                     <div class="form-group">
                         <?= lang("phone", "phone"); ?>
-                        <input type="tel" name="phone" class="form-control" required="required" id="phone"
+                        <input type="tel" name="phone" class="form-control" id="phone"
                                value="<?= $supplier->phone ?>"/>
                     </div>
                     <div class="form-group">
@@ -51,23 +53,30 @@
                         <?php echo form_input('address', $supplier->address, 'class="form-control" id="address" required="required"'); ?>
                     </div>
                     <div class="form-group">
-                        <?= lang("city", "city"); ?>
-                        <?php echo form_input('city', $supplier->city, 'class="form-control" id="city" required="required"'); ?>
-                    </div>
-                    <div class="form-group">
-                        <?= lang("state", "state"); ?>
-                        <?php echo form_input('state', $supplier->state, 'class="form-control" id="state"'); ?>
-                    </div>
-
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
                         <?= lang("postal_code", "postal_code"); ?>
                         <?php echo form_input('postal_code', $supplier->postal_code, 'class="form-control" id="postal_code"'); ?>
                     </div>
                     <div class="form-group">
+                        <?= lang("city", "city"); ?>
+                        <?php echo form_input('city', $supplier->city, 'class="form-control" id="city"'); ?>
+                    </div>
+                    <div class="form-group">
                         <?= lang("country", "country"); ?>
                         <?php echo form_input('country', $supplier->country, 'class="form-control" id="country"'); ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?= lang("ក្រុមហ៊ុន", "company_kh"); ?>
+                        <?php echo form_input('company_kh', $supplier->company_kh, 'class="form-control" id="company_kh"'); ?>
+                    </div>
+                    <div class="form-group">
+                        <?= lang("ឈ្មោះ", "name_kh"); ?>
+                        <?php echo form_input('name_kh', $supplier->name_kh, 'class="form-control" id="name_kh"'); ?>
+                    </div>
+                    <div class="form-group">
+                        <?= lang("អាស័យដ្ឋាន", "address_kh"); ?>
+                        <?php echo form_input('address_kh', $supplier->address_kh, 'class="form-control" id="address_kh"'); ?>
                     </div>
                     <div class="form-group">
                         <?= lang("scf1", "cf1"); ?>
@@ -95,6 +104,10 @@
                     <div class="form-group">
                         <?= lang("scf6", "cf6"); ?>
                         <?php echo form_input('cf6', $supplier->cf6, 'class="form-control" id="cf6"'); ?>
+                    </div>
+                    <div class="form-group">
+                        <?= lang("state", "state"); ?>
+                        <?php echo form_input('state', $supplier->state, 'class="form-control" id="state"'); ?>
                     </div>
                 </div>
             </div>

@@ -79,9 +79,9 @@ a#main-menu-min i:hover {
 .nav.main-menu > li > ul > li > a,
 .nav.main-menu > li > ul > li > ul > li > a,
 .nav.main-menu > li > ul > li > ul > li > ul > li > a {
-  color: #16a085;
+  color: #ffffff;
   border-bottom: 1px solid #dbdee0;
-  background: #e9ebec;
+  background: #16a085;
 }
 .nav.main-menu > li:first-child > a {
     border-right: 1px solid #dbdee0;
@@ -90,23 +90,23 @@ a#main-menu-min i:hover {
 .nav.main-menu > li > ul > li > a .chevron,
 .nav.main-menu > li > ul > li > ul > li > a .chevron,
 .nav.main-menu > li > ul > li > ul > li > ul > li > a .chevron {
-  color: #b2b8bd !important;
+  color: #ffffff !important;
 }
 .nav.main-menu > li > a .chevron.closed:after,
 .nav.main-menu > li > ul > li > a .chevron.closed:after,
 .nav.main-menu > li > ul > li > ul > li > a .chevron.closed:after,
 .nav.main-menu > li > ul > li > ul > li > ul > li > a .chevron.closed:after {
-  color: #b2b8bd !important;
+  color: #ffffff !important;
 }
 .nav.main-menu > li > a > i,
 .nav.main-menu > li > ul > li > a > i {
   border-right: none;
 }
 .nav.main-menu > li > ul > li > a {
-  background: #e4e5e7;
+  background: #1ccaa7;
 }
 .nav.main-menu > li > ul > li > ul > li > a {
-  background: #e1e3e5;
+  background: #1ccaa7;
 }
 .nav.main-menu > li > ul > li > ul > li > ul > li > a {
   background: #dee0e2;

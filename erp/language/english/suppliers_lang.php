@@ -17,6 +17,7 @@
  */
 
 
+$lang['suppliers_list']							= "Suppliers List";
 $lang['add_supplier']                       	= "Add Supplier";
 $lang['edit_supplier']                      		= "Edit Supplier";
 $lang['delete_supplier']                    	= "Delete Supplier";
@@ -39,3 +40,4 @@ $lang['check_supplier_email']               	= "Please check supplier email";
 $lang['supplier_already_exist']             	= "Supplier already exists with the same email address";
 $lang['line_no']                            		= "Line Number";
 $lang['first_6_required']                   	= "First Six (6) columns are required and others are optional.";
+$lang["create_employee_salary"]		= "Create Employee Salary";

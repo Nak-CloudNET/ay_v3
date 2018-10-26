@@ -27,3 +27,4 @@ $lang['qty=']                	= "បរិមាណ/Qty";
 $lang['unit']                   = "ងកតា <br>Unit";
 $lang['amount']           	= "ថ្លែទំនិញ <br>Amount";
 $lang['total']                  = "សរុប/Total";
+$lang["create_employee_salary"]		= "Create Employee Salary";

@@ -12,6 +12,8 @@ function cssStyle() {
         $('#container').removeClass('bblack');
 	if($('#container').hasClass('bgreen'))
         $('#container').removeClass('bgreen');
+    if($('#container').hasClass('bred'))
+        $('#container').removeClass('bred');
 	
     if ($.cookie('the_style') == 'light') {
         $('link[href="'+site.base_url+'themes/'+site.settings.theme+'/assets/styles/blue.css"]').attr('disabled', 'disabled');
@@ -49,15 +51,26 @@ function cssStyle() {
         .attr('href', ''+site.base_url+'themes/'+site.settings.theme+'/assets/styles/green.css');
         $('#container').addClass('bgreen');
     }
+    else if ($.cookie('the_style') == 'red') {
+        $('link[href="'+site.base_url+'themes/'+site.settings.theme+'/assets/styles/red.css"]').attr('disabled', 'disabled');
+        $('link[href="'+site.base_url+'themes/'+site.settings.theme+'/assets/styles/red.css"]').remove();
+        $('<link>')
+            .appendTo('head')
+            .attr({type: 'text/css', rel: 'stylesheet'})
+            .attr('href', ''+site.base_url+'themes/'+site.settings.theme+'/assets/styles/red.css');
+        $('#container').addClass('bred');
+    }
     else {
         $('link[href="'+site.base_url+'themes/'+site.settings.theme+'/assets/styles/light.css"]').attr('disabled', 'disabled');
         $('link[href="'+site.base_url+'themes/'+site.settings.theme+'/assets/styles/blue.css"]').attr('disabled', 'disabled');
 		$('link[href="'+site.base_url+'themes/'+site.settings.theme+'/assets/styles/purple.css"]').attr('disabled', 'disabled');
-		$('link[href="'+site.base_url+'themes/'+site.settings.theme+'/assets/styles/green.css"]').attr('disabled', 'disabled');
+        $('link[href="' + site.base_url + 'themes/' + site.settings.theme + '/assets/styles/green.css"]').attr('disabled', 'disabled');
+        $('link[href="' + site.base_url + 'themes/' + site.settings.theme + '/assets/styles/red.css"]').attr('disabled', 'disabled');
         $('link[href="'+site.base_url+'themes/'+site.settings.theme+'/assets/styles/light.css"]').remove();
         $('link[href="'+site.base_url+'themes/'+site.settings.theme+'/assets/tyles/blue.css"]').remove();
 		$('link[href="'+site.base_url+'themes/'+site.settings.theme+'/assets/tyles/purple.css"]').remove();
-		$('link[href="'+site.base_url+'themes/'+site.settings.theme+'/assets/tyles/green.css"]').remove();
+        $('link[href="' + site.base_url + 'themes/' + site.settings.theme + '/assets/tyles/green.css"]').remove();
+        $('link[href="' + site.base_url + 'themes/' + site.settings.theme + '/assets/tyles/red.css"]').remove();
         $('#container').addClass('bblack');
     }
 
@@ -103,9 +116,9 @@ $('#csv_file').change(function(e) {
             $(this).val(''); $(this).fileinput('clear');
             $('form[data-toggle="validator"]').bootstrapValidator('updateStatus', 'csv_file', 'NOT_VALIDATED');
             return false;
-        }
-        else
+        } else {
             return true;
+        }
     }
 });
 
@@ -138,7 +151,7 @@ function widthFunctions(e) {
         $("#main-menu-act").removeClass("minified").addClass("full").find("i").removeClass("fa-angle-double-right").addClass("fa-angle-double-left");
         $("body").removeClass("sidebar-minified");
         $("#content").removeClass("sidebar-minified");
-        $("#sidebar-left").removeClass("minified")
+        $("#sidebar-left").removeClass("minified");
         if ($.cookie('the_fixed') == 'yes') {
             $.cookie('the_fixed', 'no');
             $('#content, #sidebar-left, #header').removeAttr("style");
@@ -284,26 +297,26 @@ $(document).ready(function() {
     }
 });
     $('#supplier, #rsupplier, .rsupplier').select2({
-       minimumInputLength: 1,
-       ajax: {
-        url: site.base_url+"suppliers/suggestions",
-        dataType: 'json',
-        quietMillis: 15,
-        data: function (term, page) {
-            return {
-                term: term,
-                limit: 10
-            };
-        },
-        results: function (data, page) {
-            if(data.results != null) {
-                return { results: data.results };
-            } else {
-                return { results: [{id: '', text: 'No Match Found'}]};
+        minimumInputLength: 1,
+        ajax: {
+            url: site.base_url+"suppliers/suggestions",
+            dataType: 'json',
+            quietMillis: 15,
+            data: function (term, page) {
+                return {
+                    term: term,
+                    limit: 10
+                };
+            },
+            results: function (data, page) {
+                if(data.results != null) {
+                    return { results: data.results };
+                } else {
+                    return { results: [{id: '', text: 'No Match Found'}]};
+                }
             }
         }
-    }
-});
+    });
     $('.input-tip').tooltip({placement: 'top', html: true, trigger: 'hover focus', container: 'body',
         title: function() {
             return $(this).attr('data-tip');
@@ -380,9 +393,38 @@ function suppliers(ele) {
 });
 }
 
+function getAge(dob) {
+	var my_dob = moment(dob, 'DD/MM/YYYY').year();
+	var curr_date = moment().year();
+	
+	var age = curr_date - my_dob;
+	return age;
+}
+
 $(function() {
-    $('.datetime').datetimepicker({format: site.dateFormats.js_ldate, fontAwesome: true, language: 'erp', weekStart: 1, todayBtn: 1, autoclose: 1, todayHighlight: 1, startView: 2, forceParse: 0});
-    $('.date').datetimepicker({format: site.dateFormats.js_sdate, fontAwesome: true, language: 'erp', todayBtn: 1, autoclose: 1, minView: 2 });
+    $('.datetime').datetimepicker({
+        //format: site.dateFormats.js_ldate,
+        format: site.dateFormats.js_sdate,
+        fontAwesome: true,
+        language: 'erp',
+        weekStart: 1, 
+        todayBtn: 1, 
+        autoclose: 1, 
+        todayHighlight: 1, 
+        //startView: 2, 
+        /* add MinView */
+        minView: 2,
+        forceParse: 0
+    });
+    $('.date').datetimepicker({
+        format: site.dateFormats.js_sdate, 
+        fontAwesome: true, 
+        language: 'erp', 
+        todayBtn: 1, 
+        autoclose: 1, 
+        minView: 2 
+    });
+    
     $(document).on('focus','.date', function(t) {
         $(this).datetimepicker({format: site.dateFormats.js_sdate, fontAwesome: true, todayBtn: 1, autoclose: 1, minView: 2 });
     });
@@ -414,6 +456,7 @@ $(document).ready(function() {
         $('#form_action').val($(this).attr('data-action'));
         $('#action-form').submit();
     });
+
     $('body').on('click', '#sync_quantity', function(e) {
         e.preventDefault();
         $('#form_action').val($(this).attr('data-action'));
@@ -425,6 +468,14 @@ $(document).ready(function() {
         $('#action-form-submit').trigger('click');
     });
 	/*
+	$('body').on('click', '#multi_adjust', function(e) {
+		e.preventDefault();
+		$('#form_action').val($('#multi_adjust').attr('data-action'));
+		$('#action-form-submit').trigger('click');
+		//var val = $(".checkbox").val();
+		//alert(val);return false;
+	});
+	
 	$('body').on('click', '#purchase_tax', function(e) {
         e.preventDefault();
         $('#form_action').val($(this).attr('data-action'));
@@ -446,7 +497,15 @@ $(document).ready(function() {
         $('#form_action').val($(this).attr('data-action'));
         $('#action-form-submit').trigger('click');
     });
+	
     $('body').on('click', '#barcodeProducts', function(e) {
+        e.preventDefault();
+        $('#form_action').val($(this).attr('data-action'));
+        $('#action-form-submit').trigger('click');
+    });
+	
+	//=============== Adjustments =====================//
+	$('body').on('click', '#adjust_products', function(e) {
         e.preventDefault();
         $('#form_action').val($(this).attr('data-action'));
         $('#action-form-submit').trigger('click');
@@ -541,7 +600,8 @@ $(document).ready(function() {
         e.preventDefault();
         $('.po').popover('hide');
         var link = $(this).attr('href');
-        var s = $(this).attr('id'); var sp = s.split('__')
+        var s = $(this).attr('id');
+        var sp = s.split('__');
         $.ajax({type: "get", url: link,
             success: function(data) { addAlert(data, 'success'); $('#'+sp[1]).remove(); },
             error: function(data) { addAlert('Failed', 'danger'); }
@@ -654,6 +714,12 @@ $(document).ready(function() {
         cssStyle();
         return true;
     });
+    $('#cssRed').click(function(e) {
+        e.preventDefault();
+        $.cookie('the_style', 'red');
+        cssStyle();
+        return true;
+    });
     $("#toTop").click(function(e) {
         e.preventDefault();
         $("html, body").animate({scrollTop: 0}, 100);
@@ -761,6 +827,7 @@ function fsd(oObj) {
         return '';
     }
 }
+
 function generateCardNo(x) {
     if(!x) { x = 16; }
     chars = "1234567890";
@@ -771,45 +838,60 @@ function generateCardNo(x) {
    }
    return no;
 }
+
 function roundNumber(num, nearest) {
     if(!nearest) { nearest = 0.05; }
     return Math.round((num / nearest) * nearest);
 }
+
 function getNumber(x) {
     return accounting.unformat(x);
 }
+
+function textCenter(x) {
+    return (x != null) ? '<div class="text-center">'+x+'</div>' : '';
+}
+
 function formatQuantity(x) {
     return (x != null) ? '<div class="text-center">'+formatNumber(x, site.settings.qty_decimals)+'</div>' : '';
 }
+
 function formatQuantity2(x) {
     return (x != null) ? formatNumber(x, site.settings.qty_decimals) : '';
 }
+
 function formatNumber(x, d) {
     if(!d && d != 0) { d = site.settings.decimals; }
     if(site.settings.sac == 1) {
         return formatSA(parseFloat(x).toFixed(d));
     }
+
     return accounting.formatNumber(x, d, site.settings.thousands_sep == 0 ? ' ' : site.settings.thousands_sep, site.settings.decimals_sep);
 }
+/************Remove 0.000000001***************/
 function formatMoney(x, symbol) {
     if(!symbol) { symbol = ""; }
     if(site.settings.sac == 1) {
-        return symbol+''+formatSA(parseFloat(x).toFixed(site.settings.decimals));
+        return symbol+''+formatSA(parseFloat(x + 0.00000000).toFixed(site.settings.decimals));
     }
-    return accounting.formatMoney(x, symbol, site.settings.decimals, site.settings.thousands_sep == 0 ? ' ' : site.settings.thousands_sep, site.settings.decimals_sep, "%s%v");
+    return accounting.formatMoney((x + 0.00000000), symbol, site.settings.decimals, site.settings.thousands_sep == 0 ? ' ' : site.settings.thousands_sep, site.settings.decimals_sep, "%s%v");
 }
+
 function is_valid_discount(mixed_var) {
     return (is_numeric(mixed_var) || (/([0-9]%)/i.test(mixed_var))) ? true : false;
 }
+
 function is_numeric(mixed_var) {
     var whitespace =
     " \n\r\t\f\x0b\xa0\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u200b\u2028\u2029\u3000";
     return (typeof mixed_var === 'number' || (typeof mixed_var === 'string' && whitespace.indexOf(mixed_var.slice(-1)) === -
         1)) && mixed_var !== '' && !isNaN(mixed_var);
 }
+
 function is_float(mixed_var) {
   return +mixed_var === mixed_var && (!isFinite(mixed_var) || !! (mixed_var % 1));
 }
+
 function decimalFormat(x) {
     if (x != null) {
         return '<div class="text-center">'+formatNumber(x)+'</div>';
@@ -817,6 +899,7 @@ function decimalFormat(x) {
         return '<div class="text-center">0</div>';
     }
 }
+
 function currencyFormatNoZero(x) {
     if (x != null) {
         return '<div class="text-right">'+formatMoney(x)+'</div>';
@@ -824,49 +907,62 @@ function currencyFormatNoZero(x) {
         return '<div class="text-right"></div>';
     }
 }
+
+function currencyFormat_loan(x) {
+    if (x != null) {
+        return formatMoney(x);
+    } else {
+        return '0';
+    }
+}
+
 function currencyFormat(x) {
+    if (Math.abs(x) <= '0.02') {
+        x = 0;
+    }
     if (x != null) {
         return '<div class="text-right">'+formatMoney(x)+'</div>';
     } else {
         return '<div class="text-right">0</div>';
     }
 }
-function itemDiscount(dis){
-	var str = dis.split('_');
-	var get_dis = str[0]+'('+formatMoney(str[1])+')';
-	if (get_dis != null) {
-        return '<div class="text-right">'+get_dis+'</div>';
+
+function currencyFormat4(x) {
+    if (x != null) {
+        return '<div class="text-right">'+parseFloat(x).toFixed(4)+'</div>';
     } else {
         return '<div class="text-right">0</div>';
     }
 }
-function orderDiscount(dis){
-	var str = dis.split('_');
-	var percentage = str[0].split('%');
-	var get_dis = (parseFloat(percentage[0]) * (parseFloat(str[1]) * parseFloat(str[2])))/100;
-	if (get_dis != null) {
-        return '<div class="text-right">'+str[0]+'('+formatMoney(get_dis)+')'+'</div>';
+
+function currencyFormatLoan(x) {
+    if (x != null) {
+        return formatMoney(x);
     } else {
-        return '<div class="text-right">0</div>';
+        return 0;
     }
 }
-function totalDiscount(dis){
-	var str = dis.split('_');
-	var percentage = str[1].split('%');
-	var get_dis = (parseFloat(percentage[0]) * (parseFloat(str[2]) * parseFloat(str[3])))/100;
-	var total_dis = parseFloat(str[0]) + parseFloat(get_dis);
-	if (total_dis != null) {
-        return '<div class="text-right">'+formatMoney(total_dis)+'</div>';
-    } else {
-        return '<div class="text-right">0</div>';
-    }
-}
+
 function formatDecimal(x) {
     return parseFloat(parseFloat(x).toFixed(site.settings.decimals));
 }
+
 function formatPurDecimal(x) {
+	
     return parseFloat(parseFloat(x).toFixed(site.settings.purchase_decimals));
 }
+
+//====================== Round =========================//
+Number.prototype.toFixedNumber = function(x, base){
+  var pow = Math.pow(base||10,x);
+  return Math.round(this*pow) / pow ;
+};
+
+function formatRoDecimal(x) {
+	return parseFloat(parseFloat(x).toFixedNumber(site.settings.purchase_decimals));
+}
+//======================= End ==========================//
+
 function pqFormat(x) {
     if (x != null) {
         var d = '', pqc = x.split("___");
@@ -880,6 +976,7 @@ function pqFormat(x) {
         return '';
     }
 }
+
 function pqFormatPurchaseReports(x) {
     if (x != null) {
         var d = '', pqc = x.split("___");
@@ -892,6 +989,7 @@ function pqFormatPurchaseReports(x) {
         return '';
     }
 }
+
 function pqFormatSales(x) {
     if (x != null) {
         var d = '', pqc = x.split("___");
@@ -905,6 +1003,7 @@ function pqFormatSales(x) {
         return '';
     }
 }
+
 function pqFormatSaleReports(x) {
     if (x != null) {
         var d = '', pqc = x.split("___");
@@ -917,32 +1016,67 @@ function pqFormatSaleReports(x) {
         return '';
     }
 }
+
 function checkbox(x) {
     return '<center><input class="checkbox multi-select" type="checkbox" name="val[]" value="' + x + '" /></center>';
 }
+
 function attachments(x){
-	if(x == null){
+	if(x == null || x== ''){
 		return '';
 	}else{
 		return '<a href="'+site.base_url+'sales/show_attachments/'+x+'" data-target="#myModal" data-toggle="modal" class="external"><i class="fa fa-file" aria-hidden="true"></i></a>';
 	}
 }
+
 function attachment(x) {
-    return x == null ? '' : '<div class="text-center"><a href="'+site.base_url+'welcome/download/' + x + '" class="tip" title="'+lang['download']+'"><i class="fa fa-file"></i></a></div>';
+    return x == null || x== '' ? '' : '<div class="text-center"><a href="'+site.base_url+'welcome/download/' + x + '" class="tip" title="'+lang['download']+'"><i class="fa fa-file"></i></a></div>';
 }
+
+function decode_html(value){
+    return $('<div/>').html(value).text();
+}
+
 function attachment2(x) {
     return x == null ? '' : '<div class="text-center"><a href="'+site.base_url+'welcome/download/' + x + '" class="tip" title="'+lang['download']+'"><i class="fa fa-file-o"></i></a></div>';
 }
+
 function img_hl(x) {
     return x == null ? '' : '<center><ul class="enlarge"><li><img src="'+site.base_url+'assets/uploads/thumbs/' + x + '" alt="' + x + '" style="width:30px; height:30px;" class="img-circle" /><span><a href="'+site.base_url+'assets/uploads/' + x + '" data-toggle="lightbox"><img src="'+site.base_url+'assets/uploads/' + x + '" alt="' + x + '" style="width:200px;" class="img-thumbnail" /></a></span></li></ul></center>';
     //return x == null ? '' : '<center><a href="'+site.base_url+'assets/uploads/' + x + '" data-toggle="lightbox"><img src="'+site.base_url+'assets/uploads/thumbs/' + x + '" alt="" style="width:30px; height:30px;" /></a></center>';
 }
+
+function qty_hl(x){
+	var qty_w = x.split('=');
+	var table = '<div class="table-responsive" style="width:300px;">';
+			table += '<table class="table table-bordered table-striped table-condensed two-columns">';
+				table += '<thead>';
+					table += '<tr>';
+						table += '<th style="width:250px;">'+lang['warehouse_name']+'</th>';
+						table += '<th style="width:50px;">'+lang['quantity']+'</th>';
+					table += '</tr>';
+				table += '</thead>';
+				
+				table += '<body>';
+					table += '<tr>';
+						table += '<th style="width:250px;">'+lang['warehouse_name']+'</th>';
+						table += '<th style="width:50px;">'+lang['quantity']+'</th>';
+					table += '</tr>';
+				table += '</body>';
+									
+			table += '</table>';
+		table += '</div>';
+	
+	return '<center><ul class="enlarge"><li><a>'+formatQuantity(qty_w[0])+'</a><span data-toggle="lightbox">'+table+'</span></li></ul></center>';
+}
+
 function user_status(x) {
     var y = x.split("__");
     return y[0] == 1 ?
     '<a href="'+site.base_url+'auth/deactivate/'+ y[1] +'" data-toggle="modal" data-target="#myModal"><span class="label label-success"><i class="fa fa-check"></i> '+lang['active']+'</span></a>' :
     '<a href="'+site.base_url+'auth/activate/'+ y[1] +'"><span class="label label-danger"><i class="fa fa-times"></i> '+lang['inactive']+'</span><a/>';
 }
+
 function row_status_confirm(x) {
     if(x == null || x=='') {
 		x="not_yet";
@@ -967,19 +1101,31 @@ function row_suspend(x){
 }
 
 function row_status(x) {
-	if(x == null) {
+    if(x == null) {
         return '';
     } else if(x == 'pending' || x == 'book' || x == 'free') {
         return '<div class="text-center"><span class="label label-warning">'+lang[x]+'</span></div>';
-    } else if(x == 'completed' || x == 'paid' || x == 'sent' || x == 'received') {
+    } else if(x == 'completed' || x == 'paid' || x == 'sent' || x == 'received' || x == 'approved' || x=='sale' || x=='sale order'){
         return '<div class="text-center"><span class="label label-success">'+lang[x]+'</span></div>';
     } else if(x == 'partial' || x == 'transferring' || x == 'ordered'  || x == 'busy'  || x == 'processing') {
         return '<div class="text-center"><span class="label label-info">'+lang[x]+'</span></div>';
-    } else if(x == 'due' || x == 'returned' || x == 'cancel') {
+    } else if(x == 'due' || x == 'returned' || x == 'accepted' || x == 'reject') {
         return '<div class="text-center"><span class="label label-danger">'+lang[x]+'</span></div>';
     } else {
         return '<div class="text-center"><span class="label label-default">'+lang[x]+'</span></div>';
     }
+}
+
+function authorize_status(x) {
+	if(x == 'pending') {
+		return '<div class="text-center"><span class="label label-warning">'+lang['pending']+'</span></div>';
+	} else if( x == 'approved'){
+		 return '<div class="text-center"><span class="label label-success">'+lang['approved']+'</span></div>';
+	} else if( x == 'completed'){
+        return '<div class="text-center"><span class="label label-success">'+lang['approved']+'</span></div>';
+    } else{
+		 return '<div class="text-center"><span class="label label-danger">'+lang['rejected']+'</span></div>';
+	}
 }
 
 function house_calendar_status(x) {
@@ -987,14 +1133,26 @@ function house_calendar_status(x) {
         return '';
     } else if(x == 'pending' || x == 'free' || x == 'aval') {
         return '<div class="text-center"><span class="label label-warning">'+lang[x]+'</span></div>';
-    } else if(x == 'completed' || x == 'paid' || x == 'sent' || x == 'received') {
+    } else if(x == 'completed' || x == 'paid' || x == 'sent' || x == 'received' || x == 'sold') {
         return '<div class="text-center"><span class="label label-success">'+lang[x]+'</span></div>';
-    } else if(x == 'partial' || x == 'transferring' || x == 'ordered' || x == 'sold') {
+    } else if(x == 'partial' || x == 'transferring' || x == 'ordered' || x == 'order') {
         return '<div class="text-center"><span class="label label-info">'+lang[x]+'</span></div>';
     } else if(x == 'due' || x == 'returned' || x == 'busy') {
         return '<div class="text-center"><span class="label label-danger">'+lang[x]+'</span></div>';
     } else {
         return '<div class="text-center"><span class="label label-default">'+lang[x]+'</span></div>';
+    }
+}
+
+function contruction_status(x) {
+    if(x == null) {
+        return '';
+    } else if(x == 'inprogress_contruct') {
+        return '<div class="text-center"><span class="label label-warning">'+lang[x]+'</span></div>';
+    } else if(x == 'completed_contruct') {
+        return '<div class="text-center"><span class="label label-success">'+lang[x]+'</span></div>';
+    } else if(x == 'not_contruct') {
+        return '<div class="text-center"><span class="label label-danger">'+lang[x]+'</span></div>';
     }
 }
 
@@ -1013,6 +1171,7 @@ function delivery_status(xs) {
         return '<div class="text-center"><span class="label label-default">'+lang[x[1]]+'</span></div>';
     }
 }
+
 function sale_order_delivery_status(xs) {
 	
 	var x = xs.split('___');
@@ -1029,21 +1188,41 @@ function sale_order_delivery_status(xs) {
         return '<div class="text-center"><span class="label label-default">'+lang[x[1]]+'</span></div>';
     }
 }
-function sale_statusLink(str){
-	var x = str.split('_');
-	//var invoice=x[0]+"/invoice";
+
+function pos_delivery_status_old(xs) {
+	
+	var x = xs.split('___');
+	var pos_order_id =x[0];
     if(x == null) {
         return '';
-    } else if(x[1] == 'returned') {
-        return '<a href="'+site.base_url+'sales/view_return/'+x[0]+'" style="text-decoration:none"><div class="text-center"><span class="label label-danger">'+lang[x[1]]+'</span></div></a>';
+    } else if(x[1] == 'delivery') {
+        return '<a href="'+site.base_url+'pos/index/0/' + pos_order_id + '" style="text-decoration:none"><div class="text-center delivery"><span class="label label-success">'+x[1]+'</span></div></a>';
     } else if(x[1] == 'completed') {
-        return '<div class="text-center"><span class="label label-success">'+lang[x[1]]+'</span></div>';
-    } else if(x[1] == 'partial') {
-        return '<a href="'+site.base_url+'sales/modal_view/'+x[0]+'" style="text-decoration:none"><div class="text-center"><span class="label label-info">'+lang[x[1]]+'</span></div></a>';
+        return '<div class="text-center"><span class="label label-danger">'+x[1]+'</span></div>';
     } else {
-        return '<div class="text-center"><span class="label label-default">'+lang[x[1]]+'</span></div>';
+        return '<div class="text-center"><span class="label label-default">'+x[1]+'</span></div>';
     }
 }
+
+function pos_delivery_status(xs) {
+	
+	var x = xs.split('___');
+	var pos_order_id =x[0];
+	
+    if(x == null) {
+        return '';
+    } else if(x[1] == 'delivery') {
+        return '<div class="text-center delivery"><span class="label label-success">'+x[1]+'</span></div>';
+	}else if(x[1] == 'partial'){
+		return '<div class="text-center"><span class="label label-info">'+lang[x[1]]+'</span></div>';
+	} else if(x[1] == 'completed') {
+        return '<div class="text-center"><span class="label label-danger">'+x[1]+'</span></div>';
+    } else {
+        return '<div class="text-center"><span class="label label-default">'+x[1]+'</span></div>';
+    }
+}
+
+
 function invoice_delivery_status(xs) {
 	
 	var x = xs.split('___');
@@ -1060,8 +1239,6 @@ function invoice_delivery_status(xs) {
         return '<div class="text-center"><span class="label label-default">'+lang[x[1]]+'</span></div>';
     }
 }
-
-
 
 function inactive(x) {
     if(x == null || x == 0) {
@@ -1081,6 +1258,7 @@ function row_actions(x) {
 		return '';
 	}
 }
+
 function formatSA (x) {
     x=x.toString();
     var afterPoint = '';
@@ -1100,8 +1278,7 @@ function floorFigure(figure, decimals){
  if (!decimals) decimals = 2;
  var d = Math.pow(10,decimals);
  return ((figure*d)/d).toFixed(decimals);
-};
-
+}
 function toFixed(num, fixed) {
     fixed = fixed || 0;
     fixed = Math.pow(10, fixed);
@@ -1114,10 +1291,19 @@ $(document).ready(function() {
         $('#myModal').modal('show');
         //window.location.href = site.base_url + 'products/view/' + $(this).parent('.product_link').attr('id');
     });
-    $('body').on('click', '.purchase_links td:not(:first-child :last-child)', function() {
+    $('body').on('click', '.purchase_links td:not(:first-child, :nth-child(16), :last-child)', function() {
         $('#myModal').modal({remote: site.base_url + 'purchases/modal_view/' + $(this).parent('.purchase_links').attr('id')});
         $('#myModal').modal('show');
         //window.location.href = site.base_url + 'purchases/view/' + $(this).parent('.purchase_link').attr('id');
+    });
+	$('body').on('click', '.purchase_order_links td:not(:first-child, :nth-child(10), :last-child)', function() {
+        $('#myModal').modal({remote: site.base_url + 'purchases/modal_view_purchase_order/' + $(this).parent('.purchase_order_links').attr('id')});
+        $('#myModal').modal('show');
+        //window.location.href = site.base_url + 'purchases/view/' + $(this).parent('.purchase_link').attr('id');
+    });
+	$('body').on('click', '.purchase_request_links td:not(:first-child :last-child)', function() {
+        $('#myModal').modal({remote: site.base_url + 'purchases_request/modal_view/' + $(this).parent('.purchase_request_links').attr('id')});
+        $('#myModal').modal('show');
     });
 	$('body').on('click', '.return_purchase_link td', function() {
         window.location.href = site.base_url + 'purchases/view_return_purchases/' + $(this).parent('.return_purchase_link').attr('id');
@@ -1179,16 +1365,21 @@ $(document).ready(function() {
         $('#myModal').modal('show');
     });
     
-    $('body').on('click', '.invoice_link td:not(:first-child :last-child)', function() {
+    $('body').on('click', '.invoice_link td:not(:first-child, :nth-child(18), :last-child)', function() {
         $('#myModal').modal({remote: site.base_url + 'sales/modal_view/' + $(this).parent('.invoice_link').attr('id')});
         $('#myModal').modal('show');
         //window.location.href = site.base_url + 'sales/view/' + $(this).parent('.invoice_link').attr('id');
     });
 	
-	$('body').on('click', '.order_invoice_link td:not(:first-child :last-child)', function() {
+	$('body').on('click', '.register_link td:not(:first-child :last-child)', function() {
+        $('#myModal').modal({remote: site.base_url + 'pos/close_register_popup/' + $(this).parent('.register_link').attr('id')});
+        $('#myModal').modal('show');
+    });
+	
+	
+	$('body').on('click', '.order_invoice_link td:not(:first-child, :nth-child(13), :last-child)', function() {
         $('#myModal').modal({remote: site.base_url + 'sale_order/modal_order_view/' + $(this).parent('.order_invoice_link').attr('id')});
         $('#myModal').modal('show');
-        //window.location.href = site.base_url + 'sales/view/' + $(this).parent('.invoice_link').attr('id');
     });
 	
 
@@ -1224,7 +1415,10 @@ $(document).ready(function() {
     });
 
 
-
+	$('body').on('click', '.installment_link td:not(:first-child :last-child)', function() {
+        $('#myModal').modal({remote: site.base_url + 'sales/add_installment/' + $(this).parent('.installment_link').attr('id')});
+        $('#myModal').modal('show');
+    });
 
 	$('body').on('click', '.loan_link td:not(:first-child :last-child)', function() {
         $('#myModal').modal({remote: site.base_url + 'sales/loan_view/' + $(this).parent('.loan_link').attr('id')});
@@ -1254,24 +1448,61 @@ $(document).ready(function() {
         $('#myModal').modal('show');
         //window.location.href = site.base_url + 'sales/view/' + $(this).parent('.invoice_link').attr('id');
     });
-    $('body').on('click', '.return_link td', function() {
-        window.location.href = site.base_url + 'sales/view_return/' + $(this).parent('.return_link').attr('id');
+	
+	//======================== Convert Link ===============================//
+	$('body').on('click', '.convert_link td:not(:first-child :last-child)', function() {
+        $('#myModal').modal({remote: site.base_url + 'products/product_analysis/' + $(this).parent('.convert_link').attr('id')});
+        $('#myModal').modal('show');
+    });
+	//============================ End ====================================//
+	
+    // $('body').on('click', '.return_link td', function() {
+        // window.location.href = site.base_url + 'sales/view_return/' + $(this).parent('.return_link').attr('id');
+    // });
+	$('body').on('click', '.return_link td:not(:first-child :last-child)', function() {
+        $('#myModal').modal({remote: site.base_url + 'sales/modal_return/' + $(this).parent('.return_link').attr('id')});
+        $('#myModal').modal('show');
+        //window.location.href = site.base_url + 'sales/view/' + $(this).parent('.invoice_link').attr('id');
     });
 	$('body').on('click', '.return_product_link td', function() {
         window.location.href = site.base_url + 'products/view_return/' + $(this).parent('.return_link').attr('id');
+    });
+    $('body').on('click', '.invoice_links td:not(:first-child, :nth-child(2), :last-child)', function () {
+        $('#myModal').modal({remote: site.base_url + 'sales/modal_views/' + $(this).parent('.invoice_links').attr('id')});
+        $('#myModal').modal('show');
     });
     $('body').on('click', '.quote_link td:not(:first-child :last-child)', function() {
         $('#myModal').modal({remote: site.base_url + 'quotes/modal_view/' + $(this).parent('.quote_link').attr('id')});
         $('#myModal').modal('show');
         //window.location.href = site.base_url + 'quotes/view/' + $(this).parent('.quote_link').attr('id');
     });
-    $('body').on('click', '.delivery_link td:not(:first-child, :last-child)', function() {
-        $('#myModal').modal({remote: site.base_url + 'sales/view_delivery/' + $(this).parent('.delivery_link').attr('id')});
-        $('#myModal').modal('show');
+    $('body').on('click', '.delivery_inv_link td:not(:first-child, :last-child)', function() {
+		$('#myModal2').modal({remote: site.base_url + 'sales/view_inv_delivery/' + $(this).parent('.delivery_inv_link').attr('id')});
+        $('#myModal2').modal('show');
     });
-	
+	$('body').on('click', '.delivery_so_link td:not(:first-child, :last-child)', function() {
+		$('#myModal2').modal({remote: site.base_url + 'sales/view_so_delivery/' + $(this).parent('.delivery_so_link').attr('id')});
+        $('#myModal2').modal('show');
+    });	
+	$('body').on('click', '.adjustment_link td:not(:first-child, :last-child)', function() {
+        $('#myModal').modal({remote: site.base_url + 'products/adjustment_view_list/' + $(this).parent('.adjustment_link').attr('id')});
+        $('#myModal').modal('show');
+    });	
 	$('body').on('click', '.sale_order_delivery_link td:not(:first-child, :last-child)', function() {
         $('#myModal').modal({remote: site.base_url + 'sales/sale_order_view_delivery/' + $(this).parent('.sale_order_delivery_link').attr('id')});
+        $('#myModal').modal('show');
+    });
+    $('body').on('click', '.sale_order_add_delivery_link td:not(:first-child, :last-child)', function() {
+        $('#myModal').modal({remote: site.base_url + 'sales/sale_order_view_add_delivery/' + $(this).parent('.sale_order_add_delivery_link').attr('id')});
+        $('#myModal').modal('show');
+    });
+    $('body').on('click', '.sale_order_add_delivery_link1 td:not(:first-child, :last-child)', function() {
+        $('#myModal').modal({remote: site.base_url + 'sales/sale_order_view_add_delivery/' + $(this).parent('.sale_order_add_delivery_link').attr('id')});
+        $('#myModal').modal('show');
+    });
+
+    $('body').on('click', '.delivery_alert td:not(:first-child, :last-child)', function() {
+        $('#myModal').modal({remote: site.base_url + 'sales/view_delivery_alert/' + $(this).parent('.delivery_alert').attr('id')});
         $('#myModal').modal('show');
     });
 	
@@ -1335,6 +1566,7 @@ function fixAddItemnTotals() {
         }
     });
 }
+
 function ItemnTotals() {
     fixAddItemnTotals();
     $(window).bind("resize", fixAddItemnTotals);
@@ -1366,12 +1598,32 @@ function nl2br (str, is_xhtml) {
 	return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
 }
 
+//==================== Multi Currencies Formular ===================//
+	
+function multiCurrFormular(own_rate, setting_rate, amount){
+	var result = 0;
+	result = (amount/own_rate)*setting_rate;
+	return result;
+}
+	
+//============================== End ===============================//
+
 $(window).bind("resize", widthFunctions);
 $(window).load(widthFunctions);
 
-
 /* Allow Number only */
 $(document).on('keypress keyup blur','.quantity_received', function(event){
+     $(this).val($(this).val().replace(/[^0-9\.]/g,''));
+	if ((event.which != 46 || $(this).val().indexOf('.') != -1) && ((event.which > 31 ) &&(event.which < 48 || event.which > 57))) {
+		event.preventDefault();
+	}
+	$(this).val($(this).val().replace(/[^0-9\.]/g,''));
+	if ((event.which != 46 || $(this).val().indexOf('.') != -1) && ((event.which > 31 ) &&(event.which < 48 || event.which > 57))) {
+		event.preventDefault();
+	}
+});
+
+$(document).on('keypress keyup blur','.number_only', function(event){
      $(this).val($(this).val().replace(/[^0-9\.]/g,''));
 	if ((event.which != 46 || $(this).val().indexOf('.') != -1) && ((event.which > 31 ) &&(event.which < 48 || event.which > 57))) {
 		event.preventDefault();

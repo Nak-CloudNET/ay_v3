@@ -1,3 +1,7 @@
+<?php
+	//$this->erp->print_arrays($biller);
+?>
+
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
         <div class="modal-header">
@@ -32,17 +36,23 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <?= lang("code", "code"); ?>
-                        <?php echo form_input('code', '', 'class="form-control tip" id="code" data-bv-notempty="true"'); ?>
+                        <?php echo form_input('code', $biller->code, 'class="form-control tip" id="code" data-bv-notempty="true"'); ?>
                     </div>
                 </div>
 
-                <div class="col-md-6"></div>
+                <div class="col-md-6">
+					<div class="form-group">
+                        <?= lang("biller_prefix", "biller_prefix"); ?>
+                        <?php echo form_input('biller_prefix', $biller->biller_prefix, 'class="form-control tip" id="biller_prefix"'); ?>
+                    </div>
+				</div>
+				
             </div>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group company">
                         <?= lang("company", "company"); ?>
-                        <?php echo form_input('company', $biller->company, 'class="form-control tip" id="company" required="required"'); ?>
+                        <?php echo form_input('company', $biller->company, 'class="form-control tip" id="company" '); ?>
                     </div>
                     <div class="form-group person">
                         <?= lang("name", "name"); ?>
@@ -58,17 +68,17 @@
                     </div>
                     <div class="form-group">
                         <?= lang("email_address", "email_address"); ?>
-                        <input type="email" name="email" class="form-control" required="required" id="email_address"
+                        <input type="email" name="email" class="form-control" id="email_address"
                                value="<?= $biller->email ?>"/>
                     </div>
                     <div class="form-group">
                         <?= lang("phone", "phone"); ?>
-                        <input type="tel" name="phone" class="form-control" id="phone"
+                        <input type="tel" name="phone" class="form-control" id="phone" required="required"
                                value="<?= $biller->phone ?>"/>
                     </div>
                     <div class="form-group">
                         <?= lang("address", "address"); ?>
-                        <?php echo form_input('address', $biller->address, 'class="form-control" id="address" required="required"'); ?>
+                        <?php echo form_input('address', $biller->address, 'class="form-control" id="address" '); ?>
                     </div>
 					<div class="form-group">
                         <?= lang("Street", "Street"); ?>
@@ -79,26 +89,14 @@
                         <?php echo form_input('group', $biller->group, 'class="form-control" id="group"'); ?>
                     </div>
 					<div class="form-group">
-                        <?= lang("Village", "Village"); ?>
-                        <?php echo form_input('village', $biller->village, 'class="form-control" id="village"'); ?>
-                    </div>
-					<div class="form-group">
                         <?= lang("Commune", "Commune"); ?>
                         <?php echo form_input('Commune', $biller->sangkat, 'class="form-control" id="Commune"'); ?>
                     </div>
 					<div class="form-group">
-                        <?= lang("District", "District"); ?>
-                        <?php echo form_input('District', $biller->district, 'class="form-control" id="District"'); ?>
-                    </div>
-                    <div class="form-group">
                         <?= lang("city", "city"); ?>
-                        <?php echo form_input('city', $biller->city, 'class="form-control" id="city" required="required"'); ?>
+                        <?php echo form_input('city', $biller->city, 'class="form-control" id="city" '); ?>
                     </div>
-                    <div class="form-group">
-                        <?= lang("state", "state"); ?>
-                        <?php echo form_input('state', $biller->state, 'class="form-control" id="state"'); ?>
-                    </div>
-                    <div class="form-group">
+					<div class="form-group">
                         <?= lang("country", "country"); ?>
                         <?php echo form_input('country', $biller->country, 'class="form-control" id="country"'); ?>
                     </div>
@@ -106,6 +104,10 @@
                         <?= lang("postal_code", "postal_code"); ?>
                         <?php echo form_input('postal_code', $biller->postal_code, 'class="form-control" id="postal_code"'); ?>
                     </div> 
+                    <div class="form-group">
+                        <?= lang("wifi_code", "wifi_code"); ?>
+                        <?php echo form_input('wifi_code', $biller->wifi_code, 'class="form-control" id="wifi_code"'); ?>
+                    </div>
                 </div>
                 <div class="col-md-6">
 					<div class="form-group">
@@ -122,7 +124,7 @@
                     </div>
                     <div class="form-group company">
                     <?= lang("contact_person", "contact_person"); ?>
-                    <?php echo form_input('contact_person', '', 'class="form-control" id="contact_person" data-bv-notempty="false"'); ?>
+                    <?php echo form_input('contact_person', $biller->contact_person, 'class="form-control" id="contact_person"'); ?>
                 	</div>
                     <div class="form-group">
                         <?= lang("contact_phone", "cf3"); ?>
@@ -138,12 +140,40 @@
 						?>
                     </div>
                     <div class="form-group">
-                        <?= lang("benefit", "cf6"); ?>
-                        <?php echo form_input('cf6', $biller->cf6, 'class="form-control" id="cf6"'); ?>
-                    </div>
-                    <div class="form-group">
                         <?= lang("invoice_footer", "invoice_footer"); ?>
                         <?php echo form_textarea('invoice_footer', $biller->invoice_footer, 'class="form-control skip" id="invoice_footer" style="height:115px;"'); ?>
+                    </div>
+					<div class="form-group">
+                        <?= lang("Village", "Village"); ?>
+                        <?php echo form_input('village', $biller->village, 'class="form-control" id="village"'); ?>
+                    </div>
+					<div class="form-group">
+                        <?= lang("District", "District"); ?>
+                        <?php echo form_input('District', $biller->district, 'class="form-control" id="District"'); ?>
+                    </div>
+					<div class="form-group">
+                        <?= lang("state", "state"); ?>
+                        <?php echo form_input('state', $biller->state, 'class="form-control" id="state"'); ?>
+                    </div>
+					<div class="form-group">
+						<?= lang("start_date","start_date");?>
+						<?php echo form_input('start_date',$this->erp->hrsd($biller->start_date), 'class="form-control tip date" id="start_date" ');?>
+					</div>
+					<div class="form-group">
+						<?= lang("end_date","end_date");?>
+						<?php echo form_input('end_date',$this->erp->hrsd($biller->end_date), 'class="form-control tip date" id="end_date" ');?>
+					</div>
+					<div class="form-group">
+						<?= lang("period","period");?>
+						<?php echo form_input('period', $biller->period, 'class="form-control" id="period" ');?>
+					</div>
+					<div class="form-group">
+						<?= lang("amount","amount");?>
+						<?php echo form_input('amount', $this->erp->formatDecimal($biller->amount), 'class="form-control number_only" id="amount" data-bv-notempty="true"');?>
+					</div>
+                    <div class="form-group">
+                        <?= lang("beginning_balance","beginning_balance");?>
+                        <?php echo form_input('beginning_balance', $this->erp->formatDecimal($biller->begining_balance),'class="form-control number_only" id="beginning_balance"');?>
                     </div>
                 </div>
             </div>

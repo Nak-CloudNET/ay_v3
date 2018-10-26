@@ -1,7 +1,13 @@
+<style type="text/css">
+    @media print {
+        #noprint {
+            display: none !important;
+        }
+    }
+</style>
 <?php
 	//$this->erp->print_arrays($delivery);
 ?>
-
 <div class="modal-dialog modal-lg no-modal-header">
     <div class="modal-content">
         <div class="modal-body">
@@ -11,9 +17,9 @@
                 <i class="fa fa-print"></i> <?= lang('print'); ?>
             </button>
             <?php if ($logo) { ?>
-                <div class="text-center" style="margin-bottom:20px;">
-                    <img src="<?= base_url() . 'assets/uploads/logos/' . $biller->logo; ?>"
-                         alt="<?= $biller->company != '-' ? $biller->company : $biller->name; ?>">
+                <div class="text-center" style="margin-bottom:20px; font-weight:bold;">
+					ប័ណ្ណបញ្ចេញទំនិញ​​​​​<br/>
+					DELIVERY GOODS NOTE (<?= $biller->company != '-' ? $biller->company : $biller->name; ?>)
                 </div>
             <?php } ?>
             <div class="table-responsive">
@@ -22,42 +28,27 @@
                     <tbody>
                     <tr>
                         <td width="30%"><?php echo $this->lang->line("date"); ?></td>
-                        <td width="70%"><?php echo $this->erp->hrld($delivery->date); ?></td>
-                    </tr>
-                    <tr>
-                        <td><?php echo $this->lang->line("do_reference_no"); ?></td>
+                        <td width="24%"><?php echo $this->erp->hrld($delivery->date); ?></td>
                         <td><?php echo $delivery->do_reference_no; ?></td>
-                    </tr>
-                    <tr>
-                        <td><?php echo $this->lang->line("sale_reference_no"); ?></td>
                         <td><?php echo $delivery->sale_reference_no; ?></td>
                     </tr>
                     <tr>
-                        <td><?php echo $this->lang->line("customer"); ?></td>
-                        <td><?php echo $delivery->customer; ?></td>
-                    </tr>
-                    <tr>
                         <td><?php echo $this->lang->line("address"); ?></td>
-                        <td><?php echo $delivery->address; ?></td>
+                        <td colspan="3"><?php echo $delivery->address; ?></td>
                     </tr>
-                    <?php if ($delivery->note) { ?>
-                        <tr>
-                            <td><?php echo $this->lang->line("note"); ?></td>
-                            <td><?php echo $this->erp->decode_html($delivery->note); ?></td>
-                        </tr>
-                    <?php } ?>
+
                     </tbody>
 
                 </table>
             </div>
             <div class="table-responsive">
-                <table class="table table-bordered table-hover table-striped">
+                <table class="table table-bordered table-hover table-striped" style="font-size:15px;">
 
                     <h3><?php echo $this->lang->line("items"); ?></h3>
                     <thead>
 						<tr>
 							<th style="text-align:center; vertical-align:middle;"><?php echo $this->lang->line("no"); ?></th>
-							
+
 							<?php if($setting->show_code == 0){ ?>
 								<th style="vertical-align:middle;"><?php echo $this->lang->line("product_name"); ?></th>
 							<?php }else if($setting->separate_code == 0){ ?>
@@ -66,8 +57,9 @@
 								<th style="vertical-align:middle;"><?php echo $this->lang->line("product_name"); ?></th>
 								<th style="vertical-align:middle;"><?php echo $this->lang->line("product_code"); ?></th>
 							<?php } ?>
-							
-							<th style="text-align:center; vertical-align:middle;"><?php echo $this->lang->line("quantity"); ?></th>
+
+                            <th style="text-align:center; vertical-align:middle;"><?php echo $this->lang->line("quantity"); ?></th>
+							<th style="text-align:center; vertical-align:middle;"><?php echo $this->lang->line("unit"); ?></th>
 						</tr>
 
                     </thead>
@@ -87,6 +79,11 @@
 								<td style="vertical-align:middle;"><?php echo $row->code; ?></td>
 							<?php } ?>
                             <td style="width: 70px; text-align:center; vertical-align:middle;"><?php echo $this->erp->formatQuantity($row->quantity_received); ?></td>
+                            <?php if ( !empty($row->variant)) { ?>
+                                <td style="width: 70px; text-align:center; vertical-align:middle;"><?php echo $row->variant; ?></td>
+                            <?php } else { ?>
+                                <td style="width: 70px; text-align:center; vertical-align:middle;"><?php echo $row->unit; ?></td>
+                            <?php } ?>
                         </tr>
                         <?php
                         $r++;
@@ -98,24 +95,138 @@
 
             <div class="row">
                 <div class="col-xs-4">
-                    <p style="height:80px;"><?= lang("prepared_by"); ?>
-                        : <?= $user->first_name . ' ' . $user->last_name; ?> </p>
+                    <p style="height:80px;font-weight:bold;"><?= lang("prepared_by"); ?> </p>
                     <hr>
-                    <p><?= lang("stamp_sign"); ?></p>
+                    <p style="font-weight:bold;"><?= lang("stamp_sign"); ?></p>
                 </div>
                 <div class="col-xs-4">
-                    <p style="height:80px;"><?= lang("delivered_by"); ?>: </p>
+                    <p style="height:50px;font-weight:bold;"><?= lang("delivered_by"); ?>: </p>
 					<span><?php echo $row->name; ?></span>
                     <hr>
-                    <p><?= lang("stamp_sign"); ?></p>
+                    <p style="font-weight:bold;"><?= lang("stamp_sign"); ?></p>
                 </div>
                 <div class="col-xs-4">
-                    <p style="height:80px;"><?= lang("received_by"); ?>: </p>
+                    <p style="height:80px;font-weight:bold;"><?= lang("received_by"); ?>: </p>
                     <hr>
-                    <p><?= lang("stamp_sign"); ?></p>
+                    <p style="font-weight:bold;"><?= lang("stamp_sign"); ?></p>
                 </div>
             </div>
 
+            <!-- Footer buttons -->
+            <div class="btn-group btn-group-justified" id="noprint">
+                <!-- <div class="btn-group">
+                    <a href="<?= site_url('sales/add/' . $delivery->id) ?>" class="tip btn btn-primary" title="<?= lang('create_sale') ?>">
+                        <i class="fa fa-heart"></i>
+                        <span class="hidden-sm hidden-xs"><?= lang('create_sale') ?></span>
+                    </a>
+                </div>
+
+                <div class="btn-group">
+                    <a href="<?= site_url('sale_order/delivery_invoice/' . $delivery->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('invoice') ?>">
+                        <i class="fa fa-print"></i>
+                        <span class="hidden-sm hidden-xs"><?= lang('invoice') ?></span>
+                    </a>
+                </div>
+               -->
+                <div class="btn-group">
+                    <a href="<?= site_url('sale_order/sanagro_invoice_a4_r/' . $delivery->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('sanagro_deliveries') ?>">
+                        <i class="fa fa-print"></i>
+                        <span class="hidden-sm hidden-xs"><?= lang('Sanagro_Deliveries') ?></span>
+                    </a>
+                </div>
+				<div class="btn-group">
+                    <a href="<?= site_url('sale_order/standard_delivery_invoice/' . $delivery->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('invoice_delivery') ?>">
+                        <i class="fa fa-print"></i>
+                        <span class="hidden-sm hidden-xs"><?= lang('invoice_delivery') ?></span>
+                    </a>
+                </div>
+                <div class="btn-group">
+                    <a href="<?= site_url('sale_order/delivery_invoice_a5/' . $delivery->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('invoice_a5') ?>">
+                        <i class="fa fa-print"></i>
+                        <span class="hidden-sm hidden-xs"><?= lang('invoice_a5') ?></span>
+                    </a>
+                </div>
+                <!--
+                <div class="btn-group">
+                    <a href="<?= site_url('sale_order/delivery_note/' . $delivery->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('invoice') ?>">
+                        <i class="fa fa-print"></i>
+                        <span class="hidden-sm hidden-xs"><?= lang('note') ?></span>
+                    </a>
+                </div>
+				<div class="btn-group">
+                    <a href="<?= site_url('sale_order/delivery_note_ppcp/' . $delivery->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('invoice') ?>">
+                        <i class="fa fa-print"></i>
+                        <span class="hidden-sm hidden-xs"><?= lang('note_ppcp') ?></span>
+                    </a>
+                </div>
+				<div class="btn-group">
+                    <a href="<?= site_url('sale_order/delivery_invoice_lao/' . $delivery->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('delivery_lao') ?>">
+                        <i class="fa fa-print"></i>
+                        <span class="hidden-sm hidden-xs"><?= lang('delivery_lao') ?></span>
+                    </a>
+                </div>
+                <div class="btn-group">
+                    <a href="<?= site_url('sale_order/delivery_note_a5/' . $delivery->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('note_a5') ?>">
+                        <i class="fa fa-print"></i>
+                        <span class="hidden-sm hidden-xs"><?= lang('note_a5') ?></span>
+                    </a>
+                </div>
+				<div class="btn-group">
+                    <a href="<?= site_url('sale_order/delivery_note_a5_knk/' . $delivery->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('KNK_GROUP') ?>">
+                        <i class="fa fa-print"></i>
+                        <span class="hidden-sm hidden-xs"><?= lang('KNK_GROUP') ?></span>
+                    </a>
+                </div>
+				<div class="btn-group">
+                    <a href="<?= site_url('sale_order/delivery_tiger/' . $delivery->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('tiger_invoice') ?>">
+                        <i class="fa fa-print"></i>
+                        <span class="hidden-sm hidden-xs"><?= lang('tiger_invoice') ?></span>
+                    </a>
+                </div>
+                -->
+                <?php if ($Owner || $Admin || $GP['sales-edit_delivery']) { ?>
+                    <div class="btn-group">
+                        <a href="<?= site_url('sales/edit_deliveries/' . $delivery->id) ?>" class="tip btn btn-warning sledit" title="<?= lang('edit') ?>">
+                            <i class="fa fa-edit"></i>
+                            <span class="hidden-sm hidden-xs"><?= lang('edit') ?></span>
+                        </a>
+                    </div>
+                <?php } ?>
+            </div>
+            <!--
+			<div class="btn-group btn-group-justified" id="noprint">
+				<div class="btn-group">
+						<a href="<?= site_url('sales/delivery_invoice_a4/' . $delivery->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('Invoice_A4_Delivery') ?>">
+							<i class="fa fa-print"></i>
+							<span class="hidden-sm hidden-xs"><?= lang('Invoice_A4_Delivery') ?></span>
+						</a>
+				</div>
+				<div class="btn-group">
+						<a href="<?= site_url('sales/delivery_invoice_a4_2/' . $delivery->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('Invoice_A4/2_Delivery') ?>">
+							<i class="fa fa-print"></i>
+							<span class="hidden-sm hidden-xs"><?= lang('Invoice_A4/2_Delivery') ?></span>
+						</a>
+				</div>
+				<div class="btn-group">
+						<a href="<?= site_url('sale_order/deliverys_sbps/' . $delivery->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('SBPS') ?>">
+							<i class="fa fa-print"></i>
+							<span class="hidden-sm hidden-xs"><?= lang('SBPS') ?></span>
+						</a>
+				</div>
+				<div class="btn-group">
+						<a href="<?= site_url('sale_order/deliverys_nano_tech/' . $delivery->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('Nano Tech') ?>">
+							<i class="fa fa-print"></i>
+							<span class="hidden-sm hidden-xs"><?= lang('Nano Tech') ?></span>
+						</a>
+				</div>
+				<div class="btn-group">
+						<a href="<?= site_url('sales/delivery_angkor_concrete/' . $delivery->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('delivery_angkor_concrete') ?>">
+							<i class="fa fa-print"></i>
+							<span class="hidden-sm hidden-xs"><?= lang('Angkor_Concrete') ?></span>
+						</a>
+				</div>
+			</div>
+            -->
         </div>
     </div>
 </div>

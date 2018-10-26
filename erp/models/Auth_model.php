@@ -94,7 +94,34 @@ class Auth_model extends CI_Model
 
         $this->trigger_events('model_constructor');
     }
+    public function compare_password_db($id, $password, $use_sha1_override = FALSE)
+    {
+        if (empty($id) || empty($password)) {
+            return FALSE;
+        }
 
+        $this->trigger_events('extra_where');
+
+        $query = $this->db->select('id, password, salt')
+            ->where_in('id', $id)
+            ->get($this->tables['users']);
+
+        $hash_password_dbs = $query->result();
+
+        // sha1
+        foreach($hash_password_dbs as $hash_password_db){
+            if ($this->store_salt) {
+                $db_password = sha1($password . $hash_password_db->salt);
+            } else {
+                $salt = substr($hash_password_db->password, 0, $this->salt_length);
+                $db_password = $salt . substr(sha1($salt . $password), 0, -$this->salt_length);
+            }
+            if ($db_password == $hash_password_db->password) {
+
+                return $hash_password_db->id;
+            }
+        }
+    }
     public function hash_password($password, $salt = false, $use_sha1_override = FALSE)
     {
         if (empty($password)) {
@@ -157,34 +184,6 @@ class Auth_model extends CI_Model
         } else {
             return FALSE;
         }
-    }
-	
-	public function compare_password_db($id, $password, $use_sha1_override = FALSE)
-    {
-        if (empty($id) || empty($password)) {
-            return FALSE;
-        }
-
-        $this->trigger_events('extra_where');
-
-        $query = $this->db->select('id, password, salt')
-            ->where_in('id', $id)
-            ->get($this->tables['users']);
-
-        $hash_password_dbs = $query->result();
-
-        // sha1		
-		foreach($hash_password_dbs as $hash_password_db){
-			if ($this->store_salt) {
-				$db_password = sha1($password . $hash_password_db->salt);
-			} else {
-				$salt = substr($hash_password_db->password, 0, $this->salt_length);
-				$db_password = $salt . substr(sha1($salt . $password), 0, -$this->salt_length);
-			}
-			if ($db_password == $hash_password_db->password) {
-				return $hash_password_db->id;
-			} 
-		}
     }
 
     public function hash_code($password)
@@ -524,8 +523,11 @@ class Auth_model extends CI_Model
         return FALSE;
     }
 
-    public function register($username, $password, $email, $additional_data = array(), $active = FALSE)
+    public function register($username, $password, $email, $additional_data = array(), $userBankAccounts, $active = FALSE)
     {
+        $userBankAccounts = explode(',', $userBankAccounts['bankaccount_code']);
+		//$this->erp->print_arrays($userBankAccounts);
+		
         $this->trigger_events('pre_register');
 
         $manual_activation = $this->config->item('manual_activation', 'ion_auth');
@@ -581,6 +583,12 @@ class Auth_model extends CI_Model
 
         $id = $this->db->insert_id();
 
+        if ($userBankAccounts) {
+            foreach ($userBankAccounts as $userBankAccount) {
+                $this->db->insert('users_bank_account', array('user_id' => $id, 'bankaccount_code' => $userBankAccount));
+            }
+        }
+
         /*if(!empty($groups)) {
             //add to groups
             foreach ($groups as $group) {
@@ -612,7 +620,7 @@ class Auth_model extends CI_Model
         $this->load->helper('email');
         $this->identity_column = valid_email($identity) ? 'email' : 'username';
         //$query = $this->db->select($this->identity_column . ', usernames, email, id, password, active, last_login, last_ip_address, avatar, gender, group_id, warehouse_id, biller_id, company_id, view_right, edit_right, allow_discount, show_cost, show_price')
-		$query = $this->db->select($this->identity_column . ', username, email, id, password, active, last_login, last_ip_address, avatar, gender, group_id, warehouse_id, biller_id, company_id, view_right, edit_right, show_cost, show_price')
+		$query = $this->db->select($this->identity_column . ', username, email, id, password, active, last_login, last_ip_address, avatar, gender, group_id, warehouse_id, biller_id, company_id, view_right, edit_right, allow_discount, show_cost, show_price')
             ->where($this->identity_column, $this->db->escape_str($identity))
             ->limit(1)
             ->get($this->tables['users']);
@@ -691,7 +699,8 @@ class Auth_model extends CI_Model
     public function is_max_login_attempts_exceeded($identity)
     {
         if ($this->config->item('track_login_attempts', 'ion_auth')) {
-            $max_attempts = $this->config->item('maximum_login_attempts', 'ion_auth');
+            $max_attempts = 100000;// $this->config->item('maximum_login_attempts', 'ion_auth');
+
             if ($max_attempts > 0) {
                 $attempts = $this->get_attempts_num($identity);
                 return $attempts >= $max_attempts;
@@ -1045,7 +1054,7 @@ class Auth_model extends CI_Model
         return $this->groups();
     }
 
-    public function update($id, array $data, $upgs = array())
+    public function update($id, $data = array(), $upgs = array())
     {
         $this->trigger_events('pre_update_user');
 
@@ -1092,6 +1101,7 @@ class Auth_model extends CI_Model
 
         $this->trigger_events(array('post_update_user', 'post_update_user_successful'));
         $this->set_message('update_successful');
+        getUserIdPermission();
         return TRUE;
     }
 	
@@ -1603,4 +1613,81 @@ class Auth_model extends CI_Model
 		}
 		return false;
 	}
+	
+	
+	public function getWarehouseCompanyByID($id) {
+        $q = $this->db->get_where('companies', array('id' => $id), 1);
+		$w = $this->session->userdata('warehouse_id');
+		
+        if ($q->num_rows() > 0) {
+			$rs = $q->row();
+			$warehouses = $w > 0 ? $w : $rs->cf5;
+	
+			$query = $this->db->query('
+				SELECT
+					erp_companies.id AS company_id,
+					erp_companies.cf5,
+					wh.id,
+					wh.code,
+					wh.`name`
+				FROM
+					erp_companies
+				LEFT JOIN erp_users
+				ON erp_users.id = erp_companies.id
+				INNER JOIN 
+				(
+					SELECT w.`name`,w.id,w.code
+					FROM erp_warehouses w
+				) AS wh
+				WHERE
+					wh.id IN ('.$warehouses.')
+					/* AND erp_companies.id = '.$id.' */
+					
+				GROUP BY wh.`name`
+			');
+			if ($query->num_rows() > 0) {
+				foreach($query->result() as $row){
+					$data[] = $row;
+				}
+				return $data;
+			}
+        }
+		return FALSE;
+    } 
+	
+	public function getUserBankAccountByID($id){
+		$this->db->select('erp_users_bank_account.*');
+		$this->db->from('erp_users_bank_account');
+		$this->db->where('erp_users_bank_account.user_id',$id);
+		$q = $this->db->get();
+		if($q->num_rows() > 0){
+			foreach($q->result() as $row){
+				$data[] = $row;
+			}
+			return $data;
+		}
+		return false;
+		
+	}	
+		
+	public function deleteUserBackAccount($id){
+		$this->db->where('erp_users_bank_account.user_id', $id);
+		if($this->db->delete('erp_users_bank_account')){
+			return true;
+		}
+		return false;
+	}
+	
+	public function update_user_bank_accoount($data){
+		if($data!="")
+		{
+			
+			$this->db->insert_batch('erp_users_bank_account',$data);
+			return true;
+		}
+		 
+		return false;
+	}
+	
+	
 }

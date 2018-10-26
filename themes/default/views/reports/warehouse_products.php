@@ -29,37 +29,21 @@
 				return '<div class="text-right">0</div>';
 			}
 		}
-		$('#PrRData').DataTable({
+		$('#PrRData1').DataTable({
 			"aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?=lang('all')?>"]],
-		    "fnFooterCallback": function ( nRow, aaData, iStart, iEnd, aiDisplay ) {
-				/*
-				 * Calculate the total market share for all browsers in this table (ie inc. outside
-				 * the pagination)
-				 */
-				var iTotalMarket = 0 ;
-				for ( var i=0 ; i<aaData.length ; i++ )
+			"scrollY": 200,
+			"scrollX": true,
+		    "fnFooterCallback": function ( nRow, aaData, iStart, iEnd, aiDisplay ) {				
+				var total = 0;
+				for ( var i= 0 ; i < aaData.length ; i++ )
 				{
-					iTotalMarket += aaData[i][3]*1;
-				}
-
-				/* Calculate the market share for browsers on this page */
-				var wp1 = 0, wp2 = 0, total_wh = 0;
-				for ( var i=iStart ; i<iEnd ; i++ )
-				{
-					//wp1 += aaData[ aiDisplay[i] ][3]*1;
-					//wp2 += aaData[ aiDisplay[i] ][4]*1;
-					//total_wh += ((aaData[ aiDisplay[i] ][3]*1) + (aaData[ aiDisplay[i] ][4]*1));
-				}
-
-				/* Modify the footer row to match what we want */
-				var nCells = nRow.getElementsByTagName('th');
-				 nCells[3].innerHTML = format(parseInt(wp1));
-				//nCells[4].innerHTML = format(parseInt(wp2));
-				//nCells[5].innerHTML = format(parseInt(total_wh));
+					
+				}				
+				
 			}
 		}).fnSetFilteringDelay().dtFilter([
-            {column_number: 1, filter_default_label: "[<?=lang('product_code');?>", filter_type: "text", data: []},
-            {column_number: 2, filter_default_label: "[<?=lang('product_name');?>", filter_type: "text", data: []},
+            {column_number: 1, filter_default_label: "[<?=lang('product_code');?>]", filter_type: "text", data: []},
+            {column_number: 2, filter_default_label: "[<?=lang('product_name');?>]", filter_type: "text", data: []},
         ], "footer");
 		$('.ware').each(function(){
 			var id = $(this).val();
@@ -70,10 +54,8 @@
 			$('.get'+id).text(val);
 		});
 		var val = 0;
-	    var t = $('.total').val(); 
 		$('.total').each(function(){
 			val += parseFloat($(this).text());
-			 
 		});
 		$('.gettoal').text(val);
     });
@@ -92,8 +74,8 @@
         $("#product").autocomplete({
             source: '<?= site_url('reports/suggestions'); ?>',
             select: function (event, ui) {
+				
                 $('#product_id').val(ui.item.id);
-                //$(this).val(ui.item.label);
             },
             minLength: 1,
             autoFocus: false,
@@ -139,11 +121,7 @@
                         <i class="icon fa fa-file-excel-o"></i>
                     </a>
                 </li>
-            <!--    <li class="dropdown">
-                    <a href="#" id="image" class="tip" title="<?= lang('save_image') ?>">
-                        <i class="icon fa fa-file-picture-o"></i>
-                    </a>
-                </li> -->
+               
             </ul>
         </div>
     </div>
@@ -166,7 +144,7 @@
 
                     <?php echo form_open("reports/warehouse_reports"); ?>
                     <div class="row">
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <div class="form-group">
                                 <?= lang("product", "product"); ?>
                                 <?php echo form_input('sproduct', (isset($_POST['sproduct']) ? $_POST['sproduct'] : ""), 'class="form-control" id="product"'); ?>
@@ -175,37 +153,12 @@
                                        id="product_id"/>
                             </div>
                         </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <?= lang("start_date", "start_date"); ?>
-                                <?php echo form_input('start_date', (isset($_POST['start_date']) ? $_POST['start_date'] : ""), 'class="form-control datetime" id="start_date"'); ?>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <?= lang("end_date", "end_date"); ?>
-                                <?php echo form_input('end_date', (isset($_POST['end_date']) ? $_POST['end_date'] : ""), 'class="form-control datetime" id="end_date"'); ?>
-                            </div>
-                        </div>
 						
-						<div class="col-sm-4">
-                            <div class="form-group">
-                                <?= lang("supplier", "supplier") ?>
-                                <?php
-                                $sup[''] = "";
-                                foreach ($suppliers as $supplier) {
-                                    $sup[$supplier->id] = $supplier->name;
-                                }
-                                echo form_dropdown('supplier', $sup, (isset($_POST['supplier']) ? $_POST['supplier'] : ''), 'class="form-control select" id="suppliers" placeholder="' . lang("select") . " " . lang("supplier") . '" style="width:100%"')
-                                ?>
-                            </div>
-                        </div>
-						
-						<div class="col-sm-4">
+                        <div class="col-sm-3">
                             <div class="form-group">
                                 <?= lang("category", "category") ?>
                                 <?php
-                                $cat[''] = "";
+                            	$cat = array("");                                
                                 foreach ($categories as $category) {
                                     $cat[$category->id] = $category->name;
                                 }
@@ -213,6 +166,21 @@
                                 ?>
                             </div>
                         </div>
+                        			
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <?= lang("start_date", "start_date"); ?>
+                                <?php echo form_input('start_date', (isset($_POST['start_date']) ? $_POST['start_date'] : ""), 'class="form-control datetime" id="start_date"'); ?>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <?= lang("end_date", "end_date"); ?>
+                                <?php echo form_input('end_date', (isset($_POST['end_date']) ? $_POST['end_date'] : ""), 'class="form-control datetime" id="end_date"'); ?>
+                            </div>
+                        </div>
+						
+						
 						
                     </div>
                     <div class="form-group">
@@ -225,7 +193,7 @@
 
                 <div class="clearfix"></div>
                 <div class="table-responsive">
-                    <table id="PrRData"
+                    <table id="PrRData1"
                            class="table table-striped table-bordered table-condensed table-hover dfTable reports-table"
                            style="margin-bottom:5px;">
                         <thead>
@@ -234,13 +202,13 @@
 									<input class="checkbox checkth" type="checkbox" name="check"/>
 								</th>
 								<th><?= lang('product_code');?></th>
-								<th><?= lang('product_name');?></th>
+								<th style="width:350px;"><?= lang('product_name');?></th>
 								<?php
 									foreach($warehouse as $ware){
-										echo '<th>'.$ware->code.'</th>';
+										echo '<th>'.$ware->name.'</th>';
 									}
 								?>
-								<th><?= lang('total');?></th>
+								<th style="width:180px;"><?= lang('total');?></th>
 							</tr>
                         </thead>
                         <tbody>
@@ -256,20 +224,20 @@
 								<?php
 									$total_wh_amount = 0;
 									foreach($warehouse as $ware){
-										$this->db->select('SUM(quantity_balance) as qb');
-										$this->db->from('purchase_items');
+										$this->db->select('SUM(quantity) as qb');
+										$this->db->from('warehouses_products');
 										$this->db->where(array('warehouse_id'=>$ware->id, 'product_id'=>$treport->product_id));
 										$q = $this->db->get();
+										
 										if ($q->num_rows() > 0) {
 											echo '<input type="hidden" class="ware" value="'.$ware->id.'">';
-											foreach ($q->result() as $row) {
+											foreach ($q->result() as $row) {												
 												if($row->qb == ""){
 													echo '<td class="ware'. $ware->id .'" title="'. $ware->id .'">0.00</td>';
 												}else{
 													echo '<td class="ware'. $ware->id .'" title="'. $ware->id .'">'.$this->erp->formatQuantity($row->qb).'</td>';
 													$total_wh_amount += $row->qb;
 												}
-												
 											}
 										}
 									}
@@ -287,18 +255,18 @@
 							?>
                         </tbody>
                         <tfoot class="dtFilter">
-							<tr class="active">
+							<tr class="active" style="font-weight:bold; font-">
 								<th style="min-width:5%; width: 5%; text-align: center;">
 									<input class="checkbox checkth" type="checkbox" name="check"/>
 								</th>
 								<th></th>
-								<th></th> 
+								<th></th>
 								<?php
-									foreach($warehouse as $ware){ 
-										echo '<th class="get'.$ware->id.'">'.$ware->code .'</th>';
+									foreach($warehouse as $ware){
+										echo '<th class=" get'.$ware->id.'">'.$ware->code .'</th>';
 									}
 								?>
-								<th class="gettoal"><?= lang('total');?></th>
+								<th class="gettoal right"><?= lang('total');?></th>
 							</tr>
                         </tfoot>
                     </table>
@@ -309,30 +277,34 @@
     </div>
 </div>
 
+<style type="text/css">
+	.dtFilter th{ color: black; }
+</style>
 <script type="text/javascript" src="<?= $assets ?>js/html2canvas.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        /*
-		$('#pdf').click(function (event) {
-            event.preventDefault();
-            window.location.href = "<?=site_url('reports/getProductsReportInOut/pdf/?v=1'.$v)?>";
-            return false;
-        });
-        $('#xls').click(function (event) {
-            event.preventDefault();
-            window.location.href = "<?=site_url('reports/getProductsReportInOut/0/xls/?v=1'.$v)?>";
-            return false;
-        });
-		*/
         $('#image').click(function (event) {
             event.preventDefault();
             html2canvas($('.box'), {
                 onrendered: function (canvas) {
-                    var img = canvas.toDataURL()
+                    var img = canvas.toDataURL();
                     window.open(img);
                 }
             });
             return false;
         });
+		
+		$('.datetime').datetimepicker({
+			format: site.dateFormats.js_ldate, 
+			fontAwesome: true, 
+			language: 'sma', 
+			weekStart: 1, 
+			todayBtn: 1, 
+			autoclose: 1, 
+			todayHighlight: 1, 
+			startView: 2, 
+			forceParse: 0
+		});
+		
     });
 </script>

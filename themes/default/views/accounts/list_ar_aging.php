@@ -1,9 +1,9 @@
 <ul id="myTab" class="nav nav-tabs">
-    <li class=""><a href="#sales-con" class="tab-grey"><?= lang('AR Aging') ?></a></li>
-    <li class=""><a href="#payments-con" class="tab-grey"><?= lang('0 - 30 Days') ?></a></li>
-    <li class=""><a href="#quotes-con" class="tab-grey"><?= lang('30 - 60 Days') ?></a></li>
-    <li class=""><a href="#returns-con" class="tab-grey"><?= lang('60 - 90 Days') ?></a></li>
-    <li class=""><a href="#deposits-con" class="tab-grey"><?= lang('Over 90') ?></a></li>
+    <li class=""><a href="#sales-con" class="tab-grey"><?= lang('AR Aging'); ?></a></li>
+    <li class=""><a href="#payments-con" class="tab-grey"><?= lang('0 - 30 Days'); ?></a></li>
+    <li class=""><a href="#quotes-con" class="tab-grey"><?= lang('30 - 60 Days'); ?></a></li>
+    <li class=""><a href="#returns-con" class="tab-grey"><?= lang('60 - 90 Days'); ?></a></li>
+    <li class=""><a href="#deposits-con" class="tab-grey"><?= lang('Over 90'); ?></a></li>
 </ul>
 
 <div class="tab-content">
@@ -31,57 +31,8 @@
                $v .= "&end_date=" . $this->input->post('end_date');
            }	
        }
+       
        ?>
-		<script>
-         $(document).ready(function () {
-            var date_c = '<?= $date ?>';
-            var oTable = $('#SlRData').dataTable({
-				"aaSorting": [[0, "desc"]],
-				"aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
-				"iDisplayLength": <?= $Settings->rows_per_page ?>,
-				'bProcessing': true, 'bServerSide': true,
-				'sAjaxSource': '<?= site_url('reports/getSalesReport/?v=1' .$v) ?>',
-				'fnServerData': function (sSource, aoData, fnCallback) {
-					aoData.push({
-						"name": "<?= $this->security->get_csrf_token_name() ?>",
-						"value": "<?= $this->security->get_csrf_hash() ?>"
-					});
-					$.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
-				},
-				"aoColumns": [{"bSortable": false, "mRender": checkbox}, {"mRender": fld}, null, null, null, {
-					"bSearchable": false,
-					"mRender": pqFormatSaleReports
-				}, {
-					"bSearchable": false,
-					"mRender": pqFormatSaleReports
-				}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat},{"mRender": row_status}],
-				"fnFooterCallback": function (nRow, aaData, iStart, iEnd,aiDisplay) {
-					var qty = 0, gtotal = 0, paid = 0, balance = 0,costs=0,profit=0;
-					for (var i = 0; i < aaData.length; i++) {
-						qty += parseFloat(aaData[aiDisplay[i]][6]);
-						gtotal += parseFloat(aaData[aiDisplay[i]][7]);
-						paid += parseFloat(aaData[aiDisplay[i]][8]);
-						balance += parseFloat(aaData[aiDisplay[i]][9]);
-						costs += parseFloat(aaData[aiDisplay[i]][10]);
-						profit += parseFloat(aaData[aiDisplay[i]][11]);
-					}
-					var nCells = nRow.getElementsByTagName('th');
-					nCells[6].innerHTML = currencyFormat(parseFloat(qty));
-					nCells[7].innerHTML = currencyFormat(parseFloat(gtotal));
-					nCells[8].innerHTML = currencyFormat(parseFloat(paid));
-					nCells[9].innerHTML = currencyFormat(parseFloat(balance));
-					nCells[10].innerHTML = currencyFormat(parseFloat(costs));
-					nCells[11].innerHTML = currencyFormat(parseFloat(profit));
-				}
-			}).fnSetFilteringDelay().dtFilter([
-			{column_number: 1, filter_default_label: "[<?=lang('date');?> (yyyy-mm-dd)]", filter_type: "text", data: []},
-			{column_number: 2, filter_default_label: "[<?=lang('reference_no');?>]", filter_type: "text", data: []},
-			{column_number: 3, filter_default_label: "[<?=lang('biller');?>]", filter_type: "text", data: []},
-			{column_number: 4, filter_default_label: "[<?=lang('customer');?>]", filter_type: "text", data: []},
-			{column_number: 12, filter_default_label: "[<?=lang('payment_status');?>]", filter_type: "text", data: []},
-			], "footer");
-		});
-		</script>
 		<script type="text/javascript">
 			$(document).ready(function () {
 				$('#form').hide();
@@ -95,71 +46,68 @@
 			   });
 			});
 		</script>
-
+		<?php //if ($Owner || $Admin) {
+	    		echo form_open('account/list_ar_aging_actions/'.(isset($warehouse_id) ? $warehouse_id : ''), 'id="action-form"');
+				//}
+			?>
 		<div class="box sales-table">
-			<div class="box-header">
-				<div class="box-icon">
-					<ul class="btn-tasks">
-						<li class="dropdown">
-							<a href="#" class="toggle_up tip" title="<?= lang('hide_form') ?>">
-								<i class="icon fa fa-toggle-up"></i>
-							</a>
-						</li>
-						<li class="dropdown">
-							<a href="#" class="toggle_down tip" title="<?= lang('show_form') ?>">
-								<i class="icon fa fa-toggle-down"></i>
-							</a>
-						</li>
-					</ul>
+				<div class="box-header">
+					<div class="box-icon">
+						<ul class="btn-tasks">
+							<li class="dropdown">
+								<a href="#" class="toggle_up tip" title="<?= lang('hide_form'); ?>">
+									<i class="icon fa fa-toggle-up"></i>
+								</a>
+							</li>
+							<li class="dropdown">
+								<a href="#" class="toggle_down tip" title="<?= lang('show_form'); ?>">
+									<i class="icon fa fa-toggle-down"></i>
+								</a>
+							</li>
+						</ul>
+					</div>
+					<div class="box-icon">
+						<ul class="btn-tasks">
+							<?php if ($Owner || $Admin) { ?>
+							<li class="dropdown"><a href="#" id="pdf1" data-action="export_pdf1" class="tip" title="<?= lang('download_pdf'); ?>"><i class="icon fa fa-file-pdf-o"></i></a></li>
+						    <li class="dropdown"><a href="#" id="xls1" data-action="export_excel1" class="tip" title="<?= lang('download_xls'); ?>"><i class="icon fa fa-file-excel-o"></i></a></li>
+					   		<?php }else{ ?>
+						 	<?php if($GP['accounts-export']) { ?>
+						    <li class="dropdown">
+						    	<a href="#" id="pdf1" data-action="export_pdf1" class="tip" title="<?= lang('download_pdf'); ?>"><i class="icon fa fa-file-pdf-o"></i></a>
+							</li>
+							<li class="dropdown">
+							   <a href="#" id="xls1" data-action="export_excel1" class="tip" title="<?= lang('download_xls'); ?>"><i class="icon fa fa-file-excel-o"></i></a>
+							</li>
+							<?php }?>
+							<?php }?>	
+							<li class="dropdown">
+								<a href="#" id="image" class="tip" title="<?= lang('save_image'); ?>"><i class="icon fa fa-file-picture-o"></i></a>
+							</li>
+						</ul>
+					</div>
 				</div>
-				<div class="box-icon">
-					<ul class="btn-tasks">
-						<?php if ($Owner || $Admin) { ?>
-						 <li class="dropdown">
-						  <a href="#" id="pdf" class="tip" title="<?= lang('download_pdf') ?>">
-						   <i
-						   class="icon fa fa-file-pdf-o"></i>
-					   </a>
-				   </li>
-				   <li class="dropdown">
-					  <a href="#" id="xls" class="tip" title="<?= lang('download_xls') ?>">
-					   <i
-					   class="icon fa fa-file-excel-o"></i>
-				   </a>
-			   </li>
-			   <?php }else{ ?>
-				 <?php if($GP['accounts-export']) { ?>
-				  <li class="dropdown">
-				   <a href="#" id="pdf" class="tip" title="<?= lang('download_pdf') ?>">
-					<i
-					class="icon fa fa-file-pdf-o"></i>
-				</a>
-			</li>
-			<li class="dropdown">
-			   <a href="#" id="xls" class="tip" title="<?= lang('download_xls') ?>">
-				<i
-				class="icon fa fa-file-excel-o"></i>
-			</a>
-		</li>
-		<?php }?>
-		<?php }?>	
-		<li class="dropdown">
-			<a href="#" id="image" class="tip" title="<?= lang('save_image') ?>">
-				<i
-				class="icon fa fa-file-picture-o"></i>
-			</a>
-		</li>
-		</ul>
-		</div>
-			</div>
-			<div class="box-content">
+			    <div style="display: none;">
+			        <input type="hidden" name="form_action" value="" id="form_action"/>
+			        <input type="hidden" name="warehouse2" value="<?php echo isset($warehouse2); ?>" id="warehouse2" />
+			        <input type="hidden" name="created_by2" value="<?php echo isset($created_by2); ?>" id="created_by2" />
+			        <input type="hidden" name="biller2" value="<?php echo isset($biller2); ?>" id="biller2" />
+			        <input type="hidden" name="start_date2" value="<?php echo isset($start_date2); ?>" id="start_date2" />
+			        <input type="hidden" name="end_date2" value="<?php echo isset($end_date2); ?>" id="end_date2" />
+			        
+			        <?= form_submit('performAction', 'performAction', 'id="action-form-submit"'); ?>
+
+			    </div>
+			    <?php echo form_close();?>
+
+	    	<div class="box-content">
 				<div class="row">
 					<div class="col-lg-12">
 						<p class="introtext"><?= lang('A-R Aging'); ?></p>
 
 						<div id="form">
 
-							<?php echo form_open("reports/customer_report/" . $user_id); ?>
+							<?php echo form_open("account/list_ar_aging".$user_id); ?>
 							<div class="row">
 
 								<div class="col-sm-4">
@@ -209,13 +157,13 @@
 									<div class="col-sm-4">
 										<div class="form-group">
 											<?= lang("start_date", "start_date"); ?>
-											<?php echo form_input('start_date', (isset($_POST['start_date']) ? $_POST['start_date'] : ""), 'class="form-control datetime" id="start_date"'); ?>
+											<?php echo form_input('start_date', (isset($_POST['start_date']) ? $_POST['start_date'] : ""), 'class="form-control date" id="start_date"'); ?>
 										</div>
 									</div>
 									<div class="col-sm-4">
 										<div class="form-group">
 											<?= lang("end_date", "end_date"); ?>
-											<?php echo form_input('end_date', (isset($_POST['end_date']) ? $_POST['end_date'] : ""), 'class="form-control datetime" id="end_date"'); ?>
+											<?php echo form_input('end_date', (isset($_POST['end_date']) ? $_POST['end_date'] : ""), 'class="form-control date" id="end_date"'); ?>
 										</div>
 									</div>
 								</div>
@@ -234,8 +182,8 @@
 									"aaSorting": [[0, "asc"], [1, "desc"]],
 									"aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?=lang('all')?>"]],
 									"iDisplayLength": <?=$Settings->rows_per_page?>,
-									'bProcessing': true, 'bServerSide': true,
-									'sAjaxSource': '<?=site_url('account/getSales_pending' . ($warehouse_id ? '/' . $warehouse_id : '')).'/?v=1'.$v?>',
+									'bProcessing': true,'bServerSide': true,
+									'sAjaxSource': "<?= site_url('account/getSales_pending' . ($warehouse_id ? '/' . $warehouse_id : '')) . '/?v=1' . $v ?>",
 									'fnServerData': function (sSource, aoData, fnCallback) {
 										aoData.push({
 											"name": "<?=$this->security->get_csrf_token_name()?>",
@@ -244,18 +192,22 @@
 										$.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
 									},
 									'fnRowCallback': function (nRow, aData, iDisplayIndex) {
-										var oSettings = oTable.fnSettings();
-										//$("td:first", nRow).html(oSettings._iDisplayStart+iDisplayIndex +1);
-										
+										var oSettings = oTable.fnSettings();										
 										nRow.id = aData[0];
-										nRow.className = "invoice_link_ar";
-										//if(aData[7] > aData[9]){ nRow.className = "product_link warning"; } else { nRow.className = "product_link"; }
+										nRow.className = "invoice_link_ar";										
 										return nRow;
 									},
 									"aoColumns": [{
 										"bSortable": false,
 										"mRender": checkbox
-									}, null, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, null, {"bSortable": false}],
+									},
+									null, 
+									{"mRender": currencyFormat,"bSortable" : false}, 
+									{"mRender": currencyFormat,"bSortable" : false}, 
+									{"mRender": currencyFormat,"bSortable" : false}, 
+									null,
+									// {"mRender" : fld, "sClass": "center"},
+									{"bVisible": false}],
 									"fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
 										var gtotal = 0, paid = 0, balance = 0, ar_n = 0;
 										for (var i = 0; i < aaData.length; i++) {
@@ -274,17 +226,18 @@
 							});
 						</script>
 						<div class="table-responsive">
-							<table id="SLData" class="table table-bordered table-hover table-striped">
+							<table id="SLData" class="table table-striped table-bordered table-condensed table-hover dtable">
 								<thead>
 									<tr>
-										<th style="min-width:30px; width: 30px; text-align: center;">
+										<th style="min-width:3%; width: 3%; text-align: center;">
 											<input class="checkbox checkft" type="checkbox" name="check"/>
 										</th>
 										<th style="min-width:30px; width: 30px; text-align: center;"><?php echo $this->lang->line("customer"); ?></th>
 										<th><?php echo $this->lang->line("grand_total"); ?></th>
 										<th><?php echo $this->lang->line("paid"); ?></th>
 										<th><?php echo $this->lang->line("balance"); ?></th>
-										<th><?php echo $this->lang->line("AR Number"); ?></th>
+										<th><?php echo $this->lang->line("ar_number"); ?></th>
+										<!-- <th><?php echo $this->lang->line("date"); ?></th> -->
 										<th style="text-align:center;"><?= lang("actions"); ?></th>
 									</tr>
 								</thead>
@@ -303,7 +256,8 @@
 										<th><?php echo $this->lang->line("grand_total"); ?></th>
 										<th><?php echo $this->lang->line("paid"); ?></th>
 										<th><?php echo $this->lang->line("balance"); ?></th>
-										<th><?php echo $this->lang->line("AR Number"); ?></th>
+										<th><?php echo $this->lang->line("ar_number"); ?></th>
+										<!-- <th><?php echo $this->lang->line("date"); ?></th> -->
 										<th style="text-align:center;"><?= lang("actions"); ?></th>
 									</tr>
 								</tfoot>
@@ -311,61 +265,46 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div>			
 		</div>
 	</div>
-	<div id="payments-con" class="tab-pane fade in">
-		<script type="text/javascript">
-			$(document).ready(function () {
-				$('#payform').hide();
-				$('.paytoggle_down').click(function () {
-					$("#payform").slideDown();
-					return false;
-				});
-				$('.paytoggle_up').click(function () {
-					$("#payform").slideUp();
-					return false;
-				});
-			});
-		</script>
 
+	<div id="payments-con" class="tab-pane fade in">
+		<?php //if ($Owner || $Admin) {
+	    		echo form_open('account/list_ar_aging_actions2', 'id="action-form2"');
+			//	}
+			?>
 		<div class="box payments-table">
 			<div class="box-header">
 				<div class="box-icon">
 					<ul class="btn-tasks">
 						<?php if ($Owner || $Admin) { ?>
-						<li class="dropdown">
-							<a href="#" id="pdf1" class="tip" title="<?= lang('download_pdf') ?>">
-							   <i class="icon fa fa-file-pdf-o"></i>
-							</a>
+						<li class="dropdown"><a href="#" id="pdf2" data-action="export_pdf2" class="tip" title="<?= lang('download_pdf') ?>"><i class="icon fa fa-file-pdf-o"></i></a></li>
+					    <li class="dropdown"><a href="#" id="xls2" data-action="export_excel2" class="tip" title="<?= lang('download_xls') ?>"><i class="icon fa fa-file-excel-o"></i></a></li>
+				   		<?php }else{ ?>
+					 	<?php if($GP['accounts-export']) { ?>
+					    <li class="dropdown">
+					    	<a href="#" id="pdf2" data-action="export_pdf2" class="tip" title="<?= lang('download_pdf') ?>"><i class="icon fa fa-file-pdf-o"></i></a>
 						</li>
 						<li class="dropdown">
-							<a href="#" id="xls1" class="tip" title="<?= lang('download_xls') ?>">
-							   <i class="icon fa fa-file-excel-o"></i>
-							</a>
-						</li>
-						<?php }else{ ?>
-						<?php if($GP['accounts-export']) { ?>
-						<li class="dropdown">
-							   <a href="#" id="pdf1" class="tip" title="<?= lang('download_pdf') ?>">
-								<i class="icon fa fa-file-pdf-o"></i>
-							</a>
-						</li>
-						<li class="dropdown">
-							<a href="#" id="xls1" class="tip" title="<?= lang('download_xls') ?>">
-								<i class="icon fa fa-file-excel-o"></i>
-							</a>
+						   <a href="#" id="xls2" data-action="export_excel2" class="tip" title="<?= lang('download_xls') ?>"><i class="icon fa fa-file-excel-o"></i></a>
 						</li>
 						<?php }?>
-						<?php }?>
+						<?php }?>	
 						<li class="dropdown">
-							<a href="#" id="image1" class="tip" title="<?= lang('save_image') ?>">
-								<i class="icon fa fa-file-picture-o"></i>
-							</a>
+							<a href="#" id="image" class="tip" title="<?= lang('save_image') ?>"><i class="icon fa fa-file-picture-o"></i></a>
 						</li>
 					</ul>
 				</div>
-			</div>
+			
+				
+		    </div>
+			    <div style="display: none;">
+			        <input type="hidden" name="form_action2" value="export_excel2" id="form_action2"/>
+			        <?= form_submit('performAction', 'performAction', 'id="action-form-submit2"'); ?>
+			    </div>	
+			 <?php echo form_close();?>	 
+   		
 			<div class="box-content">
 				<div class="row">
 					<div class="col-lg-12">
@@ -378,7 +317,7 @@
 									"aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?=lang('all')?>"]],
 									"iDisplayLength": <?=$Settings->rows_per_page?>,
 									'bProcessing': true, 'bServerSide': true,
-									'sAjaxSource': '<?=site_url('account/list_ar_aging_0_30' . ($warehouse_id ? '/' . $warehouse_id : '')).'/?v=1'.$v?>',
+									'sAjaxSource': '<?= site_url('account/list_ar_aging_0_30' . ($warehouse_id ? '/' . $warehouse_id : '')).'/?v=1'.$v ?>',
 									'fnServerData': function (sSource, aoData, fnCallback) {
 										aoData.push({
 											"name": "<?=$this->security->get_csrf_token_name()?>",
@@ -388,16 +327,20 @@
 									},
 									'fnRowCallback': function (nRow, aData, iDisplayIndex) {
 										var oSettings = oTable.fnSettings();
-											//$("td:first", nRow).html(oSettings._iDisplayStart+iDisplayIndex +1);
 											nRow.id = aData[0];
-											nRow.className = "invoice_link_ar_0_30";
-											//if(aData[7] > aData[9]){ nRow.className = "product_link warning"; } else { nRow.className = "product_link"; }
+											nRow.className = "invoice_link_ar";
 											return nRow;
 										},
 										"aoColumns": [{
 											"bSortable": false,
 											"mRender": checkbox
-										}, null, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"bSortable": false}],
+										}, 
+										null, 
+										{"mRender": currencyFormat}, 
+										{"mRender": currencyFormat}, 
+										{"mRender": currencyFormat}, 
+										null, 
+										{"bVisible": false}],
 										"fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
 											var gtotal = 0, paid = 0, balance = 0, ar_n = 0;
 											for (var i = 0; i < aaData.length; i++) {
@@ -419,7 +362,7 @@
 								});
 						</script>
 						<div class="table-responsive">
-							<table id="SLData0_30" class="table table-bordered table-hover table-striped">
+							<table id="SLData0_30" class="table table-striped table-bordered table-condensed table-hover dtable">
 								<thead>
 									<tr>
 										<th style="min-width:30px; width: 30px; text-align: center;">
@@ -458,8 +401,8 @@
 				</div>
 			</div>
 		</div>
-
 	</div>
+
 	<div id="quotes-con" class="tab-pane fade in">
 		<script type="text/javascript">
 			$(document).ready(function () {
@@ -475,32 +418,34 @@
 			});
 		</script>
 		<div class="box">
+			<?php //if ($Owner || $Admin) {
+	    		echo form_open('account/list_ar_aging_actions3', 'id="action-form3"');
+				//}
+			?>
 			<div class="box-header">
 				<div class="box-icon">
 					<ul class="btn-tasks">
 						<?php if ($Owner || $Admin) { ?>
-						<li class="dropdown">
-							<a href="#" id="pdf1" class="tip" title="<?= lang('download_pdf') ?>"><i class="icon fa fa-file-pdf-o"></i></a>
-						</li>
-						<li class="dropdown">
-							<a href="#" id="xls1" class="tip" title="<?= lang('download_xls') ?>"><i class="icon fa fa-file-excel-o"></i></a>
-						</li>
-						<?php }else{ ?>
-						<?php if($GP['accounts-export']) { ?>
-						<li class="dropdown">
-							<a href="#" id="pdf1" class="tip" title="<?= lang('download_pdf') ?>"><i class="icon fa fa-file-pdf-o"></i></a>
-						</li>
-						<li class="dropdown">
-							<a href="#" id="xls1" class="tip" title="<?= lang('download_xls') ?>"><i class="icon fa fa-file-excel-o"></i></a>
-						</li>
-						<?php }?>	
+						<li class="dropdown"><a href="#" id="pdf3" data-action="export_pdf3" class="tip" title="<?= lang('download_pdf') ?>"><i class="icon fa fa-file-pdf-o"></i></a></li>
+					    <li class="dropdown"><a href="#" id="xls3" data-action="export_excel3" class="tip" title="<?= lang('download_xls') ?>"><i class="icon fa fa-file-excel-o"></i></a></li>
+				   		<?php }else{ ?>
+					 	<?php if($GP['accounts-export']) { ?>
+					    <<li class="dropdown"><a href="#" id="pdf3" data-action="export_pdf3" class="tip" title="<?= lang('download_pdf') ?>"><i class="icon fa fa-file-pdf-o"></i></a></li>
+					    <li class="dropdown"><a href="#" id="xls3" data-action="export_excel3" class="tip" title="<?= lang('download_xls') ?>"><i class="icon fa fa-file-excel-o"></i></a></li>
 						<?php }?>
+						<?php }?>	
 						<li class="dropdown">
-							<a href="#" id="image1" class="tip image" title="<?= lang('save_image') ?>"><i class="icon fa fa-file-picture-o"></i></a>
+							<a href="#" id="image" class="tip" title="<?= lang('save_image') ?>"><i class="icon fa fa-file-picture-o"></i></a>
 						</li>
 					</ul>
 				</div>
 			</div>
+			    <div style="display: none;">
+			        <input type="hidden" name="form_action3" value="export_excel3" id="form_action3"/>
+
+			        <?= form_submit('performAction', 'performAction', 'id="action-form-submit3"'); ?>
+			    </div>	
+			 <?php echo form_close();?>	
 			<div class="box-content">
 				<div class="row">
 					<div class="col-lg-12">
@@ -513,7 +458,7 @@
 									"aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?=lang('all')?>"]],
 									"iDisplayLength": <?=$Settings->rows_per_page?>,
 									'bProcessing': true, 'bServerSide': true,
-									'sAjaxSource': '<?=site_url('account/list_ar_aging_30_60' . ($warehouse_id ? '/' . $warehouse_id : '')).'/?v=1'.$v?>',
+									'sAjaxSource': '<?= site_url('account/list_ar_aging_30_60' . ($warehouse_id ? '/' . $warehouse_id : '')).'/?v=1'.$v ?>',
 									'fnServerData': function (sSource, aoData, fnCallback) {
 										aoData.push({
 											"name": "<?=$this->security->get_csrf_token_name()?>",
@@ -522,17 +467,15 @@
 										$.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
 									},
 									'fnRowCallback': function (nRow, aData, iDisplayIndex) {
-										var oSettings = oTable.fnSettings();
-										//$("td:first", nRow).html(oSettings._iDisplayStart+iDisplayIndex +1);
+										var oSettings = oTable.fnSettings();										
 										nRow.id = aData[0];
-										nRow.className = "invoice_link_ar_30_60";
-										//if(aData[7] > aData[9]){ nRow.className = "product_link warning"; } else { nRow.className = "product_link"; }
+										nRow.className = "invoice_link_ar";										
 										return nRow;
 									},
 									"aoColumns": [{
 										"bSortable": false,
 										"mRender": checkbox
-									}, null, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"bSortable": false}],
+									}, null, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"bVisible": false}],
 									"fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
 										var gtotal = 0, paid = 0, balance = 0, ar_n = 0;
 										for (var i = 0; i < aaData.length; i++) {
@@ -554,7 +497,7 @@
 							});
 						</script>
 						<div class="table-responsive">
-							<table id="SLData30_60" class="table table-bordered table-hover table-striped">
+							<table id="SLData30_60" class="table table-striped table-bordered table-condensed table-hover dtable">
 								<thead>
 									<tr>
 										<th style="min-width:30px; width: 30px; text-align: center;">
@@ -596,36 +539,33 @@
 	</div>
 	<div id="returns-con" class="tab-pane fade in">
 		<div class="box">
+		<?php //if ($Owner || $Admin) {
+    		echo form_open('account/list_ar_aging_actions4', 'id="action-form4"');
+			//}
+		?>
 		 <div class="box-header">
-
 			<div class="box-icon">
 			  <ul class="btn-tasks">
-			   <?php if ($Owner || $Admin) { ?>
-				<li class="dropdown">
-				  <a href="#" id="pdf5" class="tip" title="<?= lang('download_pdf') ?>">
-					  <i class="icon fa fa-file-pdf-o"></i>
-				  </a>
-			  </li>
-			  <li class="dropdown">
-				 <a href="#" id="xls5" class="tip" title="<?= lang('download_xls') ?>"><i class="icon fa fa-file-excel-o"></i></a>
-			 </li>
-			 <?php }else{ ?>
-				<?php if($GP['accounts-export']) { ?>
-				 <li class="dropdown">
-				  <a href="#" id="pdf5" class="tip" title="<?= lang('download_pdf') ?>"><i class="icon fa fa-file-pdf-o"></i>
-				  </a>
-			  </li>
-			  <li class="dropdown">
-				  <a href="#" id="xls5" class="tip" title="<?= lang('download_xls') ?>"><i class="icon fa fa-file-excel-o"></i></a>
-			  </li>
-			  <?php }?>
-			  <?php }?>
-			  <li class="dropdown">
-				<a href="#" id="image5" class="tip image" title="<?= lang('save_image') ?>"><i class="icon fa fa-file-picture-o"></i></a>
-			</li>
-		</ul>
-	</div>
-	</div>
+					<?php if ($Owner || $Admin) { ?>
+					<li class="dropdown"><a href="#" id="pdf4" data-action="export_pdf4" class="tip" title="<?= lang('download_pdf') ?>"><i class="icon fa fa-file-pdf-o"></i></a></li>
+				    <li class="dropdown"><a href="#" id="xls4" data-action="export_excel4" class="tip" title="<?= lang('download_xls') ?>"><i class="icon fa fa-file-excel-o"></i></a></li>
+			   		<?php }else{ ?>
+				 	<?php if($GP['accounts-export']) { ?>
+				    <<li class="dropdown"><a href="#" id="pdf4" data-action="export_pdf4" class="tip" title="<?= lang('download_pdf') ?>"><i class="icon fa fa-file-pdf-o"></i></a></li>
+				    <li class="dropdown"><a href="#" id="xls4" data-action="export_excel4" class="tip" title="<?= lang('download_xls') ?>"><i class="icon fa fa-file-excel-o"></i></a></li>
+					<?php }?>
+					<?php }?>	
+					<li class="dropdown">
+						<a href="#" id="image" class="tip" title="<?= lang('save_image') ?>"><i class="icon fa fa-file-picture-o"></i></a>
+					</li>
+				</ul>
+			</div>
+		</div>
+			    <div style="display: none;">
+			        <input type="hidden" name="form_action4" value="export_excel4" id="form_action4"/>
+			        <?= form_submit('performAction', 'performAction', 'id="action-form-submit4"'); ?>
+			    </div>	
+			 <?php echo form_close();?>	
 	<div class="box-content">
 		<div class="row">
 		   <div class="col-lg-12">
@@ -638,7 +578,7 @@
 						"aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?=lang('all')?>"]],
 						"iDisplayLength": <?=$Settings->rows_per_page?>,
 						'bProcessing': true, 'bServerSide': true,
-						'sAjaxSource': '<?=site_url('account/list_ar_aging_60_90' . ($warehouse_id ? '/' . $warehouse_id : '')).'/?v=1'.$v?>',
+						'sAjaxSource': '<?= site_url('account/list_ar_aging_60_90' . ($warehouse_id ? '/' . $warehouse_id : '')).'/?v=1'.$v ?>',
 						'fnServerData': function (sSource, aoData, fnCallback) {
 							aoData.push({
 								"name": "<?=$this->security->get_csrf_token_name()?>",
@@ -648,16 +588,14 @@
 						},
 						'fnRowCallback': function (nRow, aData, iDisplayIndex) {
 							var oSettings = oTable.fnSettings();
-					//$("td:first", nRow).html(oSettings._iDisplayStart+iDisplayIndex +1);
 					nRow.id = aData[0];
-					nRow.className = "invoice_link_ar_60_90";
-					//if(aData[7] > aData[9]){ nRow.className = "product_link warning"; } else { nRow.className = "product_link"; }
+					nRow.className = "invoice_link_ar";
 					return nRow;
 				},
 				"aoColumns": [{
 					"bSortable": false,
 					"mRender": checkbox
-				}, null, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"bSortable": false}],
+				}, null, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"bVisible": false}],
 				"fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
 					var gtotal = 0, paid = 0, balance = 0, ar_n = 0;
 					for (var i = 0; i < aaData.length; i++) {
@@ -679,7 +617,7 @@
 		});
 	</script>
 	<div class="table-responsive">
-	  <table id="SLData60_90" class="table table-bordered table-hover table-striped">
+	  <table id="SLData60_90" class="table table-striped table-bordered table-condensed table-hover dtable">
 		<thead>
 			<tr>
 				<th style="min-width:30px; width: 30px; text-align: center;">
@@ -728,7 +666,7 @@
 					"aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?=lang('all')?>"]],
 					"iDisplayLength": <?=$Settings->rows_per_page?>,
 					'bProcessing': true, 'bServerSide': true,
-					'sAjaxSource': '<?=site_url('account/list_ar_aging_over_90' . ($warehouse_id ? '/' . $warehouse_id : '')).'/?v=1'.$v?>',
+					'sAjaxSource': '<?= site_url('account/list_ar_aging_over_90' . ($warehouse_id ? '/' . $warehouse_id : '')).'/?v=1'.$v ?>',
 					'fnServerData': function (sSource, aoData, fnCallback) {
 						aoData.push({
 							"name": "<?=$this->security->get_csrf_token_name()?>",
@@ -738,16 +676,19 @@
 					},
 					'fnRowCallback': function (nRow, aData, iDisplayIndex) {
 						var oSettings = oTable.fnSettings();
-						//$("td:first", nRow).html(oSettings._iDisplayStart+iDisplayIndex +1);
 						nRow.id = aData[0];
-						nRow.className = "invoice_link_ar_90_over";
-						//if(aData[7] > aData[9]){ nRow.className = "product_link warning"; } else { nRow.className = "product_link"; }
+						nRow.className = "invoice_link_ar";
 						return nRow;
 					},
 					"aoColumns": [{
 						"bSortable": false,
 						"mRender": checkbox
-					}, null, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"bSortable": false}],
+					}, 
+					null, 
+					{"mRender": currencyFormat}, 
+					{"mRender": currencyFormat}, 
+					{"mRender": currencyFormat}, 
+					{"bVisible": false}],
 					"fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
 						var gtotal = 0, paid = 0, balance = 0, ar_n = 0;
 						for (var i = 0; i < aaData.length; i++) {
@@ -769,39 +710,40 @@
 			});
 		</script>
 		<div class="box">
+		<?php //if ($Owner || $Admin) {
+    		echo form_open('account/list_ar_aging_actions5', 'id="action-form5"');
+			//}
+		?>
 			<div class="box-header">
 				<div class="box-icon">
 					<ul class="btn-tasks">
-						<?php if ($Owner || $Admin) { ?>
-						<li class="dropdown">
-							<a href="#" id="pdf5" class="tip" title="<?= lang('download_pdf') ?>"><i class="icon fa fa-file-pdf-o"></i></a>
-						</li>
-						<li class="dropdown">
-							<a href="#" id="xls5" class="tip" title="<?= lang('download_xls') ?>"><i class="icon fa fa-file-excel-o"></i></a>
-						</li>
-						<?php }else{ ?>
-						<?php if($GP['accounts-export']) { ?>
-						<li class="dropdown">
-							<a href="#" id="pdf5" class="tip" title="<?= lang('download_pdf') ?>"><i class="icon fa fa-file-pdf-o"></i></a>
-						</li>
-						<li class="dropdown">
-							<a href="#" id="xls5" class="tip" title="<?= lang('download_xls') ?>"><i class="icon fa fa-file-excel-o"></i></a>
-						</li>
-						<?php }?>
-						<?php }?>
-						<li class="dropdown">
-							<a href="#" id="image5" class="tip image" title="<?= lang('save_image') ?>"><i class="icon fa fa-file-picture-o"></i></a>
-						</li>
-					</ul>
+					<?php if ($Owner || $Admin) { ?>
+					<li class="dropdown"><a href="#" id="pdf5" data-action="export_pdf5" class="tip" title="<?= lang('download_pdf') ?>"><i class="icon fa fa-file-pdf-o"></i></a></li>
+				    <li class="dropdown"><a href="#" id="xls5" data-action="export_excel5" class="tip" title="<?= lang('download_xls') ?>"><i class="icon fa fa-file-excel-o"></i></a></li>
+			   		<?php }else{ ?>
+				 	<?php if($GP['accounts-export']) { ?>
+				    <<li class="dropdown"><a href="#" id="pdf5" data-action="export_pdf5" class="tip" title="<?= lang('download_pdf') ?>"><i class="icon fa fa-file-pdf-o"></i></a></li>
+				    <li class="dropdown"><a href="#" id="xls5" data-action="export_excel5" class="tip" title="<?= lang('download_xls') ?>"><i class="icon fa fa-file-excel-o"></i></a></li>
+					<?php }?>
+					<?php }?>	
+					<li class="dropdown">
+						<a href="#" id="image" class="tip" title="<?= lang('save_image') ?>"><i class="icon fa fa-file-picture-o"></i></a>
+					</li>
+				</ul>
 				</div>
 			</div>
+			    <div style="display: none;">
+			        <input type="hidden" name="form_action5" value="export_excel5" id="form_action5"/>
+			        <?= form_submit('performAction', 'performAction', 'id="action-form-submit5"'); ?>
+			    </div>	
+			 <?php echo form_close();?>	 
 			<div class="box-content">
 				<div class="row">
 					<div class="col-lg-12">
 						<p class="introtext"><?php echo lang('Over 90'); ?></p>
 
 						<div class="table-responsive">
-							<table id="SLData_over_90" class="table table-bordered table-hover table-striped">
+							<table id="SLData_over_90" class="table table-striped table-bordered table-condensed table-hover dtable">
 								<thead>
 									<tr>
 										<th style="min-width:30px; width: 30px; text-align: center;">
@@ -843,19 +785,168 @@
 	</div>
 
 </div>
+<style type="text/css">
+	.dtable { white-space:nowrap; }
+</style>
 <script type="text/javascript" src="<?= $assets ?>js/html2canvas.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function () {
-		$('#pdf').click(function (event) {
-			event.preventDefault();
-			window.location.href = "<?=site_url('reports/getSalesReport/pdf/?v=1'.$v)?>";
-			return false;
+		// tag1
+		$('body').on('click', '#xls1', function(e) {
+			e.preventDefault();
+			var k = false;
+			$.each($("input[name='val[]']:checked"), function(){
+				
+				k = true;
+			});
+			if(k == false){
+				bootbox.alert('Please select!');
+				return false;
+			}
+			$('#form_action').val($('#xls1').attr('data-action'));
+			$('#action-form-submit').trigger('click');
 		});
-		$('#xls').click(function (event) {
-			event.preventDefault();
-			window.location.href = "<?=site_url('reports/getSalesReport/0/xls/?v=1'.$v)?>";
-			return false;
+		$('body').on('click', '#pdf1', function(e) {
+			e.preventDefault();
+			var k = false;
+			$.each($("input[name='val[]']:checked"), function(){
+				
+				k = true;
+			});
+			if(k == false){
+				bootbox.alert('Please select!');
+				return false;
+			}
+			$('#form_action').val($('#pdf1').attr('data-action'));
+			$('#action-form-submit').trigger('click');
 		});
+		///////////////////////////////////////
+
+		// tag2
+		$('body').on('click', '#xls2', function(e) {
+			e.preventDefault();
+			var k = false;
+			$.each($("input[name='val[]']:checked"), function(){
+				
+				k = true;
+			});
+			if(k == false){
+				bootbox.alert('Please select!');
+				return false;
+			}
+			//$('#form_actio2').val($('#xls2').attr('data-action'));
+			$('#action-form-submit2').trigger('click');
+		});
+		$('body').on('click', '#pdf2', function(e) {
+			e.preventDefault();
+			var k = false;
+			$.each($("input[name='val[]']:checked"), function(){
+				
+				k = true;
+			});
+			if(k == false){
+				bootbox.alert('Please select!');
+				return false;
+			}
+			// $('#form_action2').val($('#pdf2').attr('data-action'));
+			$('#action-form-submit2').trigger('click');
+		});
+		///////////////////////////////////////
+
+		// tag3
+		$('body').on('click', '#xls3', function(e) {
+			e.preventDefault();
+			var k = false;
+			$.each($("input[name='val[]']:checked"), function(){
+				
+				k = true;
+			});
+			if(k == false){
+				bootbox.alert('Please select tag3!');
+				return false;
+			}
+			//$('#form_actio2').val($('#xls2').attr('data-action'));
+			$('#action-form-submit3').trigger('click');
+		});
+		$('body').on('click', '#pdf3', function(e) {
+			e.preventDefault();
+			var k = false;
+			$.each($("input[name='val[]']:checked"), function(){
+				
+				k = true;
+			});
+			if(k == false){
+				bootbox.alert('Please select tag3!');
+				return false;
+			}
+			// $('#form_action2').val($('#pdf2').attr('data-action'));
+			$('#action-form-submit3').trigger('click');
+		});
+		///////////////////////////////////////
+
+		// tag4
+		$('body').on('click', '#xls4', function(e) {
+			e.preventDefault();
+			var k = false;
+			$.each($("input[name='val[]']:checked"), function(){
+				
+				k = true;
+			});
+			if(k == false){
+				bootbox.alert('Please select tag4!');
+				return false;
+			}
+			//$('#form_actio2').val($('#xls2').attr('data-action'));
+			$('#action-form-submit4').trigger('click');
+		});
+		$('body').on('click', '#pdf4', function(e) {
+			e.preventDefault();
+			var k = false;
+			$.each($("input[name='val[]']:checked"), function(){
+				
+				k = true;
+			});
+			if(k == false){
+				bootbox.alert('Please select tag4!');
+				return false;
+			}
+			// $('#form_action2').val($('#pdf2').attr('data-action'));
+			$('#action-form-submit4').trigger('click');
+		});
+		///////////////////////////////////////
+
+		// tag5
+		$('body').on('click', '#xls5', function(e) {
+			e.preventDefault();
+			var k = false;
+			$.each($("input[name='val[]']:checked"), function(){
+				
+				k = true;
+			});
+			if(k == false){
+				bootbox.alert('Please select tag5!');
+				return false;
+			}
+			//$('#form_actio2').val($('#xls2').attr('data-action'));
+			$('#action-form-submit5').trigger('click');
+		});
+		$('body').on('click', '#pdf5', function(e) {
+			e.preventDefault();
+			var k = false;
+			$.each($("input[name='val[]']:checked"), function(){
+				
+				k = true;
+			});
+			if(k == false){
+				bootbox.alert('Please select tag5!');
+				return false;
+			}
+			// $('#form_action2').val($('#pdf2').attr('data-action'));
+			$('#action-form-submit5').trigger('click');
+		});
+		///////////////////////////////////////
+
+
 		$('#image').click(function (event) {
 			event.preventDefault();
 			html2canvas($('.sales-table'), {
@@ -864,16 +955,6 @@
 					window.open(img);
 				}
 			});
-			return false;
-		});
-		$('#pdf1').click(function (event) {
-			event.preventDefault();
-			window.location.href = "<?=site_url('reports/getPaymentsReport/pdf/?v=1'.$p)?>";
-			return false;
-		});
-		$('#xls1').click(function (event) {
-			event.preventDefault();
-			window.location.href = "<?=site_url('reports/getPaymentsReport/0/xls/?v=1'.$p)?>";
 			return false;
 		});
 		$('#image1').click(function (event) {

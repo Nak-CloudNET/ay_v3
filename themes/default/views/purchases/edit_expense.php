@@ -9,28 +9,10 @@
         echo form_open_multipart("purchases/edit_expense/" . $expense->id, $attrib); ?>
         <div class="modal-body">
             <p><?= lang('enter_info'); ?></p>
-				
-			<?php if ($Owner || $Admin) { ?>
-				<div class="form-group">
-					<?= lang("biller", "biller"); ?>
-					<?php
-					foreach ($billers as $biller) {
-						$bl[$biller->id] = $biller->company != '-' ? $biller->company : $biller->name;
-					}
-					echo form_dropdown('biller', $bl, (isset($_POST['biller']) ? $_POST['biller'] : $pos_settings->default_biller), 'class="form-control" id="posbiller" required="required"');
-					?>
-				</div>
-			<?php } else {
-				$biller_input = array(
-					'type' => 'hidden',
-					'name' => 'biller',
-					'id' => 'posbiller',
-					'value' => $this->session->userdata('biller_id'),
-				);
 
-				echo form_input($biller_input);
-			}
-			?>
+            <div class="form-group">
+                <?= get_dropdown_project('biller', 'posbiller', $pos_settings->default_biller); ?>
+            </div>
 				
             <?php if ($Owner || $Admin) { ?>
 
@@ -39,6 +21,26 @@
                     <?= form_input('date', (isset($_POST['date']) ? $_POST['date'] : $this->erp->hrld($expense->date)), 'class="form-control datetime" id="date" required="required"'); ?>
                 </div>
             <?php } ?>
+			
+			<div class="form-group">
+				<label class="control-label" for="customer_invoice"><?= lang("customer_name"); ?></label>
+				<?php
+				$cust["0"] = "None";
+				foreach ($customers as $customer) {
+					$cust[$customer->id] = $customer->text;
+				}
+				echo form_dropdown('customer_invoice', $cust, ($expense->customer_id ? $expense->customer_id : ""), 'class="form-control" id="customer_invoice" data-placeholder="' . $this->lang->line("select") . " " . $this->lang->line("customer_invoice") . '"');
+				?>
+			</div>
+			
+			<div class="form-group">
+				<?= lang("invoice_no", "invoice_no") ?>
+				<?php echo form_input('customer_invoice_no', $expense->sale_id, 'class="form-control" id="customer_invoice_no"  placeholder="' . lang("select") . " " . lang("customer_invoice") . '" '); ?>
+			</div>
+			<div class="form-group">
+				<?= lang("invoice_sale_order_no", "invoice_sale_order_no") ?>
+				<?php echo form_input('invoice_sale_order_no', $expense->sale_order_id, 'class="form-control" id="customer_invoice_sale_order"  placeholder="' . lang("select") . " " . lang("customer_invoice") . '" '); ?>
+			</div>
 
             <div class="form-group">
                 <?= lang("reference", "reference"); ?>
@@ -69,7 +71,7 @@
 			</div>
 			<div class="form-group">
 				<?= lang("amount", "amount").' (USD)'; ?>
-				<input name="amount" type="text" value="<?= $this->erp->formatDecimal($expense->amount); ?>" class="pa form-control kb-pad amount"/>
+				<input name="amount" type="text" value="<?= $this->erp->formatDecimal($expense->amount); ?>" class="pa form-control kb-pad amount number_only" required="required"/>
 			</div>
 			<?php
 				foreach($currency as $money){
@@ -110,6 +112,92 @@
 </script>
 <?= $modal_js ?>
 <script type="text/javascript" charset="UTF-8">
+
+	$("#customer_invoice_no").select2("destroy").empty().attr("placeholder", "<?= lang('select_customer_invoice') ?>").select2({
+		placeholder: "<?= lang('select_cselect_name') ?>", data: [
+			{id: '', text: 'None'},
+			<?php foreach($invoices as $invoice) { ?>
+				{id: '<?= $invoice->id ?>', text: '<?= $invoice->text ?>'},
+			<?php } ?>
+		]
+	});
+	$("#customer_invoice_sale_order").select2("destroy").empty().attr("placeholder", "<?= lang('select_customer_invoice') ?>").select2({
+		placeholder: "<?= lang('select_cselect_name') ?>", data: [
+			{id: '', text: 'None'},
+			<?php foreach($invoice_orders as $invoice) { ?>
+				{id: '<?= $invoice->id ?>', text: '<?= $invoice->text ?>'},
+			<?php } ?>
+		]
+	});
+	
+	$("#customer_invoice").change(function()
+	{
+	 var v = $(this).val();
+            $('#modal-loading').show();
+            if (v) {
+                $.ajax({
+                    type: "get",
+                    async: false,
+                    url: "<?= site_url('account/getCustomerInvoices') ?>/" + v,
+                    dataType: "json",
+                    success: function (scdata) {
+						
+                        if (scdata != null) {
+                            $("#customer_invoice_no").select2("destroy").empty().attr("placeholder", "<?= lang('select_customer_invoice') ?>").select2({
+                                placeholder: "<?= lang('select_customer_to_load') ?>",
+                                data: scdata
+                            });
+                        }else{
+							$("#customer_invoice_no").select2("destroy").empty().attr("placeholder", "<?= lang('select_customer_invoice') ?>").select2({
+                                placeholder: "<?= lang('select_customer_to_load') ?>",
+                                data: 'not found'
+                            });
+						}
+                    },
+                    error: function () {
+                        bootbox.alert('<?= lang('ajax_error') ?>');
+                        $('#modal-loading').hide();
+                    }
+                });
+                $.ajax({
+                    type: "get",
+                    async: false,
+                    url: "<?= site_url('account/getCustomerSaleOrderInvoices') ?>/" + v,
+                    dataType: "json",
+                    success: function (scdata) {
+						
+                        if (scdata != null) {
+                            $("#customer_invoice_sale_order").select2("destroy").empty().attr("placeholder", "<?= lang('select_customer_invoice') ?>").select2({
+                                placeholder: "<?= lang('select_customer_to_load') ?>",
+                                data: scdata
+                            });
+
+                        }else{
+							$("#customer_invoice_sale_order").select2("destroy").empty().attr("placeholder", "<?= lang('select_customer_invoice') ?>").select2({
+                                placeholder: "<?= lang('select_customer_to_load') ?>",
+                                data: 'not found'
+                            });
+						}
+                    },
+                    error: function () {
+                        bootbox.alert('<?= lang('ajax_error') ?>');
+                        $('#modal-loading').hide();
+                    }
+                });
+            } else {
+                $("#customer_invoice_no").select2("destroy").empty().attr("placeholder", "<?= lang('select_category_to_load') ?>").select2({
+                    placeholder: "<?= lang('select_customer_to_load') ?>",
+                    data: [{id: '', text: '<?= lang('select_customer_to_load') ?>'}]
+                });
+                $("#customer_invoice_sale_order").select2("destroy").empty().attr("placeholder", "<?= lang('select_category_to_load') ?>").select2({
+                    placeholder: "<?= lang('select_customer_to_load') ?>",
+                    data: [{id: '', text: '<?= lang('select_customer_to_load') ?>'}]
+                });
+            }
+       $('#modal-loading').hide();
+	
+	}).trigger("change");
+
     $(document).ready(function () {
 		var rate = '<?=$KHM;?>';
 		var code = 0;

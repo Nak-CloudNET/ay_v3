@@ -12,12 +12,20 @@ for($i=0;$i<2;$i++){
 	<table class="table-responsive" width="1024px" border="0" cellspacing="0" style="margin:auto;">
 		<tr>
 			<td rowspan="3" width="20%" style="virticle-align:middle;">
-				<?php if ($logo) { ?>
-					<div class="text-center" style="margin-bottom:20px;">
-						<img src="<?= base_url() . 'assets/uploads/logos/' . $biller->logo; ?>"
-							 alt="<?= $biller->company != '-' ? $biller->company : $biller->name; ?>">
-					</div>
-				<?php } ?>
+				<?php
+			        if ($Settings->system_management == 'project') { ?>
+			            <div class="text-center" style="margin-bottom:20px;">
+			                <img src="<?= base_url() . 'assets/uploads/logos/' . $Settings->logo2; ?>"
+			                     alt="<?= $Settings->site_name; ?>">
+			            </div>
+			    <?php } else { ?>
+			            <?php if ($logo) { ?>
+			                <div class="text-center" style="margin-bottom:20px;">
+			                    <img src="<?= base_url() . 'assets/uploads/logos/' . $biller->logo; ?>"
+			                         alt="<?= $biller->company != '-' ? $biller->company : $biller->name; ?>">
+			                </div>
+			            <?php } ?>	
+			    <?php } ?>
 			</td>
 			<td colspan="3" width="80%" style="padding-left:50px;">
 				<div style="font-family:'Arial'; font-size:24px; font-weight:bold;"><?= lang('sales_receipt'); ?></div>
@@ -121,6 +129,7 @@ for($i=0;$i<2;$i++){
 									<?= $product_name_setting ?>
 									<?= $row->details ? '<br>' . $row->details : ''; ?>
 									<?= $row->serial_no ? '<br>' . $row->serial_no : ''; ?>
+									<?= $row->product_noted ? '<br>' . $row->product_noted : ''; ?>
 								</td>
 								<td style="width: 80px; text-align:center; vertical-align:middle;"><?php echo $product_unit ?></td>
 								<td style="width: 80px; text-align:center; vertical-align:middle;"><?= $this->erp->formatQuantity($row->quantity); ?></td>
@@ -207,7 +216,7 @@ for($i=0;$i<2;$i++){
 						}
 						?>
 						<?php if ($inv->shipping != 0) {
-							echo '<tr><td colspan="' . $col . '" style="text-align:right; padding-right:10px;;">' . lang("ការ​ដឹក​ជញ្ជូន/Shipping") . ' (' . $default_currency->code . ')</td><td style="text-align:right; padding-right:10px;">' . $this->erp->formatMoney($inv->shipping) . '</td></tr>';
+							echo '<tr><td colspan="' . $col . '" style="text-align:right; padding-right:10px;;">' . lang("ការ​ដឹក​ជញ្ជូន/Shipping") . ' (' . $default_currency->code . ')</td><td style="text-align:right; padding-right:10px;">' . abs($this->erp->formatMoney($inv->shipping)) . '</td></tr>';
 						}
 						?>
 						<tr>

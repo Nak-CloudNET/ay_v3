@@ -14,18 +14,28 @@ if(isset($warehouse_id)){
 	$v .= "&warehouse=" . $warehouse_id;
 }
 ?>
+
+<style>
+	#PrRData1 {
+		white-space: nowrap;
+    }
+</style>
+
 <script>
     $(document).ready(function () {
         function spb(x) {
             v = x.split('__');
             return formatQuantity2(v[0]);
         }
-        var oTable = $('#PrRData').dataTable({
-            "aaSorting": [[0, "asc"]],
-			//"aaSorting": [[3, "desc"], [2, "desc"]],
+        var oTable = $('#PrRData1').dataTable({
+            "aaSorting": [[0, "desc"]],
+			scrollY:        '50vh',
+			scrollCollapse: true,
+			paging:         false,
             "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
             "iDisplayLength": <?= $Settings->rows_per_page ?>,
-            'bProcessing': true, 'bServerSide': true,
+            'bProcessing': true, 
+			'bServerSide': true,
             'sAjaxSource': '<?= site_url('reports/getProductsMonthly/?v=1'.$v) ?>',
             'fnServerData': function (sSource, aoData, fnCallback) {
                 aoData.push({
@@ -34,7 +44,20 @@ if(isset($warehouse_id)){
                 });
                 $.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
             },
-            "aoColumns": [null, null,{"mRender": formatQuantity2},{"mRender": formatQuantity2}, {"mRender": formatQuantity2}, {"mRender": formatQuantity2}, {"mRender": formatQuantity2},{"mRender": formatQuantity2},{"mRender": formatQuantity2},{"mRender": formatQuantity2},{"mRender": formatQuantity2},{"mRender": formatQuantity2},{"mRender": formatQuantity2},{"mRender": formatQuantity2}],
+            "aoColumns": [null, null,
+			{"mRender": formatQuantity2, "bSortable" : false , "bSearchable" : false},
+			{"mRender": formatQuantity2, "bSortable" : false , "bSearchable" : false}, 
+			{"mRender": formatQuantity2, "bSortable" : false , "bSearchable" : false}, 
+			{"mRender": formatQuantity2, "bSortable" : false , "bSearchable" : false},
+			{"mRender": formatQuantity2, "bSortable" : false , "bSearchable" : false},
+			{"mRender": formatQuantity2, "bSortable" : false , "bSearchable" : false},
+			{"mRender": formatQuantity2, "bSortable" : false , "bSearchable" : false},
+			{"mRender": formatQuantity2, "bSortable" : false , "bSearchable" : false},
+			{"mRender": formatQuantity2, "bSortable" : false , "bSearchable" : false},
+			{"mRender": formatQuantity2, "bSortable" : false , "bSearchable" : false},
+			{"mRender": formatQuantity2, "bSortable" : false , "bSearchable" : false},
+			{"mRender": formatQuantity2, "bSortable" : false , "bSearchable" : false}
+			],
             "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
                 var jan = 0, feb = 0, mar = 0, apr = 0, may = 0, jun = 0, jul = 0, aug = 0, sep = 0, oct = 0, nov = 0, dec = 0;
                 for (var i = 0; i < aaData.length; i++) {
@@ -51,11 +74,6 @@ if(isset($warehouse_id)){
 					j1 = (aaData[aiDisplay[i]][11]);
 					k1 = (aaData[aiDisplay[i]][12]);
 					l1 = (aaData[aiDisplay[i]][13]);
-					
-                  // jan1 += parseFloat(p[0]);
-                   // sq += parseFloat(s[0]);
-                   // bq += parseFloat(b[0]);
-                   // pl += parseFloat(aaData[aiDisplay[i]][4]);
 					
 					jan += parseFloat(a1);
                     feb += parseFloat(b1);
@@ -80,8 +98,7 @@ if(isset($warehouse_id)){
                 nCells[6].innerHTML = '<div class="text-right">'+formatQuantity2(may)+'</div>';
                 nCells[7].innerHTML = '<div class="text-right">'+formatQuantity2(jun)+'</div>';
 				nCells[8].innerHTML = '<div class="text-right">'+formatQuantity2(jul)+'</div>';
-                nCells[9].innerHTML = '<div class="text-right">'+formatQuantity2(aug)+'</div>';
-                //nCells[4].innerHTML = currencyFormat(parseFloat(pl));
+                nCells[9].innerHTML = '<div class="text-right">'+formatQuantity2(aug)+'</div>';              
                 nCells[10].innerHTML = '<div class="text-right">'+formatQuantity2(sep)+'</div>';
 				nCells[11].innerHTML = '<div class="text-right">'+formatQuantity2(nov)+'</div>';
 				nCells[12].innerHTML = '<div class="text-right">'+formatQuantity2(oct)+'</div>';
@@ -142,27 +159,6 @@ if(isset($warehouse_id)){
                 </li>
             </ul>
         </div>
-		<!--
-        <div class="box-icon">
-            <ul class="btn-tasks">
-                <li class="dropdown">
-                    <a href="#" id="pdf" class="tip" title="<?= lang('download_pdf') ?>">
-                        <i class="icon fa fa-file-pdf-o"></i>
-                    </a>
-                </li>
-                <li class="dropdown">
-                    <a href="#" id="xls" class="tip" title="<?= lang('download_xls') ?>">
-                        <i class="icon fa fa-file-excel-o"></i>
-                    </a>
-                </li>
-                <li class="dropdown">
-                    <a href="#" id="image" class="tip" title="<?= lang('save_image') ?>">
-                        <i class="icon fa fa-file-picture-o"></i>
-                    </a>
-                </li>
-            </ul>
-        </div>
-		-->
 		
 		<div class="box-icon">
             <ul class="btn-tasks">
@@ -244,25 +240,25 @@ if(isset($warehouse_id)){
                 <div class="clearfix"></div>
 
                 <div class="table-responsive">
-                    <table id="PrRData"
+                    <table id="PrRData1"
                            class="table table-striped table-bordered table-condensed table-hover dfTable reports-table"
                            style="margin-bottom:5px;">
                         <thead>
 							<tr class="active">
-								<th><?= lang("product_code"); ?></th>
-								<th><?= lang("product_name"); ?></th>
-								<th><?= lang("january"); ?></th>
-								<th><?= lang("february"); ?></th>
-								<th><?= lang("march"); ?></th>
-								<th><?= lang("april"); ?></th>
-								<th><?= lang("may"); ?></th>
-								<th><?= lang("june"); ?></th>
-								<th><?= lang("july"); ?></th>
-								<th><?= lang("august"); ?></th>
-								<th><?= lang("september"); ?></th>
-								<th><?= lang("october"); ?></th>
-								<th><?= lang("november"); ?></th>
-								<th><?= lang("december"); ?></th>
+								<th style="width:250px;"><?= lang("product_code"); ?></th>
+								<th style="width:350px;"><?= lang("product_name"); ?></th>
+								<th style="width:180px;"><?= lang("january"); ?></th>
+								<th style="width:180px;"><?= lang("february"); ?></th>
+								<th style="width:180px;"><?= lang("march"); ?></th>
+								<th style="width:180px;"><?= lang("april"); ?></th>
+								<th style="width:180px;"><?= lang("may"); ?></th>
+								<th style="width:180px;"><?= lang("june"); ?></th>
+								<th style="width:180px;"><?= lang("july"); ?></th>
+								<th style="width:180px;"><?= lang("august"); ?></th>
+								<th style="width:180px;"><?= lang("september"); ?></th>
+								<th style="width:180px;"><?= lang("october"); ?></th>
+								<th style="width:180px;"><?= lang("november"); ?></th>
+								<th style="width:180px;"><?= lang("december"); ?></th>
 							</tr>
                         </thead>
                         <tbody>

@@ -13,7 +13,7 @@
 		}
 	}
 ?>
-<div class="modal-dialog modal-lg">
+<div class="modal-dialog modal-lg" style="width:1000px;">
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -26,14 +26,15 @@
         </div>
         <div class="modal-body">
             <div class="table-responsive">
-				<table id="POData" cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover table-striped">
+				<table id="POData" cellpadding="0" cellspacing="0" border="0" class="table table-condensed table-bordered table-hover table-striped">
                     <thead>
                         <tr class="active">
                             <th><?php echo $this->lang->line("date"); ?></th>
-                            <th><?php echo $this->lang->line("ref_no"); ?></th>
+                            <th><?php echo $this->lang->line("reference_no"); ?></th>
                             <th><?php echo $this->lang->line("supplier"); ?></th>
                             <th><?php echo $this->lang->line("purchase_status"); ?></th>
                             <th><?php echo $this->lang->line("grand_total"); ?></th>
+							<th><?php echo $this->lang->line("discount"); ?></th>
                             <th><?php echo $this->lang->line("paid"); ?></th>
                             <th><?php echo $this->lang->line("balance"); ?></th>
                             <th><?php echo $this->lang->line("payment_status"); ?></th>
@@ -44,10 +45,12 @@
 							$total = '';
 							$pay   = '';
 							$balances = '';
+							$total_discount = '';
 							foreach($costing as $pur){
 								$total += $pur->grand_total;
 								$pay += $pur->paid;
 								$balances += $pur->balance;
+								$total_discount += $pur->total_discount;
 						?>
 							<tr>
 								<td><?= $pur->date; ?></td>
@@ -55,6 +58,7 @@
 								<td><?= $pur->supplier; ?></td>
 								<td><?= row_status($pur->status); ?></td>
 								<td><?= number_format($pur->grand_total,2); ?></td>
+								<td><?= number_format($pur->total_discount,2); ?></td>
 								<td><?= number_format($pur->paid,2); ?></td>
 								<td><?= number_format($pur->balance,2); ?></td>
 								<td><?= row_status($pur->payment_status); ?></td>
@@ -66,10 +70,11 @@
                     <tfoot class="dtFilter">
                         <tr class="active">
                             <th><?php echo $this->lang->line("date"); ?></th>
-                            <th><?php echo $this->lang->line("ref_no"); ?></th>
+                            <th><?php echo $this->lang->line("reference_no"); ?></th>
                             <th><?php echo $this->lang->line("supplier"); ?></th>
                             <th><?php echo $this->lang->line("purchase_status"); ?></th>
                             <th><?php echo number_format($total,2); ?></th>
+							<th><?php echo number_format($total_discount,2); ?></th>
                             <th><?php echo number_format($pay,2); ?></th>
                             <th><?php echo number_format($balances,2); ?></th>
                             <th><?php echo $this->lang->line("payment_status"); ?></th>
@@ -79,5 +84,16 @@
             </div>
         </div>
     </div>
-
 </div>
+<script>
+	$(function(){
+		$("#POData").dataTable({
+			"iDisplayLength": 20,
+		});
+	})
+</script>
+<style type="text/css">
+	table { 
+		white-space: nowrap;
+	}
+</style>

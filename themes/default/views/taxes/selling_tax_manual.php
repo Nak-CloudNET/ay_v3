@@ -34,8 +34,8 @@
 						<center>
 							<h4><b style="font-family:'Khmer OS Muol';">ទិន្នានុប្បវត្តិលក់</b></h4>
 							<h6><b>SALES JOURNAL</b></h6>
-							<h6><b style="font-family:'Khmer OS Muol';">សំរាប់ខែ ឆ្នាំ</b></h6>
-							<h6><b>For May 2016</b></h6>
+							<h6><b style="font-family:'Khmer OS Muol';">សំរាប់ខែ <?php $month= date('m'); echo $this->erp->KhmerMonth($month);?> ឆ្នាំ <?php echo date('Y');?></b></h6>
+							<h6><b>For <?=date('M');?> <?=date('Y');?></b></h6>
 						</center>
 						<div class="col-md-10 col-xs-10 text-tax">
 							<table>
@@ -54,6 +54,9 @@
 										</div>	
 									</td></p>
 								</tr>
+								<tr>	
+									<td><p>Company Name 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<td><b></b></p>
+								<tr>
 								<tr>
 									<td><p>លេខអត្តសញ្ញាណកម្មអតប  <span style="padding-left:4px;"> :</span></p></td><td> <span name="vat_no" id="vat_no" class="vat_no"></span></td>
 								</tr>

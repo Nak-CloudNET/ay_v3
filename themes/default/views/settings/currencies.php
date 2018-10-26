@@ -21,7 +21,7 @@
                 });
                 $.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
             },
-            "aoColumns": [{"bSortable": false, "mRender": checkbox}, null, null, null, {"mRender": in_out}, {"bSortable": false}]
+            "aoColumns": [{"bSortable": false, "mRender": checkbox}, null, null, {"mRender": currencyFormat}, {"mRender": in_out}, {"bSortable": false}]
         });
     });
 </script>

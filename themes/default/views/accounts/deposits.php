@@ -31,14 +31,14 @@
                 "aoColumns": [{
 					"bSortable": false,
 					"mRender": checkbox
-				},{"mRender": fld}, null, {"mRender": currencyFormat}, null, null, {"bSortable": false}],
+				},{"mRender": fld}, null, null, {"mRender": currencyFormat}, null, null, {"bSortable": false}],
 				"fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
 					var total_amount = 0;
 					for (var i = 0; i < aaData.length; i++) {
-						total_amount += parseFloat(aaData[aiDisplay[i]][3]);
+						total_amount += parseFloat(aaData[aiDisplay[i]][4]);
 					}
 					var nCells = nRow.getElementsByTagName('th');
-					nCells[3].innerHTML = currencyFormat(parseFloat(total_amount));
+					nCells[4].innerHTML = currencyFormat(parseFloat(total_amount));
 				}
             });
             $('div.dataTables_length select').addClass('form-control');
@@ -101,9 +101,10 @@
 							<input class="checkbox checkft" type="checkbox" name="check"/>
 						</th>
                         <th class="col-xs-3"><?= lang("date"); ?></th>
+                        <th class="col-xs-3"><?= lang("reference_no"); ?></th>
 						<th class="col-xs-2"><?= lang("customer"); ?></th>
                         <th class="col-xs-2"><?= lang("amount"); ?></th>
-                        <th class="col-xs-2"><?= lang("paid_by"); ?></th>
+                        <th class="col-xs-2"><?= lang("description"); ?></th>
                         <th class="col-xs-2"><?= lang("created_by"); ?></th>
                         <th class="col-xs-3"><?= lang("actions"); ?></th>
                     </tr>

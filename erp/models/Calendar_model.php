@@ -7,7 +7,8 @@ class Calendar_model extends CI_Model
         parent::__construct();
     }
 
-    public function getEvents($start, $end) {
+    public function getEvents($start, $end) 
+	{
 
         $this->db->select('id, title, start, end, description, color');
         $this->db->where('start >=', $start)->where('start <=', $end);
@@ -36,21 +37,24 @@ class Calendar_model extends CI_Model
         return FALSE;
     }
 
-    public function addEvent($data = array()) {
+    public function addEvent($data = array()) 
+	{
         if ($this->db->insert('calendar', $data)) {
             return true;
         }
         return false;
     }
 
-    public function updateEvent($id, $data = array()) {
+    public function updateEvent($id, $data = array()) 
+	{
         if ($this->db->update('calendar', $data, array('id' => $id))) {
             return true;
         }
         return false;
     }
 
-    public function deleteEvent($id) {
+    public function deleteEvent($id) 
+	{
         if ($this->db->delete('calendar', array('id' => $id))) {
             return true;
         }

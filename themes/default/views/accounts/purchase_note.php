@@ -13,16 +13,28 @@
 			</button>
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-2x">&times;</i>
             </button>
-            <?php if (isset($logo)) { ?>
-                <!--<div class="text-center" style="margin-bottom:20px;">-->
-                <img src="<?= base_url() . 'assets/uploads/logos/' . $biller->logo; ?>"
-                     alt="<?= $biller->company != '-' ? $biller->company : $biller->name; ?>">
-                <!--</div>-->
+            <?php
+                if ($Settings->system_management == 'project') { ?>
+                    <!-- <div class="text-center" style="margin-bottom:20px;"> -->
+                        <img src="<?= base_url() . 'assets/uploads/logos/' . $Settings->logo2; ?>"
+                             alt="<?= $Settings->site_name; ?>">
+                    <!-- </div> -->
+            <?php } else { ?>
+                    <?php if ($logo) { ?>
+                        <!-- <div class="text-center" style="margin-bottom:20px;"> -->
+                            <img src="<?= base_url() . 'assets/uploads/logos/' . $biller->logo; ?>"
+                                 alt="<?= $biller->company != '-' ? $biller->company : $biller->name; ?>">
+                        <!-- </div> -->
+                    <?php } ?>
             <?php } ?>
             <div class="clearfix"></div>
             <div class="row padding10">
                 <div class="col-xs-5">
-                    <h2 class=""><?= $biller->company != '-' ? $biller->company : $biller->name; ?></h2>
+                    <?php if ($Settings->system_management == 'project') { ?>
+                        <h2><?= $Settings->site_name; ?></h2>
+                    <?php } else { ?>
+                        <h2><?= $biller->company != '-' ? $biller->company : $biller->name; ?></h2>
+                    <?php } ?>
                     <?= $biller->company ? "" : "Attn: " . $biller->name ?>
                     <?php
                     echo $biller->address . "<br />" . $biller->city . " " . $biller->postal_code . " " . $biller->state . "<br />" . $biller->country;
@@ -77,7 +89,7 @@
                             <strong><?= $payment->type == 'returned' ? lang("payment_sent") : lang("payment_sent"); ?></strong>
                         </td>
                         <td class="text-right"><strong
-                                class="text-right"><?php echo $this->erp->formatMoney($payment->paid); ?></strong>
+                                class="text-right"><?php echo $this->erp->formatMoney($payment->amount); ?></strong>
                         </td>
                     </tr>
                     <tr>

@@ -1,3 +1,11 @@
+<style>
+    @media print {
+        thead tr th:last-child,
+        tbody tr td:last-child{
+            display: none;  /*hide column Action when click on print*/
+        }
+    }
+</style>
 <script>
     $(document).ready(function () {
         var oTable = $('#CusData').dataTable({
@@ -19,7 +27,7 @@
             }, {"mRender": currencyFormat, "bSearchable": false}, {
                 "mRender": currencyFormat,
                 "bSearchable": false
-            }, {"mRender": currencyFormat, "bSearchable": false}, {"bSortable": false}]
+            }, {"mRender": null}, {"bSortable": false}]
         }).fnSetFilteringDelay().dtFilter([
             {column_number: 1, filter_default_label: "[<?=lang('company');?>]", filter_type: "text", data: []},
             {column_number: 2, filter_default_label: "[<?=lang('name');?>]", filter_type: "text", data: []},
@@ -29,38 +37,56 @@
     });
 </script>
 <?php 
-if ($Owner) {
+
     echo form_open('reports/suppliers_actions', 'id="action-form"');
-} 
 ?>
 <div class="box">
     <div class="box-header">
         <h2 class="blue"><i class="fa-fw fa fa-users"></i><?= lang('suppliers'); ?></h2>
-
         <div class="box-icon">
             <ul class="btn-tasks">
                 <li class="dropdown"><a href="#" id="pdf" data-action="export_pdf"  class="tip" title="<?= lang('download_pdf') ?>"><i
                             class="icon fa fa-file-pdf-o"></i></a></li>
                 <li class="dropdown"><a href="#" id="excel" data-action="export_excel"  class="tip" title="<?= lang('download_xls') ?>"><i
                             class="icon fa fa-file-excel-o"></i></a></li>
-            <!--    <li class="dropdown"><a href="#" id="image" class="tip" title="<?= lang('save_image') ?>"><i
-                            class="icon fa fa-file-picture-o"></i></a></li> -->
+                <li class="dropdown"><a href="#" id="image" class="tip" title="<?= lang('save_image') ?>"><i
+                            class="icon fa fa-file-picture-o"></i></a></li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)"><i class="icon fa fa-print" onclick="window.print()"></i></a>
+                </li>
             </ul>
         </div>
     </div>
-<?php if ($Owner) { ?>
     <div style="display: none;">
         <input type="hidden" name="form_action" value="" id="form_action"/>
         <?= form_submit('performAction', 'performAction', 'id="action-form-submit"') ?>
     </div>
-    <?= form_close() ?>
-<?php } ?>  
+    <?= form_close() ?> 
 	<div class="box-content">
         <div class="row">
             <div class="col-lg-12">
 
                 <p class="introtext"><?= lang('view_report_supplier'); ?></p>
-
+                <div class="report-header">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <br>
+                            <br>
+                            <span><?php echo date("F d, Y"); ?></span><br>
+                            <span><?php echo date("h:i a") ?></span>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <h3 class="text-center" style="font-size: 22px;">
+                                <?php echo $billers->company; ?>
+                            </h3>
+                            <h3 class="text-center" style="font-size: 25px;">Collections report</h3>
+                            <p class="text-center">
+                                <b><?php echo date("F d, Y"); ?></b>
+                            </p>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4"></div>
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table id="CusData" cellpadding="0" cellspacing="0" border="0"
                            class="table table-bordered table-condensed table-hover table-striped reports-table">
@@ -110,18 +136,6 @@ if ($Owner) {
 <script type="text/javascript" src="<?= $assets ?>js/html2canvas.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-		/*
-        $('#pdf').click(function (event) {
-            event.preventDefault();
-            window.location.href = "<?=site_url('reports/getSuppliers/pdf')?>";
-            return false;
-        });
-        $('#xls').click(function (event) {
-            event.preventDefault();
-            window.location.href = "<?=site_url('reports/getSuppliers/0/xls')?>";
-            return false;
-        });
-		*/
         $('#image').click(function (event) {
             event.preventDefault();
             html2canvas($('.box'), {

@@ -421,4 +421,185 @@ class Taxes_reports extends MY_Controller
             redirect('taxes_reports/withholding_tax');
         }
 	}
+	
+	function employee_salary_tax(){
+		$this->load->model('employee_modal');
+		if($this->input->post('employee')){
+			$employee_id = $this->input->post('employee');
+		}else{
+			$employee_id = NULL;
+		}
+		
+		if ($this->input->post('month')) {
+            $month = $this->input->post('month');
+        } else {
+            $month = date('m');
+        }
+		
+		if ($this->input->post('year')) {
+            $year = $this->input->post('year');
+        } else {
+            $year = date('Y');
+        }
+		if($this->input->post('epm_type')){
+			$epm_type = $this->input->post('epm_type');
+		}else{
+			$epm_type = NULL;
+		}
+		if ($this->input->post('emp_id')){
+			$emp_id = $this->input->post('emp_id');	
+		}else{
+			$emp_id = NULL;
+		}
+		/*if($sub_where!=''){
+			$sub_where = str_replace('"', "'", $sub_where);
+		}*/
+		$this->erp->checkPermissions();
+		$this->load->model('employee_modal');
+		$this->data['employee_salary_taxes'] = $this->taxes_reports_model->getEmployeeSalaryTaxes($emp_id);
+		$this->data['empid'] = $employee_id;
+		$this->data['employee_salary_taxesHeader'] = $this->taxes_reports_model->getEmployeeSalaryTaxesHeader($employee_id,$year,$month,$epm_type);
+		$this->data['employees'] = $this->employee_modal->getEmployees();
+		
+		//$arr = $this->taxes_reports_model->getEmployeeSalaryTaxes();
+		//$this->erp->print_arrays($arr);
+		$this->data['types'] = $this->site->getemployeetyp();
+        $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('employee_salary_tax')));
+        $meta = array('page_title' => lang('employee_salary_tax'), 'bc' => $bc);
+        $this->page_construct('taxes_reports/employee_salary_tax', $meta, $this->data);
+	}
+	
+	function getEmployeeSalaryTaxesReport()
+    {
+        if ( ! $this->Owner) {
+            $this->session->set_flashdata('warning', lang('access_denied'));
+            $this->erp->md();
+        }
+		
+		if($this->input->get('employee')){
+			$employee_id = $this->input->get('employee');
+		}else{
+			$employee_id = NULL;
+		}
+		
+		if ($this->input->get('month')) {
+            $month = $this->input->get('month');
+        } else {
+            $month = date('m');
+        }
+		
+		if ($this->input->get('year')) {
+            $year = $this->input->get('year');
+        } else {
+            $year = date('Y');
+        }
+		
+		if ($this->input->get('isCompany')) {
+            $isCompany = $this->input->get('isCompany');
+        } else {
+            $isCompany = 0;
+        }
+		if($this->input->get('epm_type')){
+			$epm_type = $this->input->get('epm_type');
+		}else{
+			$epm_type = NULL;
+		}
+		$searchDate = $year . '-' . $month . '-' . date('d');
+		$searchDate = date('Y-m-d', strtotime($searchDate));
+
+        $this->load->library('datatables');
+        $this->datatables
+            ->select("CONCAT(" . $this->db->dbprefix('users') . ".first_name, ' ' ," . $this->db->dbprefix('users') . ".last_name) AS fullname,
+				DATE_FORMAT(erp_employee_salary_tax.date_insert, '%Y-%m') AS date,
+				erp_employee_salary_tax.position,
+				COALESCE(erp_employee_salary_tax.basic_salary,0) as salary,
+				COALESCE (
+					(SELECT emp_tax.amount_usd
+						FROM erp_employee_salary_tax emp_tax
+						WHERE DATE_FORMAT(emp_tax.date_insert, '%Y-%m') = '". $year . '-' . $month ."'
+						AND emp_tax.employee_id = erp_employee_salary_tax.employee_id
+					),
+					0
+				) AS salary_tax,
+				0 as salary_paid,
+				COALESCE(erp_employee_salary_tax.spouse,0) as spouse, 
+				COALESCE(erp_employee_salary_tax.minor_children,0) as number_of_child, 
+				0 as allowance, 
+				0 as salary_cal, 
+				0 as tax_rate, 
+				0 as salary_riel, 
+				'' as remark")
+            ->from("users")
+			->join('employee_salary_tax', 'employee_salary_tax.employee_id = users.id', 'left')
+			->join('employee_salary_tax_trigger', 'employee_salary_tax_trigger.id=employee_salary_tax.trigger_id', 'left')
+            ->join('groups', 'users.group_id=groups.id', 'left')
+            ->group_by('users.id')
+            ->where('company_id', NULL)
+			//->where('employee_salary_tax_trigger.isCompany', $isCompany)
+			->order_by('users.id', 'ASC');
+			//->add_column("Actions", "<div class=\"text-center\"><button class=\"btn btn-primary btn-xs form-submit\" type=\"button\"><i class=\"fa fa-floppy-o\"></i></button></div>");
+			//->edit_column("allowance", "$1__$2__$3", 'id, allowance, "al"')
+			//->edit_column("salary_cal", "$1__$2__$3", 'id, salary_cal, "sc"')
+			//->edit_column("tax_rate", "$1__$2__$3", 'id, tax_rate, "tr"')
+			//->edit_column("salary_riel", "$1__$2__$3", 'id, salary_riel, "sr"');
+		
+		if($employee_id){
+			$this->datatables->where('users.id' , $employee_id);
+		}
+		if ($epm_type) {
+			$this->datatables->where('users.emp_group', $epm_type);
+		}
+		if($month && $year){
+			$this->datatables->where("DATE_FORMAT(erp_employee_salary_tax.date_insert, '%Y-%m') = " ,  $year . '-' . $month);
+		}
+        echo $this->datatables->generate();
+    }
+	
+	function vat_gov_tax_report($month=NULL,$year=NULL,$group_id=NULL) {	
+		$opening_balance=null;
+		$month =date('m');
+		$year =date('Y');
+		/*
+		if($this->input->post('start_date')){
+		$date= explode("/",$this->input->post('start_date'));  ;
+			$month =$date[0];
+			$year =$date[1];
+		}
+		*/
+		if($this->input->post('month')&&$this->input->post('year')){
+		$month =$this->input->post('month');
+		$year =$this->input->post('year');
+		}
+		$date_time_for_gl_tran= $year.'-'.$month.'-31 00:00:00';
+		$this->erp->checkPermissions();
+		$this->data['vat_input'] = $this->taxes_reports_model->v_purch_journal_list($month,$year,$group_id,$tax_type=2);	
+		$this->data['vat_output']    = $this->taxes_reports_model->v_sale_journal_list($month,$year,$group_id);
+							$getF=$this->taxes_reports_model->get_set_forward($date_time_for_gl_tran);
+							if($getF){
+							foreach($getF->result() as $get){
+								$opening_balance+=$get->amount;
+							}}
+		$date_time= $year.'-'.$month.'-01 00:00:00';
+		$total_input=$this->erp->taxes_reports_model->sum_input($date_time);
+		$total_output=$this->erp->taxes_reports_model->sum_output($date_time);
+		foreach($total_input as $t_i){
+			$get_input=$t_i->sum_input;
+		}
+		foreach($total_output as $t_o){
+			$get_output=$t_o->sum_output;
+		}
+		
+		$opening_balance = abs($opening_balance);				
+			if (($get_input+$opening_balance) < $get_output){
+				$previous_vat = 0;
+			}else{
+				$previous_vat = ($get_input+$opening_balance) - $get_output;
+			}
+
+		$this->data['previous_vat']=$previous_vat;
+		
+        $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('vat_gov_tax_report')));
+        $meta = array('page_title' => lang('vat_gov_tax_report'), 'bc' => $bc);
+        $this->page_construct('taxes_reports/vat_gov_tax_report', $meta, $this->data);
+	}
 }

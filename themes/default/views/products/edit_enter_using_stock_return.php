@@ -102,7 +102,7 @@ if ($this->input->post('end_date')) {
 				<input type="hidden"  name="stock_id"  id="stock_id" value="<?=$stock->id?>" />
                 <div class="clearfix"></div>
 					
-				<div>
+				<div class="row">
 					<div class="col-md-4">
 						<div class="form-group">
 							<?= lang('date', 'date'); ?>
@@ -190,10 +190,7 @@ if ($this->input->post('end_date')) {
 					</div>
 				</div>	
 			
-					
-					
-					
-                <div class="table-responsive">
+				<div class="table-responsive">
                     <table id="PrRData"
                            class="table table-bordered table-hover table-striped table-condensed reports-table">
                         <thead>

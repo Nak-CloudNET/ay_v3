@@ -28,22 +28,18 @@
                                     ?>
                                 </div>
                             </div>
-                        <?php } else { ?>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <?= lang("warehouse", "warehouse"); ?>
-                                    <?php
-                                    $wh[''] = '';
-                                    foreach ($warehouses as $warehouse) {
-                                        $wh[$warehouse->id] = $warehouse->name;
-                                    }
-                                    echo form_dropdown('warehouse', $wh, (isset($_POST['warehouse']) ? $_POST['warehouse'] : $Settings->default_warehouse), 'id="warehouse" class="form-control input-tip select" data-placeholder="' . lang("select") . ' ' . lang("warehouse") . '" required="required" style="width:100%;" ');
-                                    ?>
-                                </div>
-                            </div>
-						<?php } ?>
+                        <?php } else {
+                            $warehouse_input = array(
+                                'type' => 'hidden',
+                                'name' => 'warehouse',
+                                'id' => 'warehouse',
+                                'value' => $this->session->userdata('warehouse_id'),
+                                );
 
-                        <?php if ($Owner || $Admin || $this->session->userdata('user_id')) { ?>
+                            echo form_input($warehouse_input);
+                        } ?>
+
+                        <?php if ($Owner || $Admin) { ?>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <?= lang("date", "date"); ?>
@@ -87,19 +83,30 @@
                         <div class="clearfix"></div>
                         <div class="col-md-12 partials" style="display:none;">
                         <div class="well well-sm">
-							<div class="col-md-4">
-								<div class="form-group">
-									<?= lang("categories", "category"); ?>
-									<?php
-									foreach ($categories as $category) {
-										$wh[$category->id] = $category->name;
-									}
-									echo form_dropdown('category[]', $wh, (isset($_POST['category']) ? $_POST['category'] : 0), 'id="category" class="form-control input-tip select" data-placeholder="' . lang("select") . ' ' . lang("category") . '" style="width:100%;" multiple');
-									?>
-								</div>
-							</div>
-							<div class="clearfix"></div>
-						</div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <?= lang("brands", "brand"); ?>
+                                        <?php
+                                        foreach ($brands as $brand) {
+                                            $wh[$brand->id] = $brand->name;
+                                        }
+                                        echo form_dropdown('brand[]', $wh, (isset($_POST['brand']) ? $_POST['brand'] : 0), 'id="brand" class="form-control input-tip select" data-placeholder="' . lang("select") . ' ' . lang("brand") . '" style="width:100%;" multiple');
+                                        ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <?= lang("categories", "category"); ?>
+                                        <?php
+                                        foreach ($categories as $category) {
+                                            $wh[$category->id] = $category->name;
+                                        }
+                                        echo form_dropdown('category[]', $wh, (isset($_POST['category']) ? $_POST['category'] : 0), 'id="category" class="form-control input-tip select" data-placeholder="' . lang("select") . ' ' . lang("category") . '" style="width:100%;" multiple');
+                                        ?>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
                         </div>
                         <div class="clearfix"></div>
 

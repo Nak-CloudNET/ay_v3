@@ -1,30 +1,28 @@
+
 <?php
 
-$v = "";
-/* if($this->input->post('name')){
-  $v .= "&name=".$this->input->post('name');
-  } */
-if ($this->input->post('reference_no')) {
-    $v .= "&reference_no=" . $this->input->post('reference_no');
-}
-if ($this->input->post('supplier')) {
-    $v .= "&supplier=" . $this->input->post('supplier');
-}
-if ($this->input->post('warehouse')) {
-    $v .= "&warehouse=" . $this->input->post('warehouse');
-}
-if ($this->input->post('user')) {
-    $v .= "&user=" . $this->input->post('user');
-}
-if ($this->input->post('start_date')) {
-    $v .= "&start_date=" . $this->input->post('start_date');
-}
-if ($this->input->post('end_date')) {
-    $v .= "&end_date=" . $this->input->post('end_date');
-}
-if (isset($biller_id)) {
-    $v .= "&biller_id=" . $biller_id;
-}
+    $v = "";
+    if ($this->input->post('reference_no')) {
+        $v .= "&reference_no=" . $this->input->post('reference_no');
+    }
+    if ($this->input->post('supplier')) {
+        $v .= "&supplier=" . $this->input->post('supplier');
+    }
+    if ($this->input->post('warehouse')) {
+        $v .= "&warehouse=" . $this->input->post('warehouse');
+    }
+    if ($this->input->post('user')) {
+        $v .= "&user=" . $this->input->post('user');
+    }
+    if ($this->input->post('start_date')) {
+        $v .= "&start_date=" . $this->input->post('start_date');
+    }
+    if ($this->input->post('end_date')) {
+        $v .= "&end_date=" . $this->input->post('end_date');
+    }
+    if (isset($biller_id)) {
+        $v .= "&biller_id=" . $biller_id;
+    }
 
 ?>
 <style>
@@ -33,21 +31,6 @@ if (isset($biller_id)) {
 
 </style>
 <script type="text/javascript">
-	
-	function pqFormatPurchaseReports2(x) {
-		if (x != null) {
-			var d = '', pqc = x.split("___");
-			for (index = 0; index < pqc.length; ++index) {
-				var pq = pqc[index];
-				d += "" + pq +"<br>";
-			}
-			return d;
-		} else {
-			return '';
-		}
-	}
-	
-	
     $(document).ready(function () {
         var oTable = $('#PoRData').dataTable({
             "aaSorting": [[0, "desc"]],
@@ -62,40 +45,50 @@ if (isset($biller_id)) {
                 });
                 $.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
             },
-            "aoColumns": [{"bSortable": false, "mRender": checkbox}, {"mRender": null}, null, null, null, {
-                "bSearchable": false,
-                "mRender": pqFormatPurchaseReports2
-            },{
-                "bSearchable": false,
-                "mRender": pqFormatPurchaseReports2
-            }, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": row_status}],
+            "aoColumns": [
+			{"bSortable": false, "mRender": checkbox}, 
+			{"mRender": null}, 
+			null, 
+			null, 
+			null,
+			
+			{"mRender": currencyFormat}, 
+			{"mRender": currencyFormat}, 
+			{"mRender": currencyFormat}, 
+			{"mRender": row_status},null],
+			'fnRowCallback': function (nRow, aData, iDisplayIndex) {
+                var oSettings = oTable.fnSettings();
+                nRow.id = aData[0];
+                nRow.className = "purchase_links";
+                return nRow;
+            },
             "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
                 var gtotal = 0, paid = 0, balance = 0, qtotal = 0;
                 for (var i = 0; i < aaData.length; i++) {
 					var qty = aaData[aiDisplay[i]][6];
-					qty = qty.split('___');
-					$.each(qty, function(){
-						qtotal += parseFloat(this);
-					});
-
-                    gtotal += parseFloat(aaData[aiDisplay[i]][7]);
-                    paid += parseFloat(aaData[aiDisplay[i]][8]);
-                    balance += parseFloat(aaData[aiDisplay[i]][9]);
+					if(qty != null){
+						qty = qty.split('<br/>');					
+						$.each(qty, function(){
+							qtotal += parseFloat(this);
+						});
+					}
+					
+                    gtotal += parseFloat(aaData[aiDisplay[i]][5]);
+                    paid += parseFloat(aaData[aiDisplay[i]][6]);
+                    balance += parseFloat(aaData[aiDisplay[i]][7]);
                 }
                 var nCells = nRow.getElementsByTagName('th');
-				nCells[6].innerHTML = currencyFormat(parseFloat(qtotal));
-                nCells[7].innerHTML = currencyFormat(parseFloat(gtotal));
-                nCells[8].innerHTML = currencyFormat(parseFloat(paid));
-                nCells[9].innerHTML = currencyFormat(parseFloat(balance));
+                nCells[5].innerHTML = currencyFormat(parseFloat(gtotal));
+                nCells[6].innerHTML = currencyFormat(parseFloat(paid));
+                nCells[7].innerHTML = currencyFormat(parseFloat(balance));
             }
         }).fnSetFilteringDelay().dtFilter([
             {column_number: 1, filter_default_label: "[<?=lang('date');?> (yyyy-mm-dd)]", filter_type: "text", data: []},
             {column_number: 2, filter_default_label: "[<?=lang('ref_no');?>]", filter_type: "text", data: []},
-            {column_number: 3, filter_default_label: "[<?=lang('warehouse');?>]", filter_type: "text", data: []},
-           // {column_number: 4, filter_default_label: "[<?=lang('container');?>]", filter_type: "text", data: []},
+            {column_number: 3, filter_default_label: "[<?=lang('warehouse');?>]", filter_type: "text", data: []},           
 			{column_number: 4, filter_default_label: "[<?=lang('supplier');?>]", filter_type: "text", data: []},
-			{column_number: 5, filter_default_label: "[<?=lang('product');?>]", filter_type: "text", data: []},
-            {column_number: 10, filter_default_label: "[<?=lang('status');?>]", filter_type: "text", data: []},
+            {column_number: 8, filter_default_label: "[<?=lang('status');?>]", filter_type: "text", data: []},
+            {column_number: 9, filter_default_label: "[<?=lang('created_by');?>]", filter_type: "text", data: []},
         ], "footer");
     });
 </script>
@@ -149,10 +142,11 @@ if (isset($biller_id)) {
     });
 </script>
 <?php 
-if ($Owner) {
+
     echo form_open('reports/purchases_actions', 'id="action-form"');
-} 
+
 ?>
+
 <div class="box">
     <div class="box-header">
         <h2 class="blue"><i class="fa-fw fa fa-star"></i><?= lang('purchases_report'); ?> <?php
@@ -175,35 +169,36 @@ if ($Owner) {
                             class="icon fa fa-file-pdf-o"></i></a></li>
                 <li class="dropdown"><a href="#" id="excel" data-action="export_excel" class="tip" title="<?= lang('download_xls') ?>"><i
                             class="icon fa fa-file-excel-o"></i></a></li>
-            <!--    <li class="dropdown"><a href="#" id="image" class="tip" title="<?= lang('save_image') ?>"><i
-                            class="icon fa fa-file-picture-o"></i></a></li> -->
+                <li class="dropdown"><a href="#" id="image" class="tip" title="<?= lang('save_image') ?>"><i
+                            class="icon fa fa-file-picture-o"></i></a></li>
 							
 				<li class="dropdown">
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i
-                                    class="icon fa fa-building-o tip" data-placement="left"
-                                    title="<?= lang("billers") ?>"></i></a>
-                            <ul class="dropdown-menu pull-right" class="tasks-menus" role="menu"
-                                aria-labelledby="dLabel">
-                                <li><a href="<?= site_url('reports/purchases') ?>"><i
-                                            class="fa fa-building-o"></i> <?= lang('billers') ?></a></li>
-                                <li class="divider"></li>
-                                <?php
-                                foreach ($billers as $biller) {
-                                    echo '<li ' . ($biller_id && $biller_id == $biller->id ? 'class="active"' : '') . '><a href="' . site_url('reports/purchases/'. $biller->id) . '"><i class="fa fa-building"></i>' . $biller->company . '</a></li>';
-                                }
-                                ?>
-                            </ul>
+						<a data-toggle="dropdown" class="dropdown-toggle" href="#"><i
+								class="icon fa fa-building-o tip" data-placement="left"
+								title="<?= lang("billers") ?>"></i></a>
+						<ul class="dropdown-menu pull-right" class="tasks-menus" role="menu"
+							aria-labelledby="dLabel">
+							<li><a href="<?= site_url('reports/purchases') ?>"><i
+										class="fa fa-building-o"></i> <?= lang('billers') ?></a></li>
+							<li class="divider"></li>
+							<?php
+							foreach ($billers as $biller) {
+								echo '<li ' . ($biller_id && $biller_id == $biller->id ? 'class="active"' : '') . '><a href="' . site_url('reports/purchases/'. $biller->id) . '"><i class="fa fa-building"></i>' . $biller->company . '</a></li>';
+							}
+							?>
+						</ul>
+                </li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)"><i class="icon fa fa-print" onclick="window.print()"></i></a>
                 </li>
             </ul>
         </div>
     </div>
-<?php if ($Owner) { ?>
     <div style="display: none;">
         <input type="hidden" name="form_action" value="" id="form_action"/>
         <?= form_submit('performAction', 'performAction', 'id="action-form-submit"') ?>
     </div>
-    <?= form_close() ?>
-<?php } ?>   
+    <?= form_close() ?> 
 	<div class="box-content">
         <div class="row">
             <div class="col-lg-12">
@@ -254,13 +249,13 @@ if ($Owner) {
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <?= lang("start_date", "start_date"); ?>
-                                <?php echo form_input('start_date', (isset($_POST['start_date']) ? $_POST['start_date'] : ""), 'class="form-control datetime" id="start_date"'); ?>
+                                <?php echo form_input('start_date', (isset($_POST['start_date']) ? $_POST['start_date'] : $this->erp->hrsd($start_date)), 'class="form-control datetime" id="start_date"'); ?>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <?= lang("end_date", "end_date"); ?>
-                                <?php echo form_input('end_date', (isset($_POST['end_date']) ? $_POST['end_date'] : ""), 'class="form-control datetime" id="end_date"'); ?>
+                                <?php echo form_input('end_date', (isset($_POST['end_date']) ? $_POST['end_date'] : $this->erp->hrsd($end_date)), 'class="form-control datetime" id="end_date"'); ?>
                             </div>
                         </div>
                     </div>
@@ -272,10 +267,37 @@ if ($Owner) {
 
                 </div>
                 <div class="clearfix"></div>
-
+                <div class="report-header">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <br>
+                            <br>
+                            <span><?php echo date("F d, Y"); ?></span><br>
+                            <span><?php echo date("h:i a") ?></span>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <h3 class="text-center" style="font-size: 22px">
+                                <?php
+                                    echo $billers->company;
+                                ?>
+                            </h3>
+                            <h3 class="text-center" style="font-size: 22px">Collections report</h3>
+                            <p class="text-center">As of
+                                <?php
+                                    if($start_date != NULL){
+                                        echo $start_date;
+                                    }else{
+                                        echo date("F d, Y");
+                                    }
+                                ?>
+                            </p>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4"></div>
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table id="PoRData"
-                           class="table table-bordered table-hover table-striped table-condensed reports-table">
+                           class="table table-bordered table-hover table-striped table-condensed reports-table" style="white-space: nowrap;">
                         <thead>
                         <tr>
 							<th style="min-width:30px; width: 30px; text-align: center;">
@@ -285,12 +307,11 @@ if ($Owner) {
                             <th><?= lang("reference_no"); ?></th>
                             <th><?= lang("warehouse"); ?></th>
 							<th><?= lang("supplier"); ?></th>
-                            <th><?= lang("product"); ?></th>
-							<th><?= lang("qty"); ?></th>
                             <th><?= lang("grand_total"); ?></th>
                             <th><?= lang("paid"); ?></th>
                             <th><?= lang("balance"); ?></th>
                             <th><?= lang("status"); ?></th>
+							<th><?= lang("created_by"); ?></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -305,14 +326,13 @@ if ($Owner) {
                             </th>
                             <th></th>
                             <th></th>
-                            <th></th>
 							<th></th>
                             <th></th>
-							<th><?= lang("qty"); ?></th>
-                            <th><?= lang("grand_total"); ?></th>
-                            <th><?= lang("paid"); ?></th>
-                            <th><?= lang("balance"); ?></th>
                             <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+							<th></th>
                         </tr>
                         </tfoot>
                     </table>
@@ -325,18 +345,6 @@ if ($Owner) {
 <script type="text/javascript" src="<?= $assets ?>js/html2canvas.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        /*
-		$('#pdf').click(function (event) {
-            event.preventDefault();
-            window.location.href = "<?=site_url('reports/getPurchasesReport/pdf/?v=1'.$v)?>";
-            return false;
-        });
-        $('#xls').click(function (event) {
-            event.preventDefault();
-            window.location.href = "<?=site_url('reports/getPurchasesReport/0/xls/?v=1'.$v)?>";
-            return false;
-        });
-		*/
         $('#image').click(function (event) {
             event.preventDefault();
             html2canvas($('.box'), {

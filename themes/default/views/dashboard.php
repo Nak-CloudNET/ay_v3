@@ -17,7 +17,33 @@ function row_status($x)
 }
 
 ?>
+<?php if (($Owner || $Admin) && $chatData) {
+    foreach ($chatData as $month_sale) {
+        $months[] = date('M-Y', strtotime($month_sale->month));
+        $msales[] = $month_sale->sales + $month_sale->tax1 + $month_sale->tax2;
+        $mtax1[] = $month_sale->tax1;
+        $mtax2[] = $month_sale->tax2;
+        $mpurchases[] = $month_sale->purchases;
+        $mtax3[] = $month_sale->ptax;
+        $mprofit[] = ($month_sale->sales + $month_sale->tax1 + $month_sale->tax2) - ($month_sale->purchases + $month_sale->ptax);
+    }
+    ?>
+    <div class="box" style="margin-bottom: 15px;">
+        <div class="box-header">
+            <h2 class="blue"><i class="fa-fw fa fa-bar-chart-o"></i><?= lang('overview_chart'); ?></h2>
+        </div>
+        <div class="box-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="introtext"><?php echo lang('overview_chart_heading'); ?></p>
 
+                    <div id="ov-chart" style="width:100%; height:450px;"></div>
+                    <p class="text-center"><?= lang("chart_lable_toggle"); ?></p>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php } ?>
 <?php if ($Owner || $Admin) { ?>
 <div class="row" style="margin-bottom: 15px;">
     <div class="col-lg-12">
@@ -65,20 +91,14 @@ function row_status($x)
                     </a>
                 </div>
 
-            <!--    <div class="col-lg-1 col-md-2 col-xs-6">
+                <div class="col-lg-1 col-md-2 col-xs-6">
                     <a class="bgrey white quick-button small" href="<?= site_url('customers') ?>">
                         <i class="fa fa-users"></i>
 
                         <p><?= lang('customers') ?></p>
                     </a>
-                </div>  -->
-				<div class="col-lg-1 col-md-2 col-xs-6">
-                    <a class="bgrey white quick-button small" href="<?= site_url('suppliers') ?>">
-                        <i class="fa fa-users"></i>
-
-                        <p><?= lang('suppliers') ?></p>
-                    </a>
                 </div>
+
                 <div class="col-lg-1 col-md-2 col-xs-6">
                     <a class="bgrey white quick-button small" href="<?= site_url('suppliers') ?>">
                         <i class="fa fa-users"></i>
@@ -108,20 +128,6 @@ function row_status($x)
                             <i class="fa fa-cogs"></i>
 
                             <p><?= lang('settings') ?></p>
-                        </a>
-                    </div>
-					<div class="col-lg-1 col-md-2 col-xs-6">
-                        <a class="bred white quick-button small" href="<?= site_url('reports/sales') ?>">
-                            <i class="fa fa-book"></i>
-
-                            <p><?= lang('sale_report') ?></p>
-                        </a>
-                    </div>
-					<div class="col-lg-1 col-md-2 col-xs-6">
-                        <a class="bred white quick-button small" href="<?= site_url('reports/getSalesReportDetail') ?>">
-                            <i class="fa fa-book"></i>
-
-                            <p><?= lang('sales_report_detail') ?></p>
                         </a>
                     </div>
                 <?php } ?>
@@ -379,9 +385,7 @@ function row_status($x)
                                                     <th><?= $this->lang->line("from"); ?></th>
                                                     <th><?= $this->lang->line("to"); ?></th>
                                                     <th><?= $this->lang->line("status"); ?></th>
-													<?php if ($Owner || $Admin || $GP['transfers-subtotal']) { ?>
-														<th><?= $this->lang->line("amount"); ?></th>
-													<?php } ?>
+                                                    <th><?= $this->lang->line("amount"); ?></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -393,11 +397,9 @@ function row_status($x)
                                                 <td>' . $transfer->transfer_no . '</td>
                                                 <td>' . $transfer->from_warehouse_name . '</td>
                                                 <td>' . $transfer->to_warehouse_name . '</td>
-                                                <td>' . row_status($transfer->status) . '</td>';
-												if ($Owner || $Admin || $GP['transfers-subtotal']) {
-                                                echo '<td class="text-right">' . $this->erp->formatMoney($transfer->grand_total) . '</td>';
-												}
-                                            echo '</tr>';
+                                                <td>' . row_status($transfer->status) . '</td>
+                                                <td class="text-right">' . $this->erp->formatMoney($transfer->grand_total) . '</td>
+                                            </tr>';
                                                         $r++;
                                                     }
                                                 } else { ?>
@@ -532,7 +534,181 @@ function row_status($x)
     });
 </script>
 
-<?php if (($Owner || $Admin) && $chatData) { ?> 
+<?php if (($Owner || $Admin) && $chatData) { ?>
+    <style type="text/css" media="screen">
+        .tooltip-inner {
+            max-width: 500px;
+        }
+    </style>
+    <script src="<?= $assets; ?>js/hc/highcharts.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
+                return {
+                    radialGradient: {cx: 0.5, cy: 0.3, r: 0.7},
+                    stops: [[0, color], [1, Highcharts.Color(color).brighten(-0.3).get('rgb')]]
+                };
+            });
+            $('#ov-chart').highcharts({
+                chart: {},
+                credits: {enabled: false},
+                title: {text: ''},
+                xAxis: {categories: <?= json_encode($months); ?>},
+                yAxis: {min: 0, title: ""},
+                tooltip: {
+                    shared: true,
+                    followPointer: true,
+                    formatter: function () {
+                        if (this.key) {
+                            return '<div class="tooltip-inner hc-tip" style="margin-bottom:0;">' + this.key + '<br><strong>' + currencyFormat(this.y) + '</strong> (' + formatNumber(this.percentage) + '%)';
+                        } else {
+                            var s = '<div class="well well-sm hc-tip" style="margin-bottom:0;"><h2 style="margin-top:0;">' + this.x + '</h2><table class="table table-striped"  style="margin-bottom:0;">';
+                            $.each(this.points, function () {
+                                s += '<tr><td style="color:{series.color};padding:0">' + this.series.name + ': </td><td style="color:{series.color};padding:0;text-align:right;"> <b>' +
+                                currencyFormat(this.y) + '</b></td></tr>';
+                            });
+                            s += '</table></div>';
+                            return s;
+                        }
+                    },
+                    useHTML: true, borderWidth: 0, shadow: false, valueDecimals: site.settings.decimals,
+                    style: {fontSize: '14px', padding: '0', color: '#000000'}
+                },
+                series: [{
+                    type: 'column',
+                    name: '<?= lang("sp_tax"); ?>',
+                    data: [<?php
+                    echo implode(', ', $mtax1);
+                    ?>]
+                },
+                    {
+                        type: 'column',
+                        name: '<?= lang("order_tax"); ?>',
+                        data: [<?php
+                    echo implode(', ', $mtax2);
+                    ?>]
+                    },
+                    {
+                        type: 'column',
+                        name: '<?= lang("sales"); ?>',
+                        data: [<?php
+                    echo implode(', ', $msales);
+                    ?>]
+                    }, {
+                        type: 'spline',
+                        name: '<?= lang("purchases"); ?>',
+                        data: [<?php
+                    echo implode(', ', $mpurchases);
+                    ?>],
+                        marker: {
+                            lineWidth: 2,
+                            states: {
+                                hover: {
+                                    lineWidth: 4
+                                }
+                            },
+                            lineColor: Highcharts.getOptions().colors[3],
+                            fillColor: 'white'
+                        }
+                    }, {
+                        type: 'spline',
+                        name: '<?= lang("pp_tax"); ?>',
+                        data: [<?php
+                    echo implode(', ', $mtax3);
+                    ?>],
+                        marker: {
+                            lineWidth: 2,
+                            states: {
+                                hover: {
+                                    lineWidth: 4
+                                }
+                            },
+                            lineColor: Highcharts.getOptions().colors[3],
+                            fillColor: 'white'
+                        }
+                    }, {
+                        type: 'column',
+                        name: '<?= lang("profit"); ?>',
+                        data: [<?php
+                            echo implode(', ', $mprofit);
+                            ?>]
+                    }, {
+                        type: 'pie',
+                        name: '<?= lang("stock_value"); ?>',
+                        data: [
+                            ['', 0],
+                            ['', 0],
+                            ['<?= lang("stock_value_by_price"); ?>', <?php echo $stock->stock_by_price; ?>],
+                            ['<?= lang("stock_value_by_cost"); ?>', <?php echo $stock->stock_by_cost; ?>],
+                        ],
+                        center: [80, 42],
+                        size: 80,
+                        showInLegend: false,
+                        dataLabels: {
+                            enabled: false
+                        }
+                    }]
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#lmbschart').highcharts({
+                chart: {type: 'column'},
+                title: {text: ''},
+                credits: {enabled: false},
+                xAxis: {type: 'category', labels: {rotation: -60, style: {fontSize: '13px'}}},
+                yAxis: {min: 0, title: {text: ''}},
+                legend: {enabled: false},
+                series: [{
+                    name: '<?=lang('sold');?>',
+                    data: [<?php
+                    foreach ($lmbs as $r) {
+                        if($r->SoldQty > 0) {
+                            echo "['".$r->name."', ".$r->SoldQty."],";
+                        }
+                    }
+                    ?>],
+                    dataLabels: {
+                        enabled: true,
+                        rotation: -90,
+                        color: '#000',
+                        align: 'right',
+                        y: -25,
+                        style: {fontSize: '12px'}
+                    }
+                }]
+            });
+            $('#bschart').highcharts({
+                chart: {type: 'column'},
+                title: {text: ''},
+                credits: {enabled: false},
+                xAxis: {type: 'category', labels: {rotation: -60, style: {fontSize: '13px'}}},
+                yAxis: {min: 0, title: {text: ''}},
+                legend: {enabled: false},
+                series: [{
+                    name: '<?=lang('sold');?>',
+                    data: [<?php
+                foreach ($bs as $r) {
+                    if($r->SoldQty > 0) {
+                        echo "['".$r->name."', ".$r->SoldQty."],";
+                    }
+                }
+                ?>],
+                    dataLabels: {
+                        enabled: true,
+                        rotation: -90,
+                        color: '#000',
+                        align: 'right',
+                        y: -25,
+                        style: {fontSize: '12px'}
+                    }
+                }]
+            });
+
+        });
+    </script>
     <div class="row" style="margin-bottom: 15px;">
         <div class="col-sm-6">
             <div class="box">
@@ -567,207 +743,4 @@ function row_status($x)
             </div>
         </div>
     </div>
-<?php } ?>
-<?php if (($Owner || $Admin) && $chatData) {
-    foreach ($chatData as $month_sale) {
-        $months[] = date('M-Y', strtotime($month_sale->month));
-        $msales[] = $month_sale->sales;
-        $morder_discount[] = $month_sale->order_discount;
-        $mtax1[] = $month_sale->tax1;
-        $mtax2[] = $month_sale->tax2;
-        $mpurchases[] = $month_sale->purchases;
-        $mtax3[] = $month_sale->ptax;
-    }
-    ?>
-    <div class="box" style="margin-bottom: 15px;">
-        <div class="box-header">
-            <h2 class="blue"><i class="fa-fw fa fa-bar-chart-o"></i><?= lang('overview_chart'); ?></h2>
-        </div>
-        <div class="box-content">
-            <div class="row">
-                <div class="col-md-12">
-                    <p class="introtext"><?php echo lang('overview_chart_heading'); ?></p>
-
-                    <div id="ov-chart" style="width:100%; height:450px;"></div>
-                    <p class="text-center"><?= lang("chart_lable_toggle"); ?></p>
-                </div>
-            </div>
-        </div>
-    </div>
-<?php } ?>
-
-<?php if (($Owner || $Admin) && $chatData) { ?>
-<style type="text/css" media="screen">
-	.tooltip-inner {
-		max-width: 500px;
-	}
-</style>
-<script src="<?= $assets; ?>js/hc/highcharts.js"></script>
-<script type="text/javascript">
-	$(function () {
-		$('#lmbschart').highcharts({
-			chart: {type: 'column'},
-			title: {text: ''},
-			credits: {enabled: false},
-			xAxis: {type: 'category', labels: {rotation: -60, style: {fontSize: '13px'}}},
-			yAxis: {min: 0, title: {text: ''}},
-			legend: {enabled: false},
-			series: [{
-				name: '<?=lang('sold');?>',
-				data: [<?php
-				foreach ($lmbs as $r) {
-					if($r->SoldQty > 0) {
-						echo "['".$r->name."', ".$r->SoldQty."],";
-					}
-				}
-				?>],
-				dataLabels: {
-					enabled: true,
-					rotation: -90,
-					color: '#000',
-					align: 'right',
-					y: -25,
-					style: {fontSize: '12px'}
-				}
-			}]
-		});
-		$('#bschart').highcharts({
-			chart: {type: 'column'},
-			title: {text: ''},
-			credits: {enabled: false},
-			xAxis: {type: 'category', labels: {rotation: -60, style: {fontSize: '13px'}}},
-			yAxis: {min: 0, title: {text: ''}},
-			legend: {enabled: false},
-			series: [{
-				name: '<?=lang('sold');?>',
-				data: [<?php
-			foreach ($bs as $r) {
-				if($r->SoldQty > 0) {
-					echo "['".$r->name."', ".$r->SoldQty."],";
-				}
-			}
-			?>],
-				dataLabels: {
-					enabled: true,
-					rotation: -90,
-					color: '#000',
-					align: 'right',
-					y: -25,
-					style: {fontSize: '12px'}
-				}
-			}]
-		});
-
-	});
-</script>
-<script type="text/javascript">
-	$(function () {
-		Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
-			return {
-				radialGradient: {cx: 0.5, cy: 0.3, r: 0.7},
-				stops: [[0, color], [1, Highcharts.Color(color).brighten(-0.3).get('rgb')]]
-			};
-		});
-		$('#ov-chart').highcharts({
-			chart: {},
-			credits: {enabled: false},
-			title: {text: ''},
-			xAxis: {categories: <?= json_encode($months); ?>},
-			yAxis: {min: 0, title: ""},
-			tooltip: {
-				shared: true,
-				followPointer: true,
-				formatter: function () {
-					if (this.key) {
-						return '<div class="tooltip-inner hc-tip" style="margin-bottom:0;">' + this.key + '<br><strong>' + currencyFormat(this.y) + '</strong> (' + formatNumber(this.percentage) + '%)';
-					} else {
-						var s = '<div class="well well-sm hc-tip" style="margin-bottom:0;"><h2 style="margin-top:0;">' + this.x + '</h2><table class="table table-striped"  style="margin-bottom:0;">';
-						$.each(this.points, function () {
-							s += '<tr><td style="color:{series.color};padding:0">' + this.series.name + ': </td><td style="color:{series.color};padding:0;text-align:right;"> <b>' +
-							currencyFormat(this.y) + '</b></td></tr>';
-						});
-						s += '</table></div>';
-						return s;
-					}
-				},
-				useHTML: true, borderWidth: 0, shadow: false, valueDecimals: site.settings.decimals,
-				style: {fontSize: '14px', padding: '0', color: '#000000'}
-			},
-			series: [{
-				type: 'column',
-				name: '<?= lang("sp_tax"); ?>',
-				data: [<?php
-				echo implode(', ', $mtax1);
-				?>]
-			},
-				{
-					type: 'column',
-					name: '<?= lang("order_tax"); ?>',
-					data: [<?php
-				echo implode(', ', $mtax2);
-				?>]
-				},
-				{
-					type: 'column',
-					name: '<?= lang("sales"); ?>',
-					data: [<?php
-				echo implode(', ', $msales);
-				?>]
-				}, {
-					type: 'column',
-					name: '<?= lang("order_discount"); ?>',
-					data: [<?php
-				echo implode(', ', $morder_discount);
-				?>]
-				}, {
-					type: 'spline',
-					name: '<?= lang("purchases"); ?>',
-					data: [<?php
-				echo implode(', ', $mpurchases);
-				?>],
-					marker: {
-						lineWidth: 2,
-						states: {
-							hover: {
-								lineWidth: 4
-							}
-						},
-						lineColor: Highcharts.getOptions().colors[3],
-						fillColor: 'white'
-					}
-				}, {
-					type: 'spline',
-					name: '<?= lang("pp_tax"); ?>',
-					data: [<?php
-				echo implode(', ', $mtax3);
-				?>],
-					marker: {
-						lineWidth: 2,
-						states: {
-							hover: {
-								lineWidth: 4
-							}
-						},
-						lineColor: Highcharts.getOptions().colors[3],
-						fillColor: 'white'
-					}
-				}, {
-					type: 'pie',
-					name: '<?= lang("stock_value"); ?>',
-					data: [
-						['', 0],
-						['', 0],
-						['<?= lang("stock_value_by_price"); ?>', <?php echo $stock->stock_by_price; ?>],
-						['<?= lang("stock_value_by_cost"); ?>', <?php echo $stock->stock_by_cost; ?>],
-					],
-					center: [80, 42],
-					size: 80,
-					showInLegend: false,
-					dataLabels: {
-						enabled: false
-					}
-				}]
-		});
-	});
-</script>
 <?php } ?>

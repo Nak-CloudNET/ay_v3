@@ -31,7 +31,7 @@
                 <label for="quantity"><?php echo $this->lang->line("damage_quantity"); ?></label>
 
                 <div
-                    class="controls"> <?php echo form_input('quantity', (isset($_POST['quantity']) ? $_POST['quantity'] : $this->erp->formatQuantity($damage->quantity)), 'class="form-control input-tip" id="quantity" required="required"'); ?> </div>
+                    class="controls"> <?php echo form_input('quantity', (isset($_POST['quantity']) ? $_POST['quantity'] : $this->erp->formatQuantity($damage->quantity)), 'class="form-control input-tip number_only" id="quantity" required="required"'); ?> </div>
             </div>
             <?php if ($damage->option_id) { ?>
                 <div class="form-group">
