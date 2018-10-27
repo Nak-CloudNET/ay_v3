@@ -6415,8 +6415,13 @@ function index($warehouse_id = NULL)
     
     public function barcode_count_stock()
     {
-        $this->erp->checkPermissions('count_stocks', true, 'products');
-        $this->data['warehouses'] = $this->site->getAllWarehouses();
+        $this->erp->checkPermissions('count_stock',null,'products');
+        if ($Owner || $Admin || !$this->session->userdata('warehouse_id')) {
+            $this->data['warehouses'] = $this->site->getAllWarehouses();
+        }else{
+            $warehouse_id = $this->session->userdata('warehouse_id');
+            $this->data['warehouses'] = $this->site->getWarehouseByIDs($warehouse_id);
+        }
         $this->data['category']   = $this->site->getAllCategories();
         $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => site_url('products'), 'page' => lang('products')), array('link' => '#', 'page' => lang('barcode_count_stock')));
         $meta = array('page_title' => lang('barcode_count_stock'), 'bc' => $bc);

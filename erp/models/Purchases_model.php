@@ -86,29 +86,19 @@ class Purchases_model extends CI_Model
         }
 		return FALSE;
     }
-	
-	public function getProductStock($term, $standard, $combo, $digital, $service, $category, $warehouse_id, $category_id, $option_id = null, $limit = 15)
+
+    public function getProductStock($term, $standard, $combo, $digital, $service, $category, $warehouse_id, $category_id, $limit = 15)
     {
-        $this->db->select('
-        					products.id,
-        					products.code,
-        					CONCAT(erp_products.name, " (", IF (erp_product_variants.name != "", erp_product_variants.name, erp_units.name), " )") as name,
-        					warehouses_products.quantity,
-        					COALESCE(erp_product_variants.name, "") as variant,
-							COALESCE(erp_product_variants.id, "") as option_id
-        				');
-		$this->db->where("(type = 'standard') AND (erp_products.name LIKE '%" . $term . "%' OR erp_products.code LIKE '%" . $term . "%' OR  concat(erp_products.name, ' (', erp_products.code, ')') LIKE '%" . $term . "%') AND inactived <> 1");
-		$this->db->where(array("warehouses_products.warehouse_id"=> $warehouse_id, "products.inactived !="=>"1"));
-		if($category_id){
-			$this->db->where("products.category_id", $category_id);
-		}
-		if($option_id){
-			$this->db->where("product_variants.id", $option_id);
-		}
-		$this->db->join('warehouses_products', 'products.id = warehouses_products.product_id', 'left');
-		$this->db->join('product_variants', 'products.id = product_variants.product_id', 'left');
-		$this->db->join('units', 'products.unit = units.id', 'left');
-		$this->db->order_by('code', 'DESC');
+        $this->db->select('products.id, products.code, products.name, warehouses_products.quantity, COALESCE(erp_product_variants.name, "") as variant');
+        //$this->db->where("(type = 'standard' OR type = 'service') AND (erp_products.name LIKE '%" . $term . "%' OR code LIKE '%" . $term . "%' OR  concat(erp_products.name, ' (', code, ')') LIKE '%" . $term . "%') AND inactived <> 1");
+        $this->db->where("(type = 'standard' OR type = 'service') AND (erp_products.name = '" . $term . "' OR code = '" . $term . "' OR  concat(erp_products.name, ' (', code, ')') = '" . $term . "') AND inactived <> 1");
+        $this->db->where(array("warehouses_products.warehouse_id"=> $warehouse_id, "products.inactived !="=>"1"));
+        if($category_id){
+            $this->db->where("products.category_id", $category_id);
+        }
+        $this->db->join('warehouses_products', 'products.id = warehouses_products.product_id', 'left');
+        $this->db->join('product_variants', 'products.id = product_variants.product_id', 'left');
+        $this->db->order_by('code', 'DESC');
         $this->db->limit($limit);
         $q = $this->db->get('products');
         if ($q->num_rows() > 0) {
@@ -119,7 +109,6 @@ class Purchases_model extends CI_Model
         }
         return FALSE;
     }
-	
 	public function getProductNames($term, $standard, $combo, $digital, $service, $category, $limit = 100)
     {
         
