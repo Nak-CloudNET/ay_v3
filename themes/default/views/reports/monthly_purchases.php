@@ -67,7 +67,7 @@ if($warehouse_id){
                 <p class="introtext"><?= lang("reports_calendar_text") ?></p>
                 <div class="report-header">
                     <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-4">
+                        <!--<div class="col-lg-4 col-md-4 col-sm-4">
                             <br>
                             <br>
                             <span><?php echo date("F d, Y"); ?></span><br>
@@ -80,7 +80,7 @@ if($warehouse_id){
                             <h3 class="text-center" style="font-size: 25px;">Collections report</h3>
                             <p class="text-center"><b>As of <?php echo date("F d, Y"); ?></b></p>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4"></div>
+                        <div class="col-lg-4 col-md-4 col-sm-4"></div>-->
                     </div>
                 </div>
                 <div class="table-responsive" id="style">

@@ -68,7 +68,7 @@
 
                 <p class="introtext"><?= lang('view_report_supplier'); ?></p>
                 <div class="report-header">
-                    <div class="row">
+                    <!--<div class="row">
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <br>
                             <br>
@@ -84,7 +84,7 @@
                                 <b><?php echo date("F d, Y"); ?></b>
                             </p>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4"></div>
+                        <div class="col-lg-4 col-md-4 col-sm-4"></div>-->
                     </div>
                 </div>
                 <div class="table-responsive">

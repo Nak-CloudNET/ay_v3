@@ -105,7 +105,7 @@ if($warehouse_id){
             <div class="col-lg-12">
                 <p class="introtext"><?= lang('get_day_profit').' '.lang("reports_calendar_text") ?></p>
                 <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-4">
+                    <!--<div class="col-lg-4 col-md-4 col-sm-4">
                         <br>
                         <br>
                         <span><?php echo date("F d, Y"); ?></span><br>
@@ -113,12 +113,12 @@ if($warehouse_id){
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4">
                         <h3 class="text-center" style="font-size: 22px;">
-                            <?php echo $billers->company; ?>    <!-- get biller company from site setting-->
+                            <?php echo $billers->company; ?>
                         </h3>
                         <h3 class="text-center" style="font-size: 25px;">Collections report</h3>
                         <p class="text-center"><b>As of <?php echo date("F d,Y");?></b></p>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4"></div>
+                    <div class="col-lg-4 col-md-4 col-sm-4"></div>-->
                 </div>
                 <div id="style">
                     <?php echo $calender; ?>

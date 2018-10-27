@@ -147,14 +147,32 @@
                                 <span><?php echo date("h:i a"); ?></span>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4">
-                            <h3 class="text-center" id="com-name" style="font-size: 19px"><!-- get company name -->
-                                <?= $billers->company; ?>     <!-- display company name system setting -->
-                            </h3>
-                            <h3 class="text-center" id="com-name"  style="font-size: 20px">Collections Report</h3>
-                            <p class="text-center">As of <b><?php echo date("F d, Y"); ?></b></p> <!--get date from local-->
-                        </div>
+
                         <div class="col-lg-4 col-md-4 col-sm-4"></div>
+                        <!--<div class="col-lg-4 col-md-4 col-sm-4">
+                            <br>
+                            <br>
+                            <span><?php echo date("F d, Y"); ?></span><br>
+                            <span><?php echo date("h:i a") ?></span>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <h3 class="text-center" style="font-size: 22px">
+                                <?php
+                        echo $billers->company;
+                        ?>
+                            </h3>
+                            <h3 class="text-center" style="font-size: 22px">Collections report</h3>
+                            <p class="text-center">As of
+                                <?php
+                        if($start_date != NULL){
+                            echo $start_date;
+                        }else{
+                            echo date("F d, Y");
+                        }
+                        ?>
+                            </p>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4"></div>-->
                     </div>
                 </div>
                 <div class="table-responsive" id="style">
