@@ -174,13 +174,7 @@
                                 </div>
 
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                <h3 class="com-name text-center" style="font-size: 20px"><!-- get company name -->
-                                    <?= $billers->company; ?>     <!-- display company name system setting -->
-                                </h3>
-                                <h3 class="text-center"  style="font-size: 23px">Collections Report</h3>
-                                <p class="text-center">As of <b><?php echo date("F d, Y"); ?></b></p> <!--get date from local-->
-                            </div>
+
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
                         </div>
                     </div>

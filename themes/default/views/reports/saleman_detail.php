@@ -214,22 +214,7 @@
                             </div>
 
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                            <!-- get company name -->
-                            <h3 class="text-center" style="font-size: 22px;">
-                                <?= $billers->company; ?>
-                            </h3>     <!-- display company name from database -->
-                            <h3 class="text-center" style="font-size: 25px">Collections Report</h3>
-                            <p class="text-center"><b>As of
-                                <?php
-                                if($start_date2 != NULL){
-                                    echo $start_date2;
-                                }else{
-                                    echo date("F d, Y");
-                                }
-                                ?></b>
-                            </p> <!--get date filter-->
-                        </div>
+
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
                     </div>
                 </div>
@@ -364,12 +349,12 @@
 
        /* $("#excel").click(function(e){
             e.preventDefault();
-            window.location.href = "<?= site_url('reports/saleman_detail_action/0/xls/'.$saleman2) ?>";
+            window.location.href = "< site_url('reports/saleman_detail_action/0/xls/'.$saleman2) ?>";
             return false;
         });
         $('#pdf').click(function (event) {
             event.preventDefault();
-            window.location.href = "<?=site_url('reports/saleman_detail_action/pdf/?v=1'.$v)?>";
+            window.location.href = "=site_url('reports/saleman_detail_action/pdf/?v=1'.$v)?>";
             return false;
         });*/
 

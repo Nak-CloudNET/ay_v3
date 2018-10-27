@@ -199,25 +199,7 @@ echo form_open('account/arByCustomer_actions', 'id="action-form"');
                             </div>
 
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                            <div class="com-name text-center">  <!-- get company name -->
-                                <h3 style="font-size: 22px;">
-                                    <?= $billers->company; ?>
-                                </h3>     <!-- display company name from database -->
-                            </div>
-                            <h3 class="text-center" style="font-size: 25px">Collections Report</h3>
-                            <p class="text-center">
-                                <b>As of
-                                    <?php
-                                        if ($start_date2 != NULL){
-                                            echo $start_date2;
-                                        }else{
-                                            echo date("F d, Y");
-                                        }
-                                    ?>
-                                </b>
-                            </p> <!--get date filter-->
-                        </div>
+
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
 
                     </div>

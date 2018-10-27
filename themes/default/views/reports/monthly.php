@@ -147,13 +147,7 @@
                                 <span><?php echo date("h:i a"); ?></span>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4">
-                            <h3 class="text-center" id="com-name" style="font-size: 19px"><!-- get company name -->
-                                <?= $billers->company; ?>     <!-- display company name system setting -->
-                            </h3>
-                            <h3 class="text-center" id="com-name"  style="font-size: 20px">Collections Report</h3>
-                            <p class="text-center">As of <b><?php echo date("F d, Y"); ?></b></p> <!--get date from local-->
-                        </div>
+
                         <div class="col-lg-4 col-md-4 col-sm-4"></div>
                     </div>
                 </div>
