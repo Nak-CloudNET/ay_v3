@@ -269,7 +269,7 @@
                 <div class="clearfix"></div>
                 <div class="report-header">
                     <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-4">
+                        <!--<div class="col-lg-4 col-md-4 col-sm-4">
                             <br>
                             <br>
                             <span><?php echo date("F d, Y"); ?></span><br>
@@ -292,7 +292,7 @@
                                 ?>
                             </p>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4"></div>
+                        <div class="col-lg-4 col-md-4 col-sm-4"></div>-->
                     </div>
                 </div>
                 <div class="table-responsive">

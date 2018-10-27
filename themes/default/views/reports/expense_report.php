@@ -118,7 +118,7 @@ $(document).ready(function(){
                 <div class="clearfix"></div>
 				<div class="report-header">
                     <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <!--<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                             <br>
                             <br>
                             <span><?php echo date("F d, Y"); ?></span><br>
@@ -133,7 +133,7 @@ $(document).ready(function(){
                                 <b><?php echo date("F d, Y"); ?></b>
                             </p>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>-->
                     </div>
                 </div>
                 <div class="table-responsive" style="width:100%;overflow:auto;">
